@@ -12,7 +12,7 @@ export default function Home() {
 
   // Fetch articles from the backend API
   useEffect(() => {
-    fetch("http://localhost:5000/api/articles")
+    fetch("https://community-article-backend.onrender.com/api/articles")
       .then((res) => res.json())
       .then((data) => {
         const sortedArticles = data.sort(
