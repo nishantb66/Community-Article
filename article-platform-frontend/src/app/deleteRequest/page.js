@@ -22,7 +22,7 @@ export default function DeleteRequest() {
 
     try {
       const response = await fetch(
-        "http://localhost:5000/api//sendDeleteRequest",
+        "https://community-article-backend.onrender.com/api//sendDeleteRequest",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
