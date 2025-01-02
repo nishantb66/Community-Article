@@ -11,7 +11,7 @@ export default function ArticlePage() {
   useEffect(() => {
     async function fetchArticle() {
       try {
-        const res = await fetch(`http://localhost:5000/api/articles/${id}`); // Replace with your backend URL
+        const res = await fetch(`https://community-article-backend.onrender.com/api/articles/${id}`); // Replace with your backend URL
         if (!res.ok) {
           throw new Error("Failed to fetch the article");
         }
