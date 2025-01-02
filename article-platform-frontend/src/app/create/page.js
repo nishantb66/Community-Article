@@ -23,7 +23,7 @@ const CreateArticle = () => {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:5000/api/articles", {
+      const response = await fetch("https://community-article-backend.onrender.com/api/articles", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
