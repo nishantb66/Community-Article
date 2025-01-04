@@ -18,7 +18,7 @@ router.post("/", async (req, res) => {
 
     const subscriber = new Subscriber({ email });
     await subscriber.save();
-    res.status(201).json({ message: "Subscription successful! 🎉" });
+    res.status(201).json({ message: "Subscribed 🎉" });
   } catch (err) {
     res.status(500).json({ error: "Failed to subscribe." });
   }
