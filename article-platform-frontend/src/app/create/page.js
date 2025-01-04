@@ -1,12 +1,15 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const CreateArticle = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [author, setAuthor] = useState("");
   const [loading, setLoading] = useState(false);
+  const [notification, setNotification] = useState(false);
+  const router = useRouter();
 
   const handleSubmit = async () => {
     if (!title || !content || !author) {
@@ -30,10 +33,16 @@ const CreateArticle = () => {
       });
 
       if (response.ok) {
-        alert("Article created successfully!");
+        const data = await response.json(); // Assuming the API returns the created article object
         setTitle("");
         setContent("");
         setAuthor("");
+        setNotification(true); // Show notification
+
+        setTimeout(() => {
+          setNotification(false); // Hide notification after 3 seconds
+          router.push(`/article/${data._id}`); // Redirect to the article page
+        }, 3000);
       } else {
         alert("Failed to create article.");
       }
@@ -46,13 +55,38 @@ const CreateArticle = () => {
   };
 
   return (
-    <div className="bg-gradient-to-br from-orange-100 to-pink-100 min-h-screen py-10 px-6">
+    <div className="bg-gradient-to-br from-orange-100 to-pink-100 min-h-screen py-10 px-6 relative">
+      {/* Notification */}
+      {notification && (
+        <div className="fixed top-5 left-1/2 transform -translate-x-1/2 z-50">
+          <div className="bg-green-500 text-white py-2 px-6 rounded-lg shadow-md flex items-center">
+            <div className="mr-2 text-lg font-semibold">✔</div>
+            <span>Article published successfully!</span>
+          </div>
+          <div className="w-full bg-green-400 h-1 mt-1 relative">
+            <div
+              className="bg-green-600 h-full animate-[reverseLoader_3s_linear] absolute"
+              style={{ animation: "reverseLoader 3s linear forwards" }}
+            ></div>
+          </div>
+          <style jsx>{`
+            @keyframes reverseLoader {
+              0% {
+                width: 100%;
+              }
+              100% {
+                width: 0;
+              }
+            }
+          `}</style>
+        </div>
+      )}
+
       <div className="max-w-3xl mx-auto bg-white shadow-xl rounded-xl overflow-hidden">
         <div className="bg-gradient-to-r from-orange-400 to-pink-400 py-6 px-8 text-white">
-          <h1 className="text-3xl font-bold text-center">Write an Article</h1>
-          <p className="text-center mt-2 text-sm opacity-90">
-            Share your thoughts and ideas with the world.
-          </p>
+          <h1 className="text-2xl font-bold text-center">
+            Write Anonymously or with Attribution
+          </h1>
         </div>
         <div className="p-8">
           <div className="space-y-6">
@@ -122,3 +156,4 @@ const CreateArticle = () => {
 };
 
 export default CreateArticle;
+
