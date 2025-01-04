@@ -9,6 +9,7 @@ export default function Home() {
   const [visibleArticles, setVisibleArticles] = useState(3);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredArticles, setFilteredArticles] = useState([]);
+  const [loading, setLoading] = useState(true); // State for indicating loading
 
   // Fetch articles from the backend API
   useEffect(() => {
@@ -21,7 +22,8 @@ export default function Home() {
         setArticles(sortedArticles);
         setFilteredArticles(sortedArticles);
       })
-      .catch((err) => console.error("Error fetching articles:", err));
+      .catch((err) => console.error("Error fetching articles:", err))
+      .finally(() => setLoading(false)); // Set loading to false after fetching
   }, []);
 
   // Load more articles
@@ -53,10 +55,10 @@ export default function Home() {
           <Link href="/">
             <div className="flex items-center space-x-2 cursor-pointer">
               <div className="w-10 h-10 bg-gradient-to-r from-orange-400 to-pink-400 rounded-full flex items-center justify-center">
-                <span className="text-white text-xl font-bold">CA</span>
+                <span className="text-white text-xl font-bold">sA</span>
               </div>
               <h1 className="text-xl sm:text-2xl font-extrabold text-gray-800 tracking-tight">
-                Community Articles
+                SimpleArticle
               </h1>
             </div>
           </Link>
@@ -71,21 +73,29 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Search Bar */}
-      <div className="flex flex-col sm:flex-row justify-center mt-8 items-center gap-4 px-4 sm:px-0">
-        <input
-          type="text"
-          value={searchQuery}
-          onChange={(e) => handleSearch(e.target.value)}
-          placeholder="Search articles..."
-          className="w-full sm:w-3/4 lg:w-1/3 px-4 py-2 sm:py-3 border border-gray-300 rounded-full shadow-md focus:ring-2 focus:ring-orange-400 focus:outline-none"
-        />
-        <Link
-          href="/deleteRequest"
-          className="text-sm text-orange-600 font-semibold hover:underline text-center"
-        >
-          Want your article removed? Put your request here
-        </Link>
+      {/* Hero Section */}
+      <div className="text-center bg-gradient-to-br from-orange-50 to-pink-50 py-16 px-6 sm:py-24 sm:px-10">
+        <h1 className="text-4xl sm:text-6xl font-extrabold text-gray-800 mb-4">
+          Discover Inspiring Stories
+        </h1>
+        <p className="text-lg sm:text-xl text-gray-600 mb-8">
+          Explore articles written by the community to ignite your creativity.
+        </p>
+        <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => handleSearch(e.target.value)}
+            placeholder="Search articles..."
+            className="w-full sm:w-3/4 lg:w-1/3 px-4 py-3 border border-gray-300 rounded-full shadow-md focus:ring-2 focus:ring-orange-400 focus:outline-none"
+          />
+          <Link
+            href="/deleteRequest"
+            className="text-sm text-orange-600 font-semibold hover:underline text-center"
+          >
+            Want your article removed? Put your request here
+          </Link>
+        </div>
       </div>
 
       {/* Article List */}
@@ -99,34 +109,43 @@ export default function Home() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-          {filteredArticles.slice(0, visibleArticles).map((article) => (
-            <div
-              key={article._id}
-              className="bg-white rounded-lg shadow-md hover:shadow-xl transition-transform transform hover:-translate-y-2 overflow-hidden"
-            >
-              <img
-                src="https://via.placeholder.com/300x150"
-                alt="Thumbnail"
-                className="w-full h-32 sm:h-40 object-cover"
-              />
-              <div className="p-4">
-                <Link
-                  href={`/article/${article._id}`}
-                  className="text-lg sm:text-2xl font-semibold text-gray-800 hover:text-orange-500"
-                >
-                  {article.title}
-                </Link>
-                <p className="text-gray-700 mt-3 text-sm sm:text-base line-clamp-2">
-                  {article.content.slice(0, 120)}...
-                </p>
-                <p className="text-xs sm:text-sm text-gray-500 mt-4">
-                  By {article.author}
-                </p>
+        {/* Loading Indicator */}
+        {loading ? (
+          <div className="flex justify-center items-center py-20">
+            <p className="text-lg sm:text-xl font-semibold text-gray-500">
+              Loading... may take some time
+            </p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            {filteredArticles.slice(0, visibleArticles).map((article) => (
+              <div
+                key={article._id}
+                className="bg-white rounded-lg shadow-md hover:shadow-xl transition-transform transform hover:-translate-y-2 overflow-hidden"
+              >
+                {/* <img
+                  src="https://via.placeholder.com/300x150"
+                  alt="Thumbnail"
+                  className="w-full h-32 sm:h-40 object-cover"
+                /> */}
+                <div className="p-4">
+                  <Link
+                    href={`/article/${article._id}`}
+                    className="text-lg sm:text-2xl font-semibold text-gray-800 hover:text-orange-500"
+                  >
+                    {article.title}
+                  </Link>
+                  <p className="text-gray-700 mt-3 text-sm sm:text-base line-clamp-2">
+                    {article.content.slice(0, 120)}...
+                  </p>
+                  <p className="text-xs sm:text-sm text-gray-500 mt-4">
+                    By {article.author}
+                  </p>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
 
         {/* "See More" Button */}
         {visibleArticles < filteredArticles.length && (
@@ -143,3 +162,4 @@ export default function Home() {
     </div>
   );
 }
+
