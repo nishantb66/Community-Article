@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 5000;
 
 
 const corsOptions = {
-  origin: 'https://community-article-frontend.vercel.app', // Allow requests from this frontend
+  origin: 'https://simplearticles.space', // Allow requests from this frontend
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true, // If you use cookies or authentication
 };
