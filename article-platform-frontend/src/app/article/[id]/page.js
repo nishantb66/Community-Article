@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useParams } from "next/navigation"; // Correct way to access params
+import { useParams } from "next/navigation";
 import {
   FacebookShareButton,
   LinkedinShareButton,
@@ -15,19 +15,26 @@ import "../../../styles/globals.css";
 export default function ArticlePage() {
   const [article, setArticle] = useState(null);
   const [relatedArticles, setRelatedArticles] = useState([]);
+  const [comments, setComments] = useState([]);
+  const [newComment, setNewComment] = useState("");
   const [scrollProgress, setScrollProgress] = useState(0);
-  const { id } = useParams(); // Retrieve the `id` directly using `useParams`
+  const [isReportPopupOpen, setIsReportPopupOpen] = useState(false);
+  const [isConfirmationPopupOpen, setIsConfirmationPopupOpen] = useState(false);
+  const [isReported, setIsReported] = useState(false); // Track report status
+  const [darkMode, setDarkMode] = useState(false); // Track theme
+  const { id } = useParams();
 
   useEffect(() => {
     async function fetchArticle() {
       try {
-        const res = await fetch(`https://community-article-backend.onrender.com/api/articles/${id}`); // Replace with your backend URL
+        const res = await fetch(`https://community-article-backend.onrender.com/api/articles/${id}`);
         if (!res.ok) {
           throw new Error("Failed to fetch the article");
         }
         const data = await res.json();
         setArticle(data);
-        fetchRelatedArticles(data.title); // Fetch related articles based on the title
+        fetchRelatedArticles(data.title);
+        fetchComments();
       } catch (err) {
         console.error("Error fetching article:", err);
       }
@@ -40,7 +47,7 @@ export default function ArticlePage() {
 
   async function fetchRelatedArticles(currentTitle) {
     try {
-      const res = await fetch("https://community-article-backend.onrender.com/api/articles"); // Fetch all articles
+      const res = await fetch("https://community-article-backend.onrender.com/api/articles");
       if (!res.ok) {
         throw new Error("Failed to fetch related articles");
       }
@@ -48,10 +55,8 @@ export default function ArticlePage() {
 
       const currentTitleWords = currentTitle.toLowerCase().split(" ");
       const related = data.filter((article) => {
-        if (article._id === id) return false; // Exclude the current article
-
+        if (article._id === id) return false;
         const articleTitleWords = article.title.toLowerCase().split(" ");
-        // Check if there's any overlap of words between the titles
         return currentTitleWords.some((word) =>
           articleTitleWords.includes(word)
         );
@@ -62,6 +67,74 @@ export default function ArticlePage() {
       console.error("Error fetching related articles:", err);
     }
   }
+
+  async function fetchComments() {
+    try {
+      const res = await fetch(
+        `https://community-article-backend.onrender.com/api/articles/${id}/comments`
+      );
+      if (!res.ok) {
+        throw new Error("Failed to fetch comments");
+      }
+      const data = await res.json();
+      setComments(data);
+    } catch (err) {
+      console.error("Error fetching comments:", err);
+    }
+  }
+
+  const handleCommentSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!newComment.trim()) {
+      alert("Comment cannot be empty!");
+      return;
+    }
+
+    try {
+      const res = await fetch(
+        `https://community-article-backend.onrender.com/api/articles/${id}/comments`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ content: newComment }),
+        }
+      );
+
+      if (res.ok) {
+        setNewComment("");
+        fetchComments();
+      } else {
+        alert("Failed to post comment.");
+      }
+    } catch (err) {
+      console.error("Error posting comment:", err);
+      alert("An error occurred. Please try again.");
+    }
+  };
+
+  const handleReportArticle = async () => {
+    try {
+      const res = await fetch(
+        `https://community-article-backend.onrender.com/api/articles/${id}/report`,
+        {
+          method: "POST",
+        }
+      );
+
+      if (res.ok) {
+        setIsReported(true);
+        setIsConfirmationPopupOpen(false);
+        setIsReportPopupOpen(false);
+        alert("Reported! Article is under review.");
+      } else {
+        alert("Failed to report article. Please try again.");
+      }
+    } catch (err) {
+      console.error("Error reporting article:", err);
+      alert("An error occurred. Please try again.");
+    }
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -85,22 +158,46 @@ export default function ArticlePage() {
     );
   }
 
-  const shareUrl = `https://community-article-frontend.vercel.app/article/${id}`; // Replace with your deployed URL
+  const shareUrl = `https://simplearticles.space/article/${id}`;
 
   return (
-    <div className="min-h-screen bg-white">
+    <div
+      className={`min-h-screen ${
+        darkMode ? "bg-gray-900 text-white" : "bg-gray-50 text-gray-900"
+      }`}
+    >
+      {/* Theme Toggle */}
+      <div className="fixed top-5 right-5 z-50">
+        <button
+          onClick={() => setDarkMode(!darkMode)}
+          className={`px-4 py-2 rounded-full font-semibold shadow-md ${
+            darkMode
+              ? "bg-gray-700 text-white hover:bg-gray-600"
+              : "bg-gray-300 text-gray-900 hover:bg-gray-400"
+          }`}
+        >
+          {darkMode ? "Light Mode" : "Dark Mode"}
+        </button>
+      </div>
+
       {/* Reading Progress Bar */}
       <div
-        className="fixed top-0 left-0 h-2 bg-orange-500 transition-all"
+        className={`fixed top-0 left-0 h-2 ${
+          darkMode ? "bg-teal-500" : "bg-orange-500"
+        } transition-all`}
         style={{ width: `${scrollProgress}%` }}
       ></div>
 
       {/* Header */}
-      <div className="bg-gradient-to-r from-orange-200 to-orange-100 py-10">
+      <div
+        className={`py-10 ${
+          darkMode
+            ? "bg-gradient-to-r from-gray-800 to-gray-700"
+            : "bg-gradient-to-r from-orange-200 to-orange-100"
+        }`}
+      >
         <div className="max-w-4xl mx-auto px-6">
-          <h1 className="text-4xl font-extrabold text-gray-900">
-            {article.title}
-          </h1>
+          <h1 className="text-4xl font-extrabold">{article.title}</h1>
           <div className="mt-4 flex items-center">
             <div className="w-12 h-12 rounded-full bg-gray-300 overflow-hidden">
               <img
@@ -110,10 +207,8 @@ export default function ArticlePage() {
               />
             </div>
             <div className="ml-4">
-              <p className="text-lg font-semibold text-gray-700">
-                {article.author}
-              </p>
-              <p className="text-sm text-gray-500">
+              <p className="text-lg font-semibold">{article.author}</p>
+              <p className="text-sm">
                 {new Date(article.createdAt).toDateString()}
               </p>
             </div>
@@ -124,7 +219,9 @@ export default function ArticlePage() {
       {/* Article Content */}
       <main className="max-w-4xl mx-auto px-6 py-12">
         <div
-          className="prose prose-xl prose-gray whitespace-pre-line leading-relaxed"
+          className={`prose prose-lg ${
+            darkMode ? "prose-invert" : "prose-gray"
+          } whitespace-pre-line leading-relaxed`}
           style={{
             whiteSpace: "pre-line",
             wordBreak: "break-word",
@@ -135,48 +232,97 @@ export default function ArticlePage() {
         </div>
 
         {/* Social Media Share Buttons */}
-        <div className="mt-10">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">
-            Share this article:
-          </h2>
-          <div className="flex gap-4">
-            <TwitterShareButton url={shareUrl} title={article.title}>
-              <TwitterIcon size={40} round />
-            </TwitterShareButton>
-            <FacebookShareButton url={shareUrl} quote={article.title}>
-              <FacebookIcon size={40} round />
-            </FacebookShareButton>
-            <LinkedinShareButton url={shareUrl} title={article.title}>
-              <LinkedinIcon size={40} round />
-            </LinkedinShareButton>
+        <div className="mt-10 flex justify-between items-center">
+          <div>
+            <h2 className="text-xl font-bold mb-4">Share this article:</h2>
+            <div className="flex gap-4">
+              <TwitterShareButton url={shareUrl} title={article.title}>
+                <TwitterIcon size={40} round />
+              </TwitterShareButton>
+              <FacebookShareButton url={shareUrl} quote={article.title}>
+                <FacebookIcon size={40} round />
+              </FacebookShareButton>
+              <LinkedinShareButton url={shareUrl} title={article.title}>
+                <LinkedinIcon size={40} round />
+              </LinkedinShareButton>
+            </div>
           </div>
+
+          {/* Report Button */}
+          <button
+            onClick={() => setIsReportPopupOpen(true)}
+            className="text-sm text-red-500 font-semibold hover:underline"
+          >
+            Report
+          </button>
         </div>
       </main>
 
-      {/* Related Articles */}
-      <section className="max-w-4xl mx-auto px-6 py-12">
-        <h2 className="text-2xl font-bold text-gray-900 mb-6">
-          Related Articles
-        </h2>
-        {relatedArticles.length > 0 ? (
+      {/* Report Popup */}
+      {isReportPopupOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div
+            className={`bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg shadow-lg p-6 max-w-sm w-full`}
+          >
+            <h2 className="text-lg font-bold mb-4">Report Article</h2>
+            <p className="text-sm mb-4">
+              If you find this article disturbing, vulgar, or violating the
+              regulations, please click "Report" below. We will review the
+              article.
+            </p>
+            <div className="flex justify-between items-center gap-4">
+              <button
+                onClick={() => setIsConfirmationPopupOpen(true)}
+                className="bg-red-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-600 transition"
+              >
+                Report
+              </button>
+              <button
+                onClick={() => setIsReportPopupOpen(false)}
+                className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg font-semibold hover:bg-gray-400 transition"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Comments Section */}
+      <section
+        className={`max-w-4xl mx-auto px-6 py-12 ${
+          darkMode ? "bg-gray-800 text-white" : "bg-white text-gray-900"
+        } rounded-lg shadow-md`}
+      >
+        <h2 className="text-2xl font-bold mb-6">Comments</h2>
+        <form onSubmit={handleCommentSubmit} className="mb-6">
+          <textarea
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-400 focus:outline-none resize-none"
+            rows="4"
+            placeholder="Leave a comment..."
+          ></textarea>
+          <button
+            type="submit"
+            className="mt-4 bg-orange-500 text-white py-2 px-6 rounded-lg font-semibold hover:bg-orange-600 transition"
+          >
+            Submit Comment
+          </button>
+        </form>
+        {comments.length > 0 ? (
           <ul className="space-y-4">
-            {relatedArticles.map((relatedArticle) => (
-              <li key={relatedArticle._id}>
-                <a
-                  href={`/article/${relatedArticle._id}`}
-                  className="text-lg font-semibold text-orange-500 hover:underline"
-                >
-                  {relatedArticle.title}
-                </a>
-                <p className="text-sm text-gray-500">
-                  By {relatedArticle.author} -{" "}
-                  {new Date(relatedArticle.createdAt).toDateString()}
+            {comments.map((comment) => (
+              <li key={comment._id} className="border-b pb-4">
+                <p>{comment.content}</p>
+                <p className="text-sm mt-2">
+                  {new Date(comment.createdAt).toLocaleString()}
                 </p>
               </li>
             ))}
           </ul>
         ) : (
-          <p className="text-gray-500 text-lg">No related articles found.</p>
+          <p>No comments yet. Be the first to comment!</p>
         )}
       </section>
     </div>
