@@ -4,11 +4,14 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 require("dotenv").config();
 const emailRoutes = require("./routes/email");
+const commentsRoutes = require("./routes/comments");
+const subscribersRoutes = require("./routes/subscribers");
+const contributorRoutes = require("./routes/contributors");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-
+// Middleware
 const corsOptions = {
   origin: 'https://simplearticles.space', // Allow requests from this frontend
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
@@ -16,11 +19,14 @@ const corsOptions = {
 };
 
 // Middleware
-
 app.use(cors(corsOptions));
+
 app.use(bodyParser.json());
 app.use(express.json()); // Middleware to parse JSON
 app.use("/api", emailRoutes); // Register the email route
+app.use("/api", commentsRoutes);
+app.use("/api/subscribe", subscribersRoutes);
+app.use("/api/contributors", contributorRoutes);
 
 // MongoDB Connection
 mongoose
@@ -38,3 +44,4 @@ const path = require("path");
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
