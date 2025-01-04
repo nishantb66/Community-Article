@@ -7,44 +7,23 @@ export default function DeleteRequest() {
   const [email, setEmail] = useState("");
   const [articleTitle, setArticleTitle] = useState("");
   const [reason, setReason] = useState("");
-  const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (!name || !email || !articleTitle || !reason) {
       setMessage("All fields are required.");
       return;
     }
 
-    setLoading(true);
-    setMessage("");
+    const mailtoLink = `mailto:nishantbaruah3@gmail.com?subject=Delete Request for Article: ${encodeURIComponent(
+      articleTitle
+    )}&body=${encodeURIComponent(
+      `Name: ${name}\nEmail: ${email}\n\nReason for Deletion:\n${reason}`
+    )}`;
 
-    try {
-      const response = await fetch(
-        "https://community-article-backend.onrender.com/api//sendDeleteRequest",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ name, email, articleTitle, reason }),
-        }
-      );
-
-      if (response.ok) {
-        setMessage("Request sent successfully!");
-        setName("");
-        setEmail("");
-        setArticleTitle("");
-        setReason("");
-      } else {
-        setMessage("Failed to send the request. Please try again.");
-      }
-    } catch (error) {
-      console.error("Error sending request:", error);
-      setMessage("An error occurred. Please try again.");
-    } finally {
-      setLoading(false);
-    }
+    // Open the user's email client with pre-filled email
+    window.location.href = mailtoLink;
   };
 
   return (
@@ -104,18 +83,15 @@ export default function DeleteRequest() {
           </div>
           <button
             type="submit"
-            disabled={loading}
-            className="w-full bg-orange-500 text-white py-2 px-4 rounded-lg font-semibold hover:bg-orange-600 transition disabled:opacity-50"
+            className="w-full bg-orange-500 text-white py-2 px-4 rounded-lg font-semibold hover:bg-orange-600 transition"
           >
-            {loading ? "Submitting..." : "Submit Request"}
+            Submit Request
           </button>
         </form>
         {message && (
           <p
             className={`mt-4 text-center ${
-              message.includes("successfully")
-                ? "text-green-500"
-                : "text-red-500"
+              message.includes("required") ? "text-red-500" : "text-green-500"
             }`}
           >
             {message}
