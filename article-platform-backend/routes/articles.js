@@ -56,4 +56,34 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+
+// Mark an article as reported
+router.post("/:id/report", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { reason } = req.body;
+
+    if (!reason) {
+      return res.status(400).send({ message: "Reason is required." });
+    }
+
+    const article = await Article.findById(id);
+    if (!article) {
+      return res.status(404).send({ message: "Article not found." });
+    }
+
+    // Mark article as reported
+    article.reported = true;
+    article.reportReason = reason;
+    await article.save();
+
+    res.status(200).send({ message: "Article reported successfully." });
+  } catch (err) {
+    console.error("Error reporting article:", err);
+    res.status(500).send({ message: "Server error." });
+  }
+});
+
+
 module.exports = router;
+
