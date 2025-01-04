@@ -20,8 +20,8 @@ export default function ArticlePage() {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [isReportPopupOpen, setIsReportPopupOpen] = useState(false);
   const [isConfirmationPopupOpen, setIsConfirmationPopupOpen] = useState(false);
-  const [isReported, setIsReported] = useState(false); // Track report status
-  const [darkMode, setDarkMode] = useState(false); // Track theme
+  const [isReported, setIsReported] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
   const { id } = useParams();
 
   useEffect(() => {
@@ -170,7 +170,7 @@ export default function ArticlePage() {
       <div className="fixed top-5 right-5 z-50">
         <button
           onClick={() => setDarkMode(!darkMode)}
-          className={`px-4 py-2 rounded-full font-semibold shadow-md ${
+          className={`px-4 py-2 rounded-md font-semibold shadow-md ${
             darkMode
               ? "bg-gray-700 text-white hover:bg-gray-600"
               : "bg-gray-300 text-gray-900 hover:bg-gray-400"
@@ -217,16 +217,11 @@ export default function ArticlePage() {
       </div>
 
       {/* Article Content */}
-      <main className="max-w-4xl mx-auto px-6 py-12">
+      <main className="max-w-4xl mx-auto px-6 py-12 text-2xl">
         <div
           className={`prose prose-lg ${
             darkMode ? "prose-invert" : "prose-gray"
           } whitespace-pre-line leading-relaxed`}
-          style={{
-            whiteSpace: "pre-line",
-            wordBreak: "break-word",
-            fontSize: "1.25rem",
-          }}
         >
           {article.content}
         </div>
@@ -261,9 +256,7 @@ export default function ArticlePage() {
       {/* Report Popup */}
       {isReportPopupOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div
-            className={`bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg shadow-lg p-6 max-w-sm w-full`}
-          >
+          <div className="bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg shadow-lg p-6 max-w-sm w-full">
             <h2 className="text-lg font-bold mb-4">Report Article</h2>
             <p className="text-sm mb-4">
               If you find this article disturbing, vulgar, or violating the
@@ -288,6 +281,33 @@ export default function ArticlePage() {
         </div>
       )}
 
+      {/* Confirmation Popup */}
+      {isConfirmationPopupOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg shadow-lg p-6 max-w-sm w-full">
+            <h2 className="text-lg font-bold mb-4">Confirm Report</h2>
+            <p className="text-sm mb-4">
+              Are you sure you want to report this article? This action cannot
+              be undone.
+            </p>
+            <div className="flex justify-between items-center gap-4">
+              <button
+                onClick={handleReportArticle}
+                className="bg-red-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-600 transition"
+              >
+                Yes, Report
+              </button>
+              <button
+                onClick={() => setIsConfirmationPopupOpen(false)}
+                className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg font-semibold hover:bg-gray-400 transition"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Comments Section */}
       <section
         className={`max-w-4xl mx-auto px-6 py-12 ${
@@ -299,7 +319,9 @@ export default function ArticlePage() {
           <textarea
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-400 focus:outline-none resize-none"
+            className={`w-full px-4 py-2 border ${
+              darkMode ? "border-gray-600 bg-gray-700 text-white" : "bg-white"
+            } rounded-lg focus:ring-2 focus:ring-orange-400 focus:outline-none resize-none`}
             rows="4"
             placeholder="Leave a comment..."
           ></textarea>
@@ -328,3 +350,4 @@ export default function ArticlePage() {
     </div>
   );
 }
+
