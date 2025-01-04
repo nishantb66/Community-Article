@@ -46,45 +46,75 @@ const CreateArticle = () => {
   };
 
   return (
-    <div className="bg-gradient-to-r from-orange-100 to-orange-200 min-h-screen py-10 px-6">
-      <div className="max-w-4xl mx-auto bg-gradient-to-br from-white to-gray-100 shadow-2xl rounded-3xl p-10">
-        <h1 className="text-4xl font-bold text-gray-900 mb-8 text-center">
-          Write an Article
-        </h1>
-        <div className="space-y-8">
-          <div className="border-b pb-4">
-            <input
-              type="text"
-              placeholder="Enter a catchy title..."
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              className="w-full text-3xl font-semibold text-gray-800 focus:outline-none focus:ring-2 focus:ring-orange-400"
-            />
+    <div className="bg-gradient-to-br from-orange-100 to-pink-100 min-h-screen py-10 px-6">
+      <div className="max-w-3xl mx-auto bg-white shadow-xl rounded-xl overflow-hidden">
+        <div className="bg-gradient-to-r from-orange-400 to-pink-400 py-6 px-8 text-white">
+          <h1 className="text-3xl font-bold text-center">Write an Article</h1>
+          <p className="text-center mt-2 text-sm opacity-90">
+            Share your thoughts and ideas with the world.
+          </p>
+        </div>
+        <div className="p-8">
+          <div className="space-y-6">
+            <div>
+              <label
+                htmlFor="title"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Title
+              </label>
+              <input
+                id="title"
+                type="text"
+                placeholder="Enter a catchy title..."
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                className="mt-2 w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400 text-lg"
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="content"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Content
+              </label>
+              <textarea
+                id="content"
+                placeholder="Start writing your story..."
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+                className="mt-2 w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400 text-lg resize-none h-56"
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="author"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Your Name
+              </label>
+              <input
+                id="author"
+                type="text"
+                placeholder="Your name"
+                value={author}
+                onChange={(e) => setAuthor(e.target.value)}
+                className="mt-2 w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400 text-lg"
+              />
+            </div>
+            <button
+              onClick={handleSubmit}
+              disabled={loading}
+              className={`w-full py-3 rounded-md text-lg font-semibold text-white ${
+                loading
+                  ? "bg-orange-300 cursor-not-allowed"
+                  : "bg-orange-500 hover:bg-orange-600 transition"
+              } shadow-md`}
+            >
+              {loading ? "Publishing..." : "Publish Article"}
+            </button>
           </div>
-          <div>
-            <textarea
-              placeholder="Start writing your story..."
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              className="w-full text-lg leading-7 text-gray-700 border border-gray-300 rounded-lg p-5 focus:outline-none focus:ring-2 focus:ring-orange-400 resize-none h-64"
-            />
-          </div>
-          <div className="mt-6">
-            <input
-              type="text"
-              placeholder="Your name"
-              value={author}
-              onChange={(e) => setAuthor(e.target.value)}
-              className="w-full text-base text-gray-800 border-b-2 border-gray-300 focus:border-orange-400 focus:outline-none"
-            />
-          </div>
-          <button
-            onClick={handleSubmit}
-            disabled={loading}
-            className="w-full bg-orange-500 text-white py-3 rounded-lg font-semibold text-lg hover:bg-orange-600 transition disabled:opacity-50"
-          >
-            {loading ? "Publishing..." : "Publish Article"}
-          </button>
         </div>
       </div>
     </div>
