@@ -3,9 +3,12 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import "../styles/globals.css";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   const [articles, setArticles] = useState([]);
+  const [page, setPage] = useState(1); // Current page number
+  const [totalPages, setTotalPages] = useState(0); // Total pages from API
   const [visibleArticles, setVisibleArticles] = useState(3);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredArticles, setFilteredArticles] = useState([]);
@@ -21,31 +24,85 @@ export default function Home() {
   const [collaborateReason, setCollaborateReason] = useState("");
   const [collaborateMessage, setCollaborateMessage] = useState("");
 
-  useEffect(() => {
-   var _mtm = window._mtm = window._mtm || [];
-   _mtm.push({'mtm.startTime': (new Date().getTime()), 'event': 'mtm.Start'});
-   var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-   g.async=true; g.src='https://cdn.matomo.cloud/simplearticlesspace.matomo.cloud/container_3s7vGxHg.js'; s.parentNode.insertBefore(g,s);
-  }, [])
+  const [user, setUser] = useState(null); // State to track logged-in user
+  const [dropdownOpen, setDropdownOpen] = useState(false); // State for dropdown
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false); // State for mobile menu
+  const [notification, setNotification] = useState(""); // State for notifications
+  const [notificationType, setNotificationType] = useState(""); // Success or Error
 
-  // Fetch articles from the backend API
   useEffect(() => {
-    fetch("https://community-article-backend.onrender.com/api/articles")
-      .then((res) => res.json())
-      .then((data) => {
-        const sortedArticles = data.sort(
-          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-        );
-        setArticles(sortedArticles);
-        setFilteredArticles(sortedArticles);
-      })
-      .catch((err) => console.error("Error fetching articles:", err))
-      .finally(() => setLoading(false));
+    // Fetch user data from localStorage on load
+    const token = localStorage.getItem("token");
+    const userName = localStorage.getItem("userName");
+
+    if (token && userName) {
+      setUser({ name: userName });
+    }
   }, []);
+
+  const handleLogout = () => {
+    // Clear user session
+    localStorage.removeItem("token");
+    localStorage.removeItem("userName");
+    setUser(null);
+    setDropdownOpen(false);
+
+    // Set logout notification
+    setNotification("You have been logged out.");
+    setNotificationType("error");
+
+    // Clear the notification after 2 seconds
+    setTimeout(() => setNotification(""), 2000);
+  };
+
+  useEffect(() => {
+    var _mtm = (window._mtm = window._mtm || []);
+    _mtm.push({ "mtm.startTime": new Date().getTime(), event: "mtm.Start" });
+    var d = document,
+      g = d.createElement("script"),
+      s = d.getElementsByTagName("script")[0];
+    g.async = true;
+    g.src =
+      "https://cdn.matomo.cloud/simplearticlesspace.matomo.cloud/container_3s7vGxHg.js";
+    s.parentNode.insertBefore(g, s);
+  }, []);
+
+  // Fetch articles with pagination
+  const fetchArticles = async (currentPage) => {
+    setLoading(true); // Show loader
+    try {
+      const response = await fetch(
+        `https://community-article-backend.onrender.com/api/articles?page=${currentPage}&limit=6`
+      );
+      const data = await response.json();
+
+      // Ensure articles are unique
+      setArticles((prevArticles) => {
+        const existingIds = new Set(prevArticles.map((article) => article._id));
+        const newArticles = data.articles.filter(
+          (article) => !existingIds.has(article._id)
+        );
+        return [...prevArticles, ...newArticles];
+      });
+
+      setTotalPages(data.totalPages);
+    } catch (error) {
+      console.error("Error fetching articles:", error);
+    } finally {
+      setLoading(false); // Hide loader
+    }
+  };
+
+  // Trigger fetch when page changes
+  useEffect(() => {
+    fetchArticles(page);
+  }, [page]);
 
   // Load more articles
   const loadMoreArticles = () => {
-    setVisibleArticles((prev) => prev + 3);
+    if (page < totalPages) {
+      setPage((prevPage) => prevPage + 1); // Increment page number
+    }
   };
 
   // Handle search
@@ -115,7 +172,9 @@ export default function Home() {
       });
 
       if (response.ok) {
-        setCollaborateMessage("Thanks for joining us 😊, we will get back to you soon!");
+        setCollaborateMessage(
+          "Thanks for joining us 😊, we will get back to you soon!"
+        );
         setCollaborateName("");
         setCollaborateEmail("");
         setCollaborateReason("");
@@ -132,7 +191,44 @@ export default function Home() {
     }
   };
 
-return (
+  const handleBookmark = async (articleId) => {
+    const userId = localStorage.getItem("userId"); // Ensure userId is fetched correctly
+    if (!userId) {
+      // Set notification for login requirement
+      setNotification("Please login to bookmark articles.");
+      setNotificationType("error");
+      setTimeout(() => setNotification(""), 3000); // Clear notification after 3 seconds
+      return;
+    }
+
+    console.log("UserId:", userId, "ArticleId:", articleId);
+
+    try {
+      const response = await fetch("https://community-article-backend.onrender.com/api/bookmarks/add", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId, articleId }),
+      });
+
+      if (response.ok) {
+        // Set notification for successful bookmark
+        setNotification("Article bookmarked successfully!");
+        setNotificationType("success");
+      } else {
+        const data = await response.json();
+        setNotification(data.message || "Failed to bookmark article.");
+        setNotificationType("error");
+      }
+    } catch (err) {
+      console.error("Error bookmarking article:", err);
+      setNotification("An error occurred while bookmarking the article.");
+      setNotificationType("error");
+    } finally {
+      setTimeout(() => setNotification(""), 3000); // Clear notification after 3 seconds
+    }
+  };
+
+  return (
     <main className="flex-grow">
       <div className="min-h-screen bg-gradient-to-br from-orange-100 to-pink-100">
         {/* Navigation Bar */}
@@ -152,20 +248,96 @@ return (
               </div>
             </Link>
 
-            {/* Menu Buttons */}
-            <div className="flex space-x-2 sm:space-x-4">
-              <Link
-                href="/create"
-                className="px-3 py-1 sm:px-4 sm:py-2 bg-orange-500 text-white rounded-full font-semibold shadow-md hover:bg-orange-600 transition text-sm sm:text-base"
+            {/* Hamburger Menu for Mobile */}
+            <button
+              className="block sm:hidden focus:outline-none"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6 text-gray-800"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
               >
-                Write
-              </Link>
-              <button
-                onClick={() => setIsPopupOpen(true)}
-                className="px-3 py-1 sm:px-4 sm:py-2 bg-orange-500 text-white rounded-full font-semibold shadow-md hover:bg-orange-600 transition text-sm sm:text-base"
-              >
-                Subscribe
-              </button>
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16m-7 6h7"
+                />
+              </svg>
+            </button>
+
+            {/* Navigation Menu */}
+            <div
+              className={`${
+                mobileMenuOpen ? "block" : "hidden"
+              } sm:flex sm:items-center absolute sm:relative top-16 left-0 sm:top-0 w-full sm:w-auto bg-white sm:bg-transparent shadow-lg sm:shadow-none z-20`}
+            >
+              <nav className="flex flex-col sm:flex-row items-center sm:space-x-4 px-4 sm:px-0 py-4 sm:py-0">
+                <Link
+                  href="/create"
+                  className="w-full sm:w-auto px-4 py-2 mb-2 sm:mb-0 text-center bg-orange-500 text-white rounded-full font-semibold shadow-md hover:bg-orange-600 transition text-sm sm:text-base"
+                >
+                  Write
+                </Link>
+                <button
+                  onClick={() => setIsPopupOpen(true)}
+                  className="px-3 py-1 sm:px-4 sm:py-2 bg-orange-500 text-white rounded-full font-semibold shadow-md hover:bg-orange-600 transition text-sm sm:text-base"
+                >
+                  Subscribe
+                </button>
+
+                {/* User Actions */}
+                {user ? (
+                  <div className="relative w-full sm:w-auto">
+                    <button
+                      className="flex items-center justify-center w-full sm:w-auto px-4 py-2 bg-gray-200 text-gray-800 rounded-full font-semibold shadow-md hover:bg-gray-300 transition text-sm sm:text-base"
+                      onClick={() => setDropdownOpen(!dropdownOpen)}
+                    >
+                      {user.name}
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-5 w-5 ml-2"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M5.292 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </button>
+                    {dropdownOpen && (
+                      <div className="absolute sm:relative top-full right-0 mt-2 sm:mt-0 w-full sm:w-48 bg-white rounded-lg shadow-lg py-2 z-50">
+                        <button
+                          className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100"
+                          onClick={handleLogout}
+                        >
+                          Logout
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div className="flex flex-col sm:flex-row sm:space-x-2 w-full sm:w-auto">
+                    <Link
+                      href="/login"
+                      className="w-full sm:w-auto px-4 py-2 text-center bg-gray-200 text-gray-800 rounded-full font-semibold shadow-md hover:bg-gray-300 transition text-sm sm:text-base"
+                    >
+                      Login
+                    </Link>
+                    <Link
+                      href="/signup"
+                      className="w-full sm:w-auto px-4 py-2 text-center bg-gray-200 text-gray-800 rounded-full font-semibold shadow-md hover:bg-gray-300 transition text-sm sm:text-base"
+                    >
+                      Register
+                    </Link>
+                  </div>
+                )}
+              </nav>
             </div>
           </div>
         </header>
@@ -204,6 +376,15 @@ return (
               Collaborate
             </button>
           </div>
+          {/* Bookmarks Button */}
+          {user && (
+            <Link
+              href="/bookmarks"
+              className="mt-6 inline-block px-6 py-2 bg-gray-800 text-white font-semibold rounded-full shadow-md hover:bg-gray-900 transition text-sm sm:text-base"
+            >
+              View Bookmarks
+            </Link>
+          )}
         </div>
 
         {/* Collaborate Popup */}
@@ -260,6 +441,32 @@ return (
           </div>
         )}
 
+        {/* Notification Display */}
+        {notification && (
+          <div
+            className={`fixed top-5 right-5 z-50 p-4 rounded-md shadow-lg ${
+              notificationType === "success"
+                ? "bg-green-100 border-green-500 text-green-700"
+                : "bg-red-100 border-red-500 text-red-700"
+            }`}
+          >
+            {notification}
+          </div>
+        )}
+
+        {/* Notification Display */}
+        {notification && (
+          <div
+            className={`fixed top-5 right-5 z-50 p-4 rounded-md shadow-lg ${
+              notificationType === "success"
+                ? "bg-green-100 border-green-500 text-green-700"
+                : "bg-red-100 border-red-500 text-red-700"
+            }`}
+          >
+            {notification}
+          </div>
+        )}
+
         {/* Article List */}
         <main className="container mx-auto mt-6 px-4 sm:px-10">
           <div className="mb-6 sm:mb-8 text-center">
@@ -271,45 +478,85 @@ return (
             </p>
           </div>
 
-          {loading ? (
-            <div className="flex justify-center items-center py-20">
-              <p className="text-lg sm:text-xl font-semibold text-gray-500">
-                Loading... may take some time
-              </p>
+          {loading && page === 1 ? (
+            // Show skeleton loader for initial load
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+              {[1, 2, 3, 4, 5, 6].map((_, index) => (
+                <div
+                  key={index}
+                  className="bg-white rounded-lg shadow-md overflow-hidden animate-pulse"
+                >
+                  <div className="h-40 bg-gray-300"></div>
+                  <div className="p-4">
+                    <div className="h-5 bg-gray-300 rounded-md w-3/4 mb-3"></div>
+                    <div className="h-4 bg-gray-300 rounded-md w-full mb-2"></div>
+                    <div className="h-4 bg-gray-300 rounded-md w-5/6 mb-2"></div>
+                    <div className="h-4 bg-gray-300 rounded-md w-1/3"></div>
+                  </div>
+                </div>
+              ))}
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-              {filteredArticles.slice(0, visibleArticles).map((article) => (
+              {articles.map((article) => (
                 <div
                   key={article._id}
                   className="bg-white rounded-lg shadow-md hover:shadow-xl transition-transform transform hover:-translate-y-2 overflow-hidden"
                 >
-                  <div className="p-4">
-                    <Link
-                      href={`/article/${article._id}`}
-                      className="text-lg sm:text-2xl font-semibold text-gray-800 hover:text-orange-500"
-                    >
-                      {article.title}
-                    </Link>
-                    <p className="text-gray-700 mt-3 text-sm sm:text-base line-clamp-2">
-                      {article.content.slice(0, 120)}...
-                    </p>
-                    <p className="text-xs sm:text-sm text-gray-500 mt-4">
-                      By {article.author}
-                    </p>
-                  </div>
+                  {/* Initialize the Router */}
+                  {(() => {
+                    const router = useRouter();
+
+                    return (
+                      <>
+                        {/* Clickable container */}
+                        <div
+                          onClick={() => router.push(`/article/${article._id}`)}
+                          className="cursor-pointer p-4"
+                        >
+                          <h3 className="text-lg sm:text-2xl font-semibold text-gray-800 hover:text-orange-500">
+                            {article.title}
+                          </h3>
+                          <p className="text-gray-700 mt-3 text-sm sm:text-base line-clamp-2">
+                            <div
+                              dangerouslySetInnerHTML={{
+                                __html: article.content.slice(0, 120),
+                              }}
+                            ></div>
+                            ...
+                          </p>
+                          <p className="text-xs sm:text-sm text-gray-500 mt-4">
+                            By {article.author}
+                          </p>
+                        </div>
+                        {/* Bookmark Button */}
+                        <div className="p-4">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation(); // Prevent click on the card from triggering navigation
+                              handleBookmark(article._id);
+                            }}
+                            className="mt-4 px-3 py-1 bg-orange-400 text-white text-xs rounded-full font-semibold shadow-md hover:bg-orange-500 transition"
+                          >
+                            Bookmark
+                          </button>
+                        </div>
+                      </>
+                    );
+                  })()}
                 </div>
               ))}
             </div>
           )}
 
-          {visibleArticles < filteredArticles.length && (
+          {/* Load More Button */}
+          {page < totalPages && !loading && (
             <div className="flex justify-center mt-8 sm:mt-12">
               <button
                 onClick={loadMoreArticles}
-                className="px-2 sm:px-3 py-1 sm:py-1 bg-orange-500 text-white rounded-full font-semibold text-sm sm:text-lg shadow-md hover:bg-orange-600 transition"
+                className="px-4 py-2 bg-orange-500 text-white rounded-full font-semibold shadow-md hover:bg-orange-600 transition"
               >
-                See More
+                Load More
               </button>
             </div>
           )}
