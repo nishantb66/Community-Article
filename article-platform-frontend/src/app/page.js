@@ -28,6 +28,7 @@ export default function Home() {
   const [dropdownOpen, setDropdownOpen] = useState(false); // State for dropdown
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false); // State for mobile menu
   const [notification, setNotification] = useState(""); // State for notifications
+  const [popupMessage, setPopupMessage] = useState("");
   const [notificationType, setNotificationType] = useState(""); // Success or Error
 
   useEffect(() => {
@@ -382,6 +383,32 @@ export default function Home() {
               View Bookmarks
             </Link>
           )}
+
+          <br />
+
+          {user && (
+            <>
+              <button
+                onClick={() => {
+                  setPopupMessage("Exciting feature coming soon!");
+                  setTimeout(() => setPopupMessage(""), 2500); // Clear the notification after 3 seconds
+                }}
+                className="mt-6 inline-block px-6 py-2 bg-gray-800 text-white font-semibold rounded-full shadow-md hover:bg-gray-900 transition text-sm sm:text-base"
+              >
+                Stories by SimpleArticles
+              </button>
+
+              {/* Popup Notification */}
+              {popupMessage && (
+                <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
+                  <div className="bg-blue-500 text-white py-4 px-8 rounded-lg shadow-md text-center">
+                    <p className="text-lg font-semibold">{popupMessage}</p>
+                  </div>
+                </div>
+              )}
+            </>
+          )}
+          
         </div>
 
         {/* Collaborate Popup */}
