@@ -2,13 +2,14 @@
 
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 import { apiBaseUrl } from "../../utils/api";
 
-export default function InterestsPage() {
+function InterestsForm() {
   const [domains, setDomains] = useState("");
   const router = useRouter();
   const searchParams = useSearchParams();
-  const username = searchParams.get("username");
+  const username = searchParams?.get("username"); // Ensure searchParams is available
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -61,3 +62,18 @@ export default function InterestsPage() {
     </div>
   );
 }
+
+export default function InterestsPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center min-h-screen">
+          <p className="text-lg font-semibold text-gray-500">Loading...</p>
+        </div>
+      }
+    >
+      <InterestsForm />
+    </Suspense>
+  );
+}
+
