@@ -12,6 +12,7 @@ import {
 } from "react-share";
 import "../../../styles/globals.css";
 
+
 export default function ArticlePage() {
   const [article, setArticle] = useState(null);
   const [relatedArticles, setRelatedArticles] = useState([]);
@@ -23,13 +24,6 @@ export default function ArticlePage() {
   const [isReported, setIsReported] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
   const { id } = useParams();
-
-  useEffect(() => {
-   var _mtm = window._mtm = window._mtm || [];
-   _mtm.push({'mtm.startTime': (new Date().getTime()), 'event': 'mtm.Start'});
-   var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-   g.async=true; g.src='https://cdn.matomo.cloud/simplearticlesspace.matomo.cloud/container_3s7vGxHg.js'; s.parentNode.insertBefore(g,s);
-  }, [])
 
   useEffect(() => {
     async function fetchArticle() {
@@ -52,6 +46,9 @@ export default function ArticlePage() {
     }
   }, [id]);
 
+
+  
+
   async function fetchRelatedArticles(currentTitle) {
     try {
       const res = await fetch("https://community-article-backend.onrender.com/api/articles");
@@ -60,14 +57,18 @@ export default function ArticlePage() {
       }
       const data = await res.json();
 
+      // Ensure data is an array before processing
+      // const currentTitleWords = currentTitle.toLower;
       const currentTitleWords = currentTitle.toLowerCase().split(" ");
-      const related = data.filter((article) => {
-        if (article._id === id) return false;
-        const articleTitleWords = article.title.toLowerCase().split(" ");
-        return currentTitleWords.some((word) =>
-          articleTitleWords.includes(word)
-        );
-      });
+      const related = Array.isArray(data)
+        ? data.filter((article) => {
+            if (article._id === id) return false;
+            const articleTitleWords = article.title.toLowerCase().split(" ");
+            return currentTitleWords.some((word) =>
+              articleTitleWords.includes(word)
+            );
+          })
+        : []; // If data is not an array, fallback to an empty array
 
       setRelatedArticles(related);
     } catch (err) {
@@ -166,6 +167,7 @@ export default function ArticlePage() {
   }
 
   const shareUrl = `https://simplearticles.space/article/${id}`;
+  
 
   return (
     <div
@@ -230,7 +232,7 @@ export default function ArticlePage() {
             darkMode ? "prose-invert" : "prose-gray"
           } whitespace-pre-line leading-relaxed`}
         >
-          {article.content}
+          <div dangerouslySetInnerHTML={{ __html: article.content }}></div>
         </div>
 
         {/* Social Media Share Buttons */}
@@ -357,4 +359,5 @@ export default function ArticlePage() {
     </div>
   );
 }
+
 
