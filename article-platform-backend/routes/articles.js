@@ -33,15 +33,31 @@ router.post("/", upload.single("thumbnail"), async (req, res) => {
   }
 });
 
-// Get All Articles
+// Get Paginated Articles
 router.get("/", async (req, res) => {
   try {
-    const articles = await Article.find();
-    res.status(200).json(articles);
+    const page = parseInt(req.query.page) || 1; // Current page number (default to 1)
+    const limit = parseInt(req.query.limit) || 6; // Number of articles per page (default to 6)
+    const skip = (page - 1) * limit; // Skip articles based on page number
+
+    const articles = await Article.find()
+      .sort({ createdAt: -1 }) // Sort by latest articles
+      .skip(skip)
+      .limit(limit);
+
+    const totalArticles = await Article.countDocuments(); // Get total article count
+
+    res.status(200).json({
+      articles,
+      totalArticles,
+      totalPages: Math.ceil(totalArticles / limit),
+      currentPage: page,
+    });
   } catch (error) {
     res.status(500).json({ message: "Error fetching articles", error });
   }
 });
+
 
 // Get Single Article
 router.get("/:id", async (req, res) => {
@@ -81,6 +97,20 @@ router.post("/:id/report", async (req, res) => {
   } catch (err) {
     console.error("Error reporting article:", err);
     res.status(500).send({ message: "Server error." });
+  }
+});
+
+
+// Fetch articles written by a specific user
+router.get("/user/:userId", async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    const articles = await Article.find({ authorId: userId });
+    res.status(200).json(articles);
+  } catch (error) {
+    console.error("Error fetching user's articles:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 
