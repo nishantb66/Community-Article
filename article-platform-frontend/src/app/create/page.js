@@ -2,31 +2,29 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
+import "quill/dist/quill.snow.css"; // Import Quill's styles
 import Quill from "quill";
-import "quill/dist/quill.snow.css"; // Import Quill styles
 
 const CreateArticle = () => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
-  const [notification, setNotification] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [notification, setNotification] = useState(false);
+  const contentRef = useRef(null); // Reference to the Quill editor
+  const quillInstance = useRef(null); // Store Quill instance
   const router = useRouter();
-  const editorRef = useRef(null);
-  const quillInstance = useRef(null);
 
   useEffect(() => {
-    if (editorRef.current) {
-      // Initialize Quill editor
-      quillInstance.current = new Quill(editorRef.current, {
+    // Initialize Quill editor only once
+    if (!quillInstance.current) {
+      quillInstance.current = new Quill(contentRef.current, {
         theme: "snow",
-        placeholder: "Start writing your article...",
+        placeholder: "Write your content here...",
         modules: {
           toolbar: [
-            [{ header: [1, 2, 3, false] }],
             ["bold", "italic", "underline", "strike"],
             [{ list: "ordered" }, { list: "bullet" }],
-            ["link", "image", "blockquote", "code-block"],
-            ["clean"],
+            ["link", "image"],
           ],
         },
       });
@@ -34,14 +32,19 @@ const CreateArticle = () => {
   }, []);
 
   const handleSubmit = async () => {
-    const content = quillInstance.current?.root.innerHTML || ""; // Get editor content
+    const content = quillInstance.current.root.innerHTML; // Get HTML content from Quill
+    const cleanedContent = content.replace(/<[^>]*>/g, "").trim(); // Clean up content
 
-    if (!title || !content.trim() || !author) {
+    if (!title || !cleanedContent || !author) {
       alert("All fields are required!");
       return;
     }
 
-    const formData = { title, content, author };
+    const formData = {
+      title,
+      content, // Send formatted content with HTML
+      author,
+    };
 
     setLoading(true);
 
@@ -55,13 +58,13 @@ const CreateArticle = () => {
       if (response.ok) {
         const data = await response.json();
         setTitle("");
-        quillInstance.current.root.innerHTML = ""; // Clear the editor
+        quillInstance.current.setContents([]); // Clear the Quill editor
         setAuthor("");
-        setNotification(true);
+        setNotification(true); // Show notification
 
         setTimeout(() => {
           setNotification(false);
-          router.push(`/article/${data._id}`);
+          router.push(`/article/${data._id}`); // Redirect to the article page
         }, 3000);
       } else {
         alert("Failed to create article.");
@@ -75,8 +78,7 @@ const CreateArticle = () => {
   };
 
   return (
-    <div className="bg-gradient-to-br from-orange-100 to-pink-100 min-h-screen py-10 px-6">
-      {/* Notification */}
+    <div className="bg-gradient-to-br from-orange-100 to-pink-100 min-h-screen py-10 px-6 relative">
       {notification && (
         <div className="fixed top-5 left-1/2 transform -translate-x-1/2 z-50">
           <div className="bg-green-500 text-white py-2 px-6 rounded-lg shadow-md flex items-center">
@@ -120,8 +122,8 @@ const CreateArticle = () => {
               {/* Quill Editor */}
               <div
                 id="editor"
-                ref={editorRef}
-                className="mt-2 h-64 border border-gray-300 rounded-md shadow-sm"
+                ref={contentRef}
+                className="h-40 border border-gray-300 rounded-md"
               ></div>
             </div>
             <div>
