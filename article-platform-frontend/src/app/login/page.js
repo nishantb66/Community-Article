@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { apiBaseUrl } from "../../utils/api";
 
@@ -30,9 +30,12 @@ export default function LoginPage() {
 
       if (response.ok) {
         const data = await response.json();
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("userId", data.userId);
-        localStorage.setItem("userName", data.name);
+        if (typeof window !== "undefined") {
+          // Check if window is defined
+          localStorage.setItem("token", data.token);
+          localStorage.setItem("userId", data.userId);
+          localStorage.setItem("userName", data.name);
+        }
 
         // Show success message
         setSuccessMessage("Logged in");
