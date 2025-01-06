@@ -1,31 +1,47 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { Editor } from "@tinymce/tinymce-react";
+import Quill from "quill";
+import "quill/dist/quill.snow.css"; // Import Quill styles
 
 const CreateArticle = () => {
   const [title, setTitle] = useState("");
-  const [content, setContent] = useState(""); // TinyMCE editor content
   const [author, setAuthor] = useState("");
-  const [loading, setLoading] = useState(false);
   const [notification, setNotification] = useState(false);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const editorRef = useRef(null);
+  const quillInstance = useRef(null);
+
+  useEffect(() => {
+    if (editorRef.current) {
+      // Initialize Quill editor
+      quillInstance.current = new Quill(editorRef.current, {
+        theme: "snow",
+        placeholder: "Start writing your article...",
+        modules: {
+          toolbar: [
+            [{ header: [1, 2, 3, false] }],
+            ["bold", "italic", "underline", "strike"],
+            [{ list: "ordered" }, { list: "bullet" }],
+            ["link", "image", "blockquote", "code-block"],
+            ["clean"],
+          ],
+        },
+      });
+    }
+  }, []);
 
   const handleSubmit = async () => {
-    // Ensure content is not empty, including HTML tags
-    const cleanedContent = content.replace(/<[^>]*>/g, "").trim(); // Remove HTML tags and trim whitespace
+    const content = quillInstance.current?.root.innerHTML || ""; // Get editor content
 
-    if (!title || !cleanedContent || !author) {
+    if (!title || !content.trim() || !author) {
       alert("All fields are required!");
       return;
     }
 
-    const formData = {
-      title,
-      content, // Send formatted content with HTML
-      author,
-    };
+    const formData = { title, content, author };
 
     setLoading(true);
 
@@ -37,15 +53,15 @@ const CreateArticle = () => {
       });
 
       if (response.ok) {
-        const data = await response.json(); // Assuming the API returns the created article object
+        const data = await response.json();
         setTitle("");
-        setContent("");
+        quillInstance.current.root.innerHTML = ""; // Clear the editor
         setAuthor("");
-        setNotification(true); // Show notification
+        setNotification(true);
 
         setTimeout(() => {
-          setNotification(false); // Hide notification after 3 seconds
-          router.push(`/article/${data._id}`); // Redirect to the article page
+          setNotification(false);
+          router.push(`/article/${data._id}`);
         }, 3000);
       } else {
         alert("Failed to create article.");
@@ -58,20 +74,8 @@ const CreateArticle = () => {
     }
   };
 
-  useEffect(() => {
-    var _mtm = (window._mtm = window._mtm || []);
-    _mtm.push({ "mtm.startTime": new Date().getTime(), event: "mtm.Start" });
-    var d = document,
-      g = d.createElement("script"),
-      s = d.getElementsByTagName("script")[0];
-    g.async = true;
-    g.src =
-      "https://cdn.matomo.cloud/simplearticlesspace.matomo.cloud/container_3s7vGxHg.js";
-    s.parentNode.insertBefore(g, s);
-  }, []);
-
   return (
-    <div className="bg-gradient-to-br from-orange-100 to-pink-100 min-h-screen py-10 px-6 relative">
+    <div className="bg-gradient-to-br from-orange-100 to-pink-100 min-h-screen py-10 px-6">
       {/* Notification */}
       {notification && (
         <div className="fixed top-5 left-1/2 transform -translate-x-1/2 z-50">
@@ -79,22 +83,6 @@ const CreateArticle = () => {
             <div className="mr-2 text-lg font-semibold">✔</div>
             <span>Article published successfully!</span>
           </div>
-          <div className="w-full bg-green-400 h-1 mt-1 relative">
-            <div
-              className="bg-green-600 h-full animate-[reverseLoader_3s_linear] absolute"
-              style={{ animation: "reverseLoader 3s linear forwards" }}
-            ></div>
-          </div>
-          <style jsx>{`
-            @keyframes reverseLoader {
-              0% {
-                width: 100%;
-              }
-              100% {
-                width: 0;
-              }
-            }
-          `}</style>
         </div>
       )}
 
@@ -129,24 +117,12 @@ const CreateArticle = () => {
               >
                 Content
               </label>
-              {/* TinyMCE Editor */}
-              <Editor
-                apiKey="1k6jxn3hn2io1wkgtmpdwe1swsk0q4okloh6ktqzw1ws3ovs" // Replace with your TinyMCE API key
-                value={content}
-                onEditorChange={(newContent) => setContent(newContent)} // Sync editor content with state
-                init={{
-                  plugins: [
-                    "advlist autolink lists link image charmap print preview anchor",
-                    "searchreplace visualblocks code fullscreen",
-                    "insertdatetime media table paste code help wordcount",
-                  ],
-                  toolbar:
-                    "undo redo | formatselect | bold italic backcolor | \
-                    alignleft aligncenter alignright alignjustify | \
-                    bullist numlist outdent indent | removeformat | help",
-                  height: 400,
-                }}
-              />
+              {/* Quill Editor */}
+              <div
+                id="editor"
+                ref={editorRef}
+                className="mt-2 h-64 border border-gray-300 rounded-md shadow-sm"
+              ></div>
             </div>
             <div>
               <label
