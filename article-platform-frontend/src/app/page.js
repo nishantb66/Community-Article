@@ -514,14 +514,13 @@ export default function Home() {
                           <h3 className="text-lg sm:text-2xl font-semibold text-gray-800 hover:text-orange-500">
                             {article.title}
                           </h3>
-                          <p className="text-gray-700 mt-3 text-sm sm:text-base line-clamp-2">
-                            <div
+                          <div
+                              className="text-gray-700 mt-3 text-sm sm:text-base line-clamp-2"
                               dangerouslySetInnerHTML={{
                                 __html: article.content.slice(0, 120),
                               }}
                             ></div>
-                            ...
-                          </p>
+                              ...
                           <p className="text-xs sm:text-sm text-gray-500 mt-4">
                             By {article.author}
                           </p>
