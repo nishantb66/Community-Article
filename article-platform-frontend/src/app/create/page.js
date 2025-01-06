@@ -1,50 +1,31 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import "quill/dist/quill.snow.css"; // Import Quill's styles
-import Quill from "quill";
+import dynamic from "next/dynamic";
+
+const QuillEditor = dynamic(() => import("../../components/QuillEditor"), {
+  ssr: false,
+});
+
 
 const CreateArticle = () => {
   const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
   const [author, setAuthor] = useState("");
   const [loading, setLoading] = useState(false);
   const [notification, setNotification] = useState(false);
-  const contentRef = useRef(null); // Reference to the Quill editor
-  const quillInstance = useRef(null); // Store Quill instance
   const router = useRouter();
 
-  useEffect(() => {
-    // Initialize Quill editor only once
-    if (!quillInstance.current) {
-      quillInstance.current = new Quill(contentRef.current, {
-        theme: "snow",
-        placeholder: "Write your content here...",
-        modules: {
-          toolbar: [
-            ["bold", "italic", "underline", "strike"],
-            [{ list: "ordered" }, { list: "bullet" }],
-            ["link", "image"],
-          ],
-        },
-      });
-    }
-  }, []);
-
   const handleSubmit = async () => {
-    const content = quillInstance.current.root.innerHTML; // Get HTML content from Quill
-    const cleanedContent = content.replace(/<[^>]*>/g, "").trim(); // Clean up content
+    const cleanedContent = content.replace(/<[^>]*>/g, "").trim();
 
     if (!title || !cleanedContent || !author) {
       alert("All fields are required!");
       return;
     }
 
-    const formData = {
-      title,
-      content, // Send formatted content with HTML
-      author,
-    };
+    const formData = { title, content, author };
 
     setLoading(true);
 
@@ -58,13 +39,13 @@ const CreateArticle = () => {
       if (response.ok) {
         const data = await response.json();
         setTitle("");
-        quillInstance.current.setContents([]); // Clear the Quill editor
+        setContent("");
         setAuthor("");
-        setNotification(true); // Show notification
+        setNotification(true);
 
         setTimeout(() => {
           setNotification(false);
-          router.push(`/article/${data._id}`); // Redirect to the article page
+          router.push(`/article/${data._id}`);
         }, 3000);
       } else {
         alert("Failed to create article.");
@@ -119,24 +100,19 @@ const CreateArticle = () => {
               >
                 Content
               </label>
-              {/* Quill Editor */}
-              <div
-                id="editor"
-                ref={contentRef}
-                className="h-40 border border-gray-300 rounded-md"
-              ></div>
+              <QuillEditor setContent={setContent} />
             </div>
             <div>
               <label
                 htmlFor="author"
                 className="block text-sm font-medium text-gray-700"
               >
-                Your Name
+                Author
               </label>
               <input
                 id="author"
                 type="text"
-                placeholder="Your name"
+                placeholder="Your name..."
                 value={author}
                 onChange={(e) => setAuthor(e.target.value)}
                 className="mt-2 w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400 text-lg"
@@ -161,5 +137,4 @@ const CreateArticle = () => {
 };
 
 export default CreateArticle;
-
 
