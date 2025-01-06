@@ -7,12 +7,20 @@ export default function BookmarksPage() {
   const [bookmarks, setBookmarks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [notification, setNotification] = useState(""); // State for notification message
+  const [userId, setUserId] = useState(null); // State for userId
 
-  // Retrieve the logged-in user's ID from localStorage
-  const userId = localStorage.getItem("userId");
+  useEffect(() => {
+    // Access localStorage on the client-side
+    if (typeof window !== "undefined") {
+      const storedUserId = localStorage.getItem("userId");
+      setUserId(storedUserId); // Set userId from localStorage
+    }
+  }, []);
 
   useEffect(() => {
     async function fetchBookmarks() {
+      if (!userId) return;
+
       try {
         const res = await fetch(
           `https://community-article-backend.onrender.com/api/bookmarks/${userId}`
@@ -29,12 +37,7 @@ export default function BookmarksPage() {
       }
     }
 
-    if (userId) {
-      fetchBookmarks();
-    } else {
-      console.error("User not logged in.");
-      setLoading(false);
-    }
+    fetchBookmarks();
   }, [userId]);
 
   // Function to remove a bookmark
@@ -132,3 +135,4 @@ export default function BookmarksPage() {
     </div>
   );
 }
+
