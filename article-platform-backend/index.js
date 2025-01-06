@@ -1,17 +1,21 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const cors = require("cors");
 const bodyParser = require("body-parser");
 require("dotenv").config();
+
+// Import Routes
 const emailRoutes = require("./routes/email");
 const commentsRoutes = require("./routes/comments");
 const subscribersRoutes = require("./routes/subscribers");
 const contributorRoutes = require("./routes/contributors");
+const usersRoutes = require("./routes/users");
+const articleRoutes = require("./routes/articles");
 
+// Initialize Express App
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Middleware
+
 const corsOptions = {
   origin: 'https://simplearticles.space', // Allow requests from this frontend
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
@@ -22,11 +26,19 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 app.use(bodyParser.json());
-app.use(express.json()); // Middleware to parse JSON
-app.use("/api", emailRoutes); // Register the email route
+app.use(express.json());
+
+// API Routes
+app.use("/api/email", emailRoutes);
 app.use("/api", commentsRoutes);
 app.use("/api/subscribe", subscribersRoutes);
 app.use("/api/contributors", contributorRoutes);
+app.use("/api", usersRoutes);
+app.use("/api/articles", articleRoutes);
+
+// Serve static files for uploads (if any)
+const path = require("path");
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // MongoDB Connection
 mongoose
@@ -35,13 +47,8 @@ mongoose
     useUnifiedTopology: true,
   })
   .then(() => console.log("MongoDB connected"))
-  .catch((err) => console.error(err));
+  .catch((err) => console.error("MongoDB connection error:", err));
 
-// API Routes
-const articleRoutes = require("./routes/articles");
-app.use("/api/articles", articleRoutes);
-const path = require("path");
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-
+// Start the Server
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
