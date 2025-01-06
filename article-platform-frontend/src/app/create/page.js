@@ -1,26 +1,29 @@
 "use client";
 
-
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { Editor } from "@tinymce/tinymce-react";
 
 const CreateArticle = () => {
   const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+  const [content, setContent] = useState(""); // TinyMCE editor content
   const [author, setAuthor] = useState("");
   const [loading, setLoading] = useState(false);
   const [notification, setNotification] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async () => {
-    if (!title || !content || !author) {
+    // Ensure content is not empty, including HTML tags
+    const cleanedContent = content.replace(/<[^>]*>/g, "").trim(); // Remove HTML tags and trim whitespace
+
+    if (!title || !cleanedContent || !author) {
       alert("All fields are required!");
       return;
     }
 
     const formData = {
       title,
-      content,
+      content, // Send formatted content with HTML
       author,
     };
 
@@ -55,12 +58,17 @@ const CreateArticle = () => {
     }
   };
 
-useEffect(() => {
-   var _mtm = window._mtm = window._mtm || [];
-   _mtm.push({'mtm.startTime': (new Date().getTime()), 'event': 'mtm.Start'});
-   var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-   g.async=true; g.src='https://cdn.matomo.cloud/simplearticlesspace.matomo.cloud/container_3s7vGxHg.js'; s.parentNode.insertBefore(g,s);
-  }, [])
+  useEffect(() => {
+    var _mtm = (window._mtm = window._mtm || []);
+    _mtm.push({ "mtm.startTime": new Date().getTime(), event: "mtm.Start" });
+    var d = document,
+      g = d.createElement("script"),
+      s = d.getElementsByTagName("script")[0];
+    g.async = true;
+    g.src =
+      "https://cdn.matomo.cloud/simplearticlesspace.matomo.cloud/container_3s7vGxHg.js";
+    s.parentNode.insertBefore(g, s);
+  }, []);
 
   return (
     <div className="bg-gradient-to-br from-orange-100 to-pink-100 min-h-screen py-10 px-6 relative">
@@ -121,12 +129,23 @@ useEffect(() => {
               >
                 Content
               </label>
-              <textarea
-                id="content"
-                placeholder="Start writing your story..."
+              {/* TinyMCE Editor */}
+              <Editor
+                apiKey="1k6jxn3hn2io1wkgtmpdwe1swsk0q4okloh6ktqzw1ws3ovs" // Replace with your TinyMCE API key
                 value={content}
-                onChange={(e) => setContent(e.target.value)}
-                className="mt-2 w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400 text-lg resize-none h-56"
+                onEditorChange={(newContent) => setContent(newContent)} // Sync editor content with state
+                init={{
+                  plugins: [
+                    "advlist autolink lists link image charmap print preview anchor",
+                    "searchreplace visualblocks code fullscreen",
+                    "insertdatetime media table paste code help wordcount",
+                  ],
+                  toolbar:
+                    "undo redo | formatselect | bold italic backcolor | \
+                    alignleft aligncenter alignright alignjustify | \
+                    bullist numlist outdent indent | removeformat | help",
+                  height: 400,
+                }}
               />
             </div>
             <div>
@@ -164,4 +183,5 @@ useEffect(() => {
 };
 
 export default CreateArticle;
+
 
