@@ -32,18 +32,22 @@ export default function Home() {
 
   useEffect(() => {
     // Fetch user data from localStorage on load
-    const token = localStorage.getItem("token");
-    const userName = localStorage.getItem("userName");
+    if (typeof window !== "undefined") {
+      const token = localStorage.getItem("token");
+      const userName = localStorage.getItem("userName");
 
-    if (token && userName) {
-      setUser({ name: userName });
+      if (token && userName) {
+        setUser({ name: userName });
+      }
     }
   }, []);
 
   const handleLogout = () => {
     // Clear user session
-    localStorage.removeItem("token");
-    localStorage.removeItem("userName");
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("token");
+      localStorage.removeItem("userName");
+    }
     setUser(null);
     setDropdownOpen(false);
 
@@ -192,7 +196,11 @@ export default function Home() {
   };
 
   const handleBookmark = async (articleId) => {
-    const userId = localStorage.getItem("userId"); // Ensure userId is fetched correctly
+    let userId = null;
+    if (typeof window !== "undefined") {
+      userId = localStorage.getItem("userId"); // Ensure userId is fetched correctly
+    }
+
     if (!userId) {
       // Set notification for login requirement
       setNotification("Please login to bookmark articles.");
@@ -204,7 +212,7 @@ export default function Home() {
     console.log("UserId:", userId, "ArticleId:", articleId);
 
     try {
-      const response = await fetch("https://community-article-backend.onrender.com/api/bookmarks/add", {
+      const response = await fetch("http://localhost:5000/api/bookmarks/add", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId, articleId }),
