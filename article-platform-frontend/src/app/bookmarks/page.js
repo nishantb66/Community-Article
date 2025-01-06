@@ -97,23 +97,25 @@ export default function BookmarksPage() {
           </p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {bookmarks.map((article) => (
+            {bookmarks.map((article, index) => (
               <div
-                key={article._id}
+                key={article._id || index} // Fallback to index if article._id is undefined
                 className="bg-white rounded-lg shadow-md hover:shadow-lg transition-transform transform hover:-translate-y-1"
               >
                 <div className="p-4">
                   <h2 className="text-xl font-semibold text-gray-800">
-                    {article.title}
+                    {article.title || "Untitled Article"}
                   </h2>
-                  <p className="text-sm text-gray-600 mt-2 line-clamp-3">
+                  
                     <div
+                      className="text-sm text-gray-600 mt-2 line-clamp-3"
                       dangerouslySetInnerHTML={{
-                        __html: article.content.slice(0, 120),
+                        __html: article.content
+                          ? article.content.slice(0, 120)
+                          : "No content available.",
                       }}
                     ></div>
-                    ...
-                  </p>
+        
                   <Link
                     href={`/article/${article._id}`}
                     className="text-orange-500 font-semibold hover:underline mt-4 inline-block"
