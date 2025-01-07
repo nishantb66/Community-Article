@@ -17,7 +17,6 @@ const CreateArticle = () => {
   const router = useRouter();
 
   useEffect(() => {
-    // Check if the window object is available (ensures browser environment)
     if (typeof window !== "undefined") {
       const storedUsername = localStorage.getItem("userName");
       const userId = localStorage.getItem("userId");
@@ -38,7 +37,6 @@ const CreateArticle = () => {
       return;
     }
 
-    // Check if window object is available
     let username = "";
     if (typeof window !== "undefined") {
       username = localStorage.getItem("userName"); // Fetch username from localStorage
@@ -49,7 +47,7 @@ const CreateArticle = () => {
       return;
     }
 
-    const formData = { title, content, author: username }; // Use username as the author
+    const formData = { title, content, author: username };
 
     setLoading(true);
 
@@ -68,7 +66,7 @@ const CreateArticle = () => {
 
         setTimeout(() => {
           setNotification(false);
-          router.push(`/article/${data._id}`);
+          router.push(`/`);
         }, 3000);
       } else {
         alert("Failed to create article.");
@@ -81,11 +79,8 @@ const CreateArticle = () => {
     }
   };
 
-
-
-
   return (
-    <div className="bg-gradient-to-br from-orange-100 to-pink-100 min-h-screen py-10 px-6 relative">
+    <div className="bg-gradient-to-br from-orange-50 to-pink-100 min-h-screen py-10 px-4 sm:px-6 lg:px-8">
       {notification && (
         <div className="fixed top-5 left-1/2 transform -translate-x-1/2 z-50">
           <div className="bg-green-500 text-white py-2 px-6 rounded-lg shadow-md flex items-center">
@@ -95,74 +90,87 @@ const CreateArticle = () => {
         </div>
       )}
 
-      <div className="max-w-3xl mx-auto bg-white shadow-xl rounded-xl overflow-hidden">
-        <div className="bg-gradient-to-r from-orange-400 to-pink-400 py-6 px-8 text-white">
-          <h1 className="text-2xl font-bold text-center">
-            Write Anonymously or with Attribution
-          </h1>
+      <div className="max-w-4xl mx-auto bg-white shadow-2xl rounded-xl overflow-hidden">
+        {/* Header */}
+        <div className="bg-gradient-to-r from-orange-400 to-pink-400 py-8 px-6 text-white text-center">
+          <h1 className="text-3xl font-bold">Create an Article</h1>
+          <p className="mt-2 text-sm">Share your ideas with the world!</p>
         </div>
-        <div className="p-8">
-          <div className="space-y-6">
-            <div>
-              <label
-                htmlFor="title"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Title
-              </label>
-              <input
-                id="title"
-                type="text"
-                placeholder="Enter a catchy title..."
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                className="mt-2 w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400 text-lg"
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="content"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Content
-              </label>
+
+        {/* Form */}
+        <div className="p-8 space-y-6">
+          <div>
+            <label
+              htmlFor="title"
+              className="block text-lg font-medium text-gray-700"
+            >
+              Title
+            </label>
+            <input
+              id="title"
+              type="text"
+              placeholder="Enter a catchy title..."
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className="mt-2 w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400 text-base"
+            />
+          </div>
+          <div>
+            <label
+              htmlFor="content"
+              className="block text-lg font-medium text-gray-700"
+            >
+              Content
+            </label>
+            <div className="mt-6">
               <QuillEditor setContent={setContent} />
             </div>
-            {/* Hide Author field if user is logged in */}
-            {!username && (
-              <div>
-                <label
-                  htmlFor="author"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Author
-                </label>
-                <input
-                  id="author"
-                  type="text"
-                  placeholder="Your name..."
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  className="mt-2 w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400 text-lg"
-                />
-              </div>
-            )}
-            <button
-              onClick={handleSubmit}
-              disabled={loading}
-              className={`w-full py-3 rounded-md text-lg font-semibold text-white ${
-                loading
-                  ? "bg-orange-300 cursor-not-allowed"
-                  : "bg-orange-500 hover:bg-orange-600 transition"
-              } shadow-md`}
-            >
-              {loading ? "Publishing..." : "Publish Article"}
-            </button>
           </div>
+          {!username && (
+            <div>
+              <label
+                htmlFor="author"
+                className="block text-lg font-medium text-gray-700"
+              >
+                Author
+              </label>
+              <input
+                id="author"
+                type="text"
+                placeholder="Your name..."
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className="mt-2 w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400 text-base"
+              />
+            </div>
+          )}
+          <button
+            onClick={handleSubmit}
+            disabled={loading}
+            className={`w-full py-3 rounded-lg text-lg font-semibold text-white ${
+              loading
+                ? "bg-orange-300 cursor-not-allowed"
+                : "bg-orange-500 hover:bg-orange-600 transition"
+            } shadow-lg`}
+          >
+            {loading ? "Publishing..." : "Publish Article"}
+          </button>
         </div>
+      </div>
+
+      <div className="mt-6 text-center">
+        <a
+          href="/guidelines"
+          className="text-blue-600 hover:underline font-medium"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          simpleArticle regulations
+        </a>
       </div>
     </div>
   );
 };
 
 export default CreateArticle;
+
