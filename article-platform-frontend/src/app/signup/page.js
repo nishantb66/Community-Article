@@ -23,7 +23,6 @@ export default function SignupPage() {
     }
   };
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
@@ -48,37 +47,45 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen px-4 bg-gradient-to-br from-orange-100 to-pink-100">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-100 to-pink-100 relative overflow-hidden">
+      {/* Background Decorative Elements */}
+      <div className="absolute top-0 left-0 w-40 h-40 bg-orange-200 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob"></div>
+      <div className="absolute top-0 right-0 w-60 h-60 bg-pink-200 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-2000"></div>
+      <div className="absolute bottom-0 left-0 w-60 h-60 bg-yellow-200 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-4000"></div>
+
+      {/* Form Container */}
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-lg p-6 space-y-6 bg-white rounded-lg shadow-lg sm:p-8 md:p-10"
+        className="relative z-10 w-full max-w-lg p-8 bg-white shadow-2xl rounded-3xl sm:p-10 md:p-12"
       >
-        <h2 className="text-2xl font-bold text-center text-gray-800 sm:text-3xl md:text-4xl">
-          Create an Account
+        <h2 className="text-3xl font-extrabold text-center text-gray-800 sm:text-4xl md:text-5xl mb-6">
+          Join Our Community
         </h2>
+        <p className="text-sm text-center text-gray-500 sm:text-base mb-8">
+          Start your journey by creating an account
+        </p>
         <div className="space-y-4">
           <input
             name="name"
-            placeholder="Name"
+            placeholder="Nick name"
             onChange={handleChange}
             required
-            className="w-full px-4 py-2 text-gray-700 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-300"
+            className="w-full px-4 py-3 text-gray-700 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-300 shadow-sm"
           />
           <input
             name="username"
             placeholder="Username"
             onChange={handleChange}
             required
-            className="w-full px-4 py-2 text-gray-700 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-300"
+            className="w-full px-4 py-3 text-gray-700 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-300 shadow-sm"
           />
-
           <input
             type="email"
             name="email"
             placeholder="Email"
             onChange={handleChange}
             required
-            className="w-full px-4 py-2 text-gray-700 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-300"
+            className="w-full px-4 py-3 text-gray-700 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-300 shadow-sm"
           />
           <input
             type="password"
@@ -86,7 +93,7 @@ export default function SignupPage() {
             placeholder="Password"
             onChange={handleChange}
             required
-            className="w-full px-4 py-2 text-gray-700 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-300"
+            className="w-full px-4 py-3 text-gray-700 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-300 shadow-sm"
           />
           <input
             type="password"
@@ -94,22 +101,25 @@ export default function SignupPage() {
             placeholder="Confirm Password"
             onChange={handleChange}
             required
-            className="w-full px-4 py-2 text-gray-700 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-300"
+            className="w-full px-4 py-3 text-gray-700 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-300 shadow-sm"
           />
         </div>
         <button
           type="submit"
-          className="w-full py-2 mt-4 text-white bg-orange-400 rounded-lg hover:bg-orange-500 focus:outline-none focus:ring-4 focus:ring-orange-300"
+          className="w-full py-3 mt-6 text-white bg-orange-400 rounded-lg hover:bg-orange-500 focus:outline-none focus:ring-4 focus:ring-orange-300 font-semibold shadow-lg transition"
         >
           Sign Up
         </button>
-        <p className="text-sm text-center text-gray-500 sm:text-base">
+        <p className="mt-6 text-sm text-center text-gray-500 sm:text-base">
           Already have an account?{" "}
           <a href="/login" className="text-orange-500 hover:underline">
             Log in
           </a>
         </p>
       </form>
+
+      {/* Additional Animation */}
+      <div className="absolute -top-10 -right-10 w-96 h-96 bg-orange-300 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-blob animation-delay-6000"></div>
     </div>
   );
 }
