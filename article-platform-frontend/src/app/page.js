@@ -80,6 +80,7 @@ export default function Home() {
       });
 
       setTotalPages(data.totalPages);
+      setFilteredArticles(data); // Initially, all articles are shown
     } catch (error) {
       console.error("Error fetching articles:", error);
     } finally {
@@ -103,12 +104,10 @@ export default function Home() {
   const handleSearch = (query) => {
     setSearchQuery(query);
     if (query.trim() === "") {
-      setFilteredArticles(articles);
+      setFilteredArticles(articles); // Reset to all articles if search query is empty
     } else {
-      const filtered = articles.filter(
-        (article) =>
-          article.title.toLowerCase().includes(query.toLowerCase()) ||
-          article.content.toLowerCase().includes(query.toLowerCase())
+      const filtered = articles.filter((article) =>
+        article.title.toLowerCase().includes(query.toLowerCase())
       );
       setFilteredArticles(filtered);
     }
@@ -353,7 +352,7 @@ export default function Home() {
           </div>
         </header>
 
-        {/* Hero Section */}
+       {/* Hero Section */}
 
         <div className="text-center bg-gradient-to-br from-orange-50 to-pink-50 py-10 px-6 sm:py-16 sm:px-10">
           {/* Collaborate Button Below Logo */}
@@ -364,8 +363,21 @@ export default function Home() {
           <p className="text-base sm:text-lg text-gray-600 mb-6">
             Explore articles, stories written by the community
           </p>
+          {/* Search Bar */}
+          <div className="max-w-md mx-auto">
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                handleSearch(e.target.value);
+              }}
+              placeholder="Search articles..."
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-400 focus:outline-none"
+            />
+          </div>
+          <br />
           <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
-
             <div className="flex flex-row gap-2">
               <Link
                 href="/deleteRequest"
@@ -381,7 +393,6 @@ export default function Home() {
               Collaborate
             </button>
           </div>
-          
 
           <br />
 
@@ -389,8 +400,7 @@ export default function Home() {
             <>
               <button
                 onClick={() => {
-                  setPopupMessage("Exciting feature coming soon!");
-                  setTimeout(() => setPopupMessage(""), 2500); // Clear the notification after 3 seconds
+                  router.push("/stories"); // Redirect to the stories page
                 }}
                 className="mt-6 inline-block px-6 py-2 bg-gray-800 text-white font-semibold rounded-full shadow-md hover:bg-gray-900 transition text-sm sm:text-base"
               >
@@ -407,7 +417,6 @@ export default function Home() {
               )}
             </>
           )}
-          
         </div>
 
         {/* Collaborate Popup */}
@@ -490,7 +499,7 @@ export default function Home() {
           </div>
         )}
 
-        {/* Article List */}
+        {/* Main Section */}
         <main className="container mx-auto mt-6 px-4 sm:px-10">
           <div className="mb-6 sm:mb-8 text-center">
             <h2 className="text-xl sm:text-3xl font-bold text-gray-800">
@@ -502,9 +511,9 @@ export default function Home() {
           </div>
 
           {loading && page === 1 ? (
-            // Show skeleton loader for initial load
+            // Skeleton Loader for Initial Load
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-              {[1, 2, 3, 4, 5, 6].map((_, index) => (
+              {Array.from({ length: 6 }).map((_, index) => (
                 <div
                   key={index}
                   className="bg-white rounded-lg shadow-md overflow-hidden animate-pulse"
@@ -520,52 +529,44 @@ export default function Home() {
               ))}
             </div>
           ) : (
+            // Filtered Articles
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-              {articles.map((article) => (
+              {(searchQuery ? filteredArticles : articles).map((article) => (
                 <div
                   key={article._id}
                   className="bg-white rounded-lg shadow-md hover:shadow-xl transition-transform transform hover:-translate-y-2 overflow-hidden"
                 >
-                  {/* Initialize the Router */}
-                  {(() => {
-                    const router = useRouter();
+                  {/* Article Container */}
+                  <div
+                    onClick={() => router.push(`/article/${article._id}`)}
+                    className="cursor-pointer p-4"
+                  >
+                    <h3 className="text-lg sm:text-2xl font-semibold text-gray-800 hover:text-orange-500">
+                      {article.title}
+                    </h3>
+                    <div
+                      className="text-gray-700 mt-3 text-sm sm:text-base line-clamp-2"
+                      dangerouslySetInnerHTML={{
+                        __html: article.content.slice(0, 120),
+                      }}
+                    ></div>
+                    <p className="text-xs sm:text-sm text-gray-500 mt-4">
+                      By {article.author}
+                    </p>
+                  </div>
 
-                    return (
-                      <>
-                        {/* Clickable container */}
-                        <div
-                          onClick={() => router.push(`/article/${article._id}`)}
-                          className="cursor-pointer p-4"
-                        >
-                          <h3 className="text-lg sm:text-2xl font-semibold text-gray-800 hover:text-orange-500">
-                            {article.title}
-                          </h3>
-                          <div
-                              className="text-gray-700 mt-3 text-sm sm:text-base line-clamp-2"
-                              dangerouslySetInnerHTML={{
-                                __html: article.content.slice(0, 120),
-                              }}
-                            ></div>
-                              ...
-                          <p className="text-xs sm:text-sm text-gray-500 mt-4">
-                            By {article.author}
-                          </p>
-                        </div>
-                        {/* Bookmark Button */}
-                        <div className="p-4">
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation(); // Prevent click on the card from triggering navigation
-                              handleBookmark(article._id);
-                            }}
-                            className="mt-4 px-3 py-1 bg-orange-400 text-white text-xs rounded-full font-semibold shadow-md hover:bg-orange-500 transition"
-                          >
-                            Bookmark
-                          </button>
-                        </div>
-                      </>
-                    );
-                  })()}
+                  {/* Bookmark Button */}
+                  <div className="p-4">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation(); // Prevent navigation on card click
+                        handleBookmark(article._id);
+                      }}
+                      className="mt-4 px-3 py-1 bg-orange-400 text-white text-xs rounded-full font-semibold shadow-md hover:bg-orange-500 transition"
+                    >
+                      Bookmark
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
