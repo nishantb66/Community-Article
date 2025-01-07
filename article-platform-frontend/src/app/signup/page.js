@@ -15,8 +15,14 @@ export default function SignupPage() {
   const router = useRouter();
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    if (name === "username") {
+      setFormData({ ...formData, [name]: value.replace(/\s/g, "") });
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
   };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -64,7 +70,10 @@ export default function SignupPage() {
             onChange={handleChange}
             required
             className="w-full px-4 py-2 text-gray-700 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-300"
+            pattern="\\S+"
+            title="Username must not contain spaces"
           />
+
           <input
             type="email"
             name="email"
