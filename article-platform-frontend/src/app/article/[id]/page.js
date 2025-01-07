@@ -267,8 +267,15 @@ export default function ArticlePage() {
             <h2 className="text-lg font-bold mb-4">Report Article</h2>
             <p className="text-sm mb-4">
               If you find this article disturbing, vulgar, or violating the
-              regulations, please click "Report" below. We will review the
-              article.
+              <a
+                href="/guidelines"
+                className="text-blue-500 hover:underline mx-1"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                simpleArticle regulations
+              </a>
+              , please click "Report" below. We will review the article.
             </p>
             <div className="flex justify-between items-center gap-4">
               <button
