@@ -12,6 +12,7 @@ export default function SignupPage() {
     password: "",
     confirmPassword: "",
   });
+  const [loading, setLoading] = useState(false); // Loading state
   const router = useRouter();
 
   const handleChange = (e) => {
@@ -31,6 +32,9 @@ export default function SignupPage() {
       alert("Passwords do not match");
       return;
     }
+
+    setLoading(true); // Enable loading indicator
+
     try {
       const res = await fetch(`${apiBaseUrl}/api/signup`, {
         method: "POST",
@@ -45,6 +49,8 @@ export default function SignupPage() {
       }
     } catch (err) {
       console.error("Error:", err);
+    } finally {
+      setLoading(false); // Disable loading indicator in case of error
     }
   };
 
@@ -108,9 +114,40 @@ export default function SignupPage() {
         </div>
         <button
           type="submit"
-          className="w-full py-3 mt-6 text-white bg-orange-400 rounded-lg hover:bg-orange-500 focus:outline-none focus:ring-4 focus:ring-orange-300 font-semibold shadow-lg transition"
+          className={`w-full py-3 mt-6 text-white rounded-lg focus:outline-none focus:ring-4 focus:ring-orange-300 font-semibold shadow-lg transition ${
+            loading
+              ? "bg-orange-300 cursor-not-allowed"
+              : "bg-orange-400 hover:bg-orange-500"
+          }`}
+          disabled={loading}
         >
-          Sign Up
+          {loading ? (
+            <span className="flex justify-center items-center">
+              <svg
+                className="animate-spin h-5 w-5 mr-3 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8v8H4z"
+                ></path>
+              </svg>
+              Processing...
+            </span>
+          ) : (
+            "Sign Up"
+          )}
         </button>
         <p className="mt-6 text-sm text-center text-gray-500 sm:text-base">
           Already have an account?{" "}
