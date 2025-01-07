@@ -16,7 +16,9 @@ export default function SignupPage() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    if (name === "username" && name === "name") {
+
+    // Remove spaces for both 'username' and 'name'
+    if (name === "username" || name === "name") {
       setFormData({ ...formData, [name]: value.replace(/\s/g, "") });
     } else {
       setFormData({ ...formData, [name]: value });
