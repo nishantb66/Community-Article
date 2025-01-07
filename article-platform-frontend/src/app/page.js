@@ -314,6 +314,15 @@ export default function Home() {
                         >
                           My Articles
                         </Link>
+                        {/* Bookmarks Button */}
+                        {user && (
+                          <Link
+                            href="/bookmarks"
+                            className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100"
+                          >
+                            View Bookmarks
+                          </Link>
+                        )}
                         <button
                           className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100"
                           onClick={handleLogout}
@@ -372,15 +381,7 @@ export default function Home() {
               Collaborate
             </button>
           </div>
-          {/* Bookmarks Button */}
-          {user && (
-            <Link
-              href="/bookmarks"
-              className="mt-6 inline-block px-6 py-2 bg-gray-800 text-white font-semibold rounded-full shadow-md hover:bg-gray-900 transition text-sm sm:text-base"
-            >
-              View Bookmarks
-            </Link>
-          )}
+          
 
           <br />
 
