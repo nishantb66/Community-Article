@@ -29,6 +29,17 @@ router.post("/signup", async (req, res) => {
         .json({ message: "Username is already taken. Please choose another." });
     }
 
+    // Check if the name (nickname) already exists
+    const existingName = await User.findOne({ name });
+    if (existingName) {
+      return res
+        .status(400)
+        .json({
+          message:
+            "Nickname is already in use.",
+        });
+    }
+
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
