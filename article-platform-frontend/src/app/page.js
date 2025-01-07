@@ -631,38 +631,50 @@ export default function Home() {
         )}
       </div>
       {/* Footer Section */}
-      <footer className="bg-gray-800 text-white py-6 mt-12">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-lg font-semibold">Nishant Baruah</h2>
-          <p className="text-sm mt-2">
-            © {new Date().getFullYear()} Nishant Baruah. All rights reserved.
-          </p>
-          <p className="mt-4">
-            Email:{" "}
-            <a
-              href="mailto:nishantbarua3@gmail.com"
-              className="text-orange-400 hover:underline"
-            >
-              nishantbarua3@gmail.com
-            </a>
-          </p>
-          <div className="flex justify-center mt-4 space-x-4">
-            <a
-              href="https://www.linkedin.com/in/nishantbaru/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-orange-400 hover:underline"
-            >
-              LinkedIn
-            </a>
-            <a
-              href="https://nishantb66.github.io/MyPortfolio/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-orange-400 hover:underline"
-            >
-              Portfolio
-            </a>
+      <footer className="bg-gradient-to-r from-gray-900 to-gray-800 text-white py-10 mt-12">
+        <div className="container mx-auto px-6 md:px-10 lg:px-16">
+          {/* Top Section */}
+          <div className="flex flex-col lg:flex-row justify-between items-center border-b border-gray-700 pb-6">
+            <div className="text-center lg:text-left mb-6 lg:mb-0">
+              <h2 className="text-2xl font-extrabold">simpleArticle</h2>
+              <p className="mt-2 text-sm text-gray-400">
+                Building a better future, one article at a time.
+              </p>
+            </div>
+            <div className="flex space-x-6">
+              <a
+                href="mailto:nishantbarua3@gmail.com"
+                className="text-orange-400 hover:text-orange-500 transition duration-300 text-sm"
+              >
+                Email
+              </a>
+              <a
+                href="https://www.linkedin.com/in/nishantbaru/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-orange-400 hover:text-orange-500 transition duration-300 text-sm"
+              >
+                LinkedIn
+              </a>
+              <a
+                href="https://nishantb66.github.io/MyPortfolio/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-orange-400 hover:text-orange-500 transition duration-300 text-sm"
+              >
+                Portfolio
+              </a>
+            </div>
+          </div>
+
+          {/* Bottom Section */}
+          <div className="flex flex-col md:flex-row justify-between items-center mt-6">
+            <p className="text-xs text-gray-500 text-center md:text-left">
+              © {new Date().getFullYear()} Nishant Baruah. All rights reserved.
+            </p>
+            <p className="text-xs text-gray-500 text-center md:text-right mt-4 md:mt-0">
+              Developed and Designed by Nishant Baruah.
+            </p>
           </div>
         </div>
       </footer>
