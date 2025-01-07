@@ -14,6 +14,7 @@ const QuillEditor = ({ setContent }) => {
         modules: {
           toolbar: [
             ["bold", "italic", "underline", "strike"],
+            [{ font: [] }], // Font styles including size
             [{ list: "ordered" }, { list: "bullet" }],
             ["link", "image"],
           ],
@@ -29,7 +30,9 @@ const QuillEditor = ({ setContent }) => {
   return (
     <div
       ref={editorRef}
+      theme="snow"
       className="h-40 border border-gray-300 rounded-md"
+      style={{ height: "160px" }}
     ></div>
   );
 };
