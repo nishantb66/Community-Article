@@ -176,7 +176,6 @@ export default function ArticlePage() {
         darkMode ? "bg-gray-900 text-white" : "bg-gray-50 text-gray-900"
       }`}
     >
-
       {/* Reading Progress Bar */}
       <div
         className={`fixed top-0 left-0 h-2 ${
@@ -315,7 +314,6 @@ export default function ArticlePage() {
           </div>
         </div>
       )}
-
       {/* Comments Slider */}
       <div>
         <button
@@ -384,6 +382,7 @@ export default function ArticlePage() {
           </div>
         </div>
       </div>
+    </div>
   );
 }
 
