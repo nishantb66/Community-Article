@@ -73,6 +73,8 @@ export default function LoginPage() {
             onChange={handleChange}
             required
             className="w-full px-4 py-2 text-gray-700 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-300 sm:text-base lg:text-lg"
+            pattern="\\S+"
+            title="Username must not contain spaces"
           />
           <input
             type="password"
