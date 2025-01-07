@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 
@@ -8,24 +8,48 @@ const QuillEditor = dynamic(() => import("../../components/QuillEditor"), {
   ssr: false,
 });
 
-
 const CreateArticle = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [author, setAuthor] = useState("");
   const [loading, setLoading] = useState(false);
   const [notification, setNotification] = useState(false);
+  const [username, setUsername] = useState(null); // Logged-in user's username
   const router = useRouter();
+
+  useEffect(() => {
+    // Check if the window object is available (ensures browser environment)
+    if (typeof window !== "undefined") {
+      const storedUsername = localStorage.getItem("userName");
+      const userId = localStorage.getItem("userId");
+
+      if (!userId) {
+        router.push("/login");
+      } else {
+        setUsername(storedUsername || ""); // Set username or fallback to empty string
+      }
+    }
+  }, [router]);
 
   const handleSubmit = async () => {
     const cleanedContent = content.replace(/<[^>]*>/g, "").trim();
 
-    if (!title || !cleanedContent || !author) {
+    if (!title || !cleanedContent) {
       alert("All fields are required!");
       return;
     }
 
-    const formData = { title, content, author };
+    // Check if window object is available
+    let username = "";
+    if (typeof window !== "undefined") {
+      username = localStorage.getItem("userName"); // Fetch username from localStorage
+    }
+
+    if (!username) {
+      alert("You must be logged in to create an article.");
+      return;
+    }
+
+    const formData = { title, content, author: username }; // Use username as the author
 
     setLoading(true);
 
@@ -40,7 +64,6 @@ const CreateArticle = () => {
         const data = await response.json();
         setTitle("");
         setContent("");
-        setAuthor("");
         setNotification(true);
 
         setTimeout(() => {
@@ -57,6 +80,9 @@ const CreateArticle = () => {
       setLoading(false);
     }
   };
+
+
+
 
   return (
     <div className="bg-gradient-to-br from-orange-100 to-pink-100 min-h-screen py-10 px-6 relative">
@@ -102,22 +128,25 @@ const CreateArticle = () => {
               </label>
               <QuillEditor setContent={setContent} />
             </div>
-            <div>
-              <label
-                htmlFor="author"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Author
-              </label>
-              <input
-                id="author"
-                type="text"
-                placeholder="Your name..."
-                value={author}
-                onChange={(e) => setAuthor(e.target.value)}
-                className="mt-2 w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400 text-lg"
-              />
-            </div>
+            {/* Hide Author field if user is logged in */}
+            {!username && (
+              <div>
+                <label
+                  htmlFor="author"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Author
+                </label>
+                <input
+                  id="author"
+                  type="text"
+                  placeholder="Your name..."
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  className="mt-2 w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400 text-lg"
+                />
+              </div>
+            )}
             <button
               onClick={handleSubmit}
               disabled={loading}
@@ -137,4 +166,3 @@ const CreateArticle = () => {
 };
 
 export default CreateArticle;
-
