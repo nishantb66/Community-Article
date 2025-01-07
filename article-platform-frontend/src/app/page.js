@@ -6,6 +6,7 @@ import "../styles/globals.css";
 import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const router = useRouter(); // Initialize the router
   const [articles, setArticles] = useState([]);
   const [page, setPage] = useState(1); // Current page number
   const [totalPages, setTotalPages] = useState(0); // Total pages from API
