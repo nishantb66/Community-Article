@@ -14,6 +14,11 @@ router.post("/signup", async (req, res) => {
       return res.status(400).json({ message: "All fields are required" });
     }
 
+    // Prevent spaces in username
+  if (/\s/.test(username)) {
+    return res.status(400).json({ error: "Username must not contain spaces." });
+  }
+
     // Check if the user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
