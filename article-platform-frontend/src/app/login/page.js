@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { apiBaseUrl } from "../../utils/api";
 
@@ -127,6 +127,15 @@ export default function LoginPage() {
           Don’t have an account?{" "}
           <a href="/signup" className="text-orange-500 hover:underline">
             Sign Up
+          </a>
+        </p>
+        <p className="mt-4 text-sm text-center text-gray-500 sm:text-base lg:text-lg">
+          Just want to read articles?{" "}
+          <a
+            onClick={() => router.push("/")}
+            className="cursor-pointer text-orange-500 hover:underline"
+          >
+            Go to Home
           </a>
         </p>
       </form>
