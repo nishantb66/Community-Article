@@ -69,7 +69,7 @@ export default function SignupPage() {
             placeholder="Username"
             onChange={handleChange}
             required
-            className="w-full px-4 py-2 text-gray-700 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-300""
+            className="w-full px-4 py-2 text-gray-700 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-300"
           />
 
           <input
