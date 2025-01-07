@@ -99,10 +99,6 @@ router.post("/login", async (req, res) => {
       return res.status(401).json({ error: "Invalid credentials" });
     }
 
-    // Prevent spaces in username
-  if (/\s/.test(username)) {
-    return res.status(400).json({ error: "Username must not contain spaces." });
-  }
 
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
       expiresIn: "1h",
