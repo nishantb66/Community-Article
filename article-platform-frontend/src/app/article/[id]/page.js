@@ -23,6 +23,7 @@ export default function ArticlePage() {
   const [isConfirmationPopupOpen, setIsConfirmationPopupOpen] = useState(false);
   const [isReported, setIsReported] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
+  const [isCommentSliderOpen, setIsCommentSliderOpen] = useState(false);
   const { id } = useParams();
 
   useEffect(() => {
@@ -175,19 +176,6 @@ export default function ArticlePage() {
         darkMode ? "bg-gray-900 text-white" : "bg-gray-50 text-gray-900"
       }`}
     >
-      {/* Theme Toggle */}
-      <div className="fixed top-5 right-5 z-50">
-        <button
-          onClick={() => setDarkMode(!darkMode)}
-          className={`px-4 py-2 rounded-md font-semibold shadow-md ${
-            darkMode
-              ? "bg-gray-700 text-white hover:bg-gray-600"
-              : "bg-gray-300 text-gray-900 hover:bg-gray-400"
-          }`}
-        >
-          {darkMode ? "Light Mode" : "Dark Mode"}
-        </button>
-      </div>
 
       {/* Reading Progress Bar */}
       <div
@@ -224,6 +212,17 @@ export default function ArticlePage() {
           </div>
         </div>
       </div>
+
+      <button
+        onClick={() => setDarkMode(!darkMode)}
+        className={`fixed px-2 py-1 rounded-md font-semibold shadow-md ${
+          darkMode
+            ? "bg-gray-700 text-white hover:bg-gray-600"
+            : "bg-gray-300 text-gray-900 hover:bg-gray-400"
+        }`}
+      >
+        {darkMode ? "Light Mode" : "Dark Mode"}
+      </button>
 
       {/* Article Content */}
       <main className="max-w-4xl mx-auto px-6 py-12 text-2xl">
@@ -317,46 +316,74 @@ export default function ArticlePage() {
         </div>
       )}
 
-      {/* Comments Section */}
-      <section
-        className={`max-w-4xl mx-auto px-6 py-12 ${
-          darkMode ? "bg-gray-800 text-white" : "bg-white text-gray-900"
-        } rounded-lg shadow-md`}
-      >
-        <h2 className="text-2xl font-bold mb-6">Comments</h2>
-        <form onSubmit={handleCommentSubmit} className="mb-6">
-          <textarea
-            value={newComment}
-            onChange={(e) => setNewComment(e.target.value)}
-            className={`w-full px-4 py-2 border ${
-              darkMode ? "border-gray-600 bg-gray-700 text-white" : "bg-white"
-            } rounded-lg focus:ring-2 focus:ring-orange-400 focus:outline-none resize-none`}
-            rows="4"
-            placeholder="Leave a comment..."
-          ></textarea>
-          <button
-            type="submit"
-            className="mt-4 bg-orange-500 text-white py-2 px-6 rounded-lg font-semibold hover:bg-orange-600 transition"
-          >
-            Submit Comment
-          </button>
-        </form>
-        {comments.length > 0 ? (
-          <ul className="space-y-4">
-            {comments.map((comment) => (
-              <li key={comment._id} className="border-b pb-4">
-                <p>{comment.content}</p>
-                <p className="text-sm mt-2">
-                  {new Date(comment.createdAt).toLocaleString()}
+      {/* Comments Slider */}
+      <div>
+        <button
+          onClick={() => setIsCommentSliderOpen(true)}
+          className="fixed bottom-5 right-5 bg-orange-500 text-white px-4 py-3 rounded-full shadow-lg hover:bg-orange-600 transition"
+        >
+          Responses
+        </button>
+
+        <div
+          className={`fixed top-0 right-0 h-full bg-white dark:bg-gray-800 shadow-lg transform transition-transform duration-300 ${
+            isCommentSliderOpen ? "translate-x-0" : "translate-x-full"
+          }`}
+          style={{ width: "100%", maxWidth: "400px" }}
+        >
+          <div className="p-6 relative flex flex-col h-full">
+            {/* Cross Button */}
+            <button
+              onClick={() => setIsCommentSliderOpen(false)}
+              className="absolute top-4 right-4 text-red-500 hover:text-red-700 text-2xl font-bold"
+            >
+              &times;
+            </button>
+            <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white text-center">
+              Comments
+            </h2>
+            <form onSubmit={handleCommentSubmit} className="mb-6">
+              <textarea
+                value={newComment}
+                onChange={(e) => setNewComment(e.target.value)}
+                className={`w-full px-4 py-2 border ${
+                  darkMode
+                    ? "border-gray-600 bg-gray-700 text-white"
+                    : "border-gray-300 bg-gray-100 text-gray-900"
+                } rounded-lg focus:ring-2 focus:ring-orange-400 focus:outline-none resize-none`}
+                rows="4"
+                placeholder="Leave a comment..."
+              ></textarea>
+              <button
+                type="submit"
+                className="mt-4 w-full bg-orange-500 text-white py-3 rounded-lg font-semibold hover:bg-orange-600 transition"
+              >
+                Submit Comment
+              </button>
+            </form>
+            <div className="flex-1 overflow-y-auto">
+              {comments.length > 0 ? (
+                <ul className="space-y-4">
+                  {comments.map((comment) => (
+                    <li key={comment._id} className="border-b pb-4">
+                      <p className="text-gray-900 dark:text-white">
+                        {comment.content}
+                      </p>
+                      <p className="text-sm mt-2 text-gray-600 dark:text-gray-400">
+                        {new Date(comment.createdAt).toLocaleString()}
+                      </p>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-gray-900 dark:text-gray-400 text-center">
+                  No comments yet. Be the first to comment!
                 </p>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p>No comments yet. Be the first to comment!</p>
-        )}
-      </section>
-    </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
   );
 }
 
