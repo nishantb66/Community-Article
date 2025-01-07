@@ -13,7 +13,6 @@ export default function MyArticles() {
     const fetchArticles = async () => {
       let username = "";
 
-      // Ensure `localStorage` access only in the browser
       if (typeof window !== "undefined") {
         username = localStorage.getItem("userName"); // Fetch username from localStorage
       }
@@ -44,15 +43,23 @@ export default function MyArticles() {
   }, [router]);
 
   if (loading) {
-    return <p className="text-center mt-10">Loading your articles...</p>;
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-orange-100 to-pink-100">
+        <p className="text-xl font-semibold text-gray-500 animate-pulse">
+          Loading your articles...
+        </p>
+      </div>
+    );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-100 to-pink-100 py-10">
-      <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-6">
-        <h1 className="text-2xl font-bold text-gray-800 mb-6">My Articles</h1>
+    <div className="min-h-screen bg-gradient-to-br from-orange-100 to-pink-100 py-10 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-xl p-6 sm:p-8">
+        <h1 className="text-3xl font-extrabold text-gray-800 text-center mb-6">
+          My Articles
+        </h1>
         {articles.length === 0 ? (
-          <p className="text-gray-600">
+          <p className="text-gray-500 text-center">
             You have not written any articles yet.
           </p>
         ) : (
@@ -61,14 +68,30 @@ export default function MyArticles() {
               <li
                 key={article._id}
                 onClick={() => router.push(`/article/${article._id}`)}
-                className="p-4 bg-gray-100 rounded-lg shadow cursor-pointer hover:bg-gray-200"
+                className="group flex items-center justify-between p-4 bg-gray-100 rounded-lg shadow-md hover:bg-gray-200 transition transform hover:scale-105 cursor-pointer"
               >
-                <h2 className="text-lg font-bold text-gray-800">
-                  {article.title}
-                </h2>
-                <p className="text-sm text-gray-600">
-                  {new Date(article.createdAt).toLocaleDateString()}
-                </p>
+                <div>
+                  <h2 className="text-xl font-semibold text-gray-800 group-hover:text-orange-500">
+                    {article.title}
+                  </h2>
+                  <p className="text-sm text-gray-600">
+                    {new Date(article.createdAt).toLocaleDateString()}
+                  </p>
+                </div>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6 text-gray-400 group-hover:text-orange-400 transition"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 5l7 7-7 7"
+                  />
+                </svg>
               </li>
             ))}
           </ul>
