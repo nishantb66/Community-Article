@@ -356,13 +356,7 @@ export default function Home() {
             Explore articles, stories written by the community
           </p>
           <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => handleSearch(e.target.value)}
-              placeholder="Search articles..."
-              className="w-full sm:w-2/3 lg:w-1/3 px-4 py-2 border border-gray-300 rounded-full shadow-md focus:ring-2 focus:ring-orange-400 focus:outline-none text-sm sm:text-base"
-            />
+
             <div className="flex flex-row gap-2">
               <Link
                 href="/deleteRequest"
