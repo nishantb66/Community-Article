@@ -55,10 +55,10 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen px-4 bg-gradient-to-br from-orange-100 to-pink-100 sm:px-6 lg:px-8">
+    <div className="relative flex items-center justify-center min-h-screen px-4 bg-gradient-to-br from-orange-100 to-pink-100 sm:px-6 lg:px-8">
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-md p-8 bg-white rounded-lg shadow-lg sm:p-10 lg:p-12"
+        className="relative z-10 w-full max-w-md p-8 bg-white rounded-lg shadow-lg sm:p-10 lg:p-12"
       >
         <h2 className="mb-6 text-2xl font-bold text-center text-gray-800 sm:text-3xl lg:text-4xl">
           Welcome Back
@@ -139,7 +139,37 @@ export default function LoginPage() {
           </a>
         </p>
       </form>
+
+      {/* Forgot Password or Username Button */}
+      <div className="absolute bottom-8 right-4 sm:right-10 flex flex-col items-center space-y-2 sm:space-y-4">
+        <button
+          onClick={() =>
+            window.open("https://tripetto.app/run/9Z10BCH0PM", "_blank")
+          }
+          className="flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 bg-white border-2 border-orange-400 rounded-full shadow-lg hover:bg-orange-400 hover:text-white transition duration-300 focus:outline-none focus:ring-4 focus:ring-orange-300"
+          title="Forgot password or username?"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="w-6 h-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M9 5l7 7-7 7"
+            />
+          </svg>
+        </button>
+        <span className="text-sm sm:text-base text-gray-600">
+          Forgot password or username?
+        </span>
+      </div>
     </div>
   );
 }
+
 
