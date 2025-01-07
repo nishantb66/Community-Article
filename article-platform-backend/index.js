@@ -11,6 +11,7 @@ const subscribersRoutes = require("./routes/subscribers");
 const contributorRoutes = require("./routes/contributors");
 const usersRoutes = require("./routes/users");
 const articleRoutes = require("./routes/articles");
+const storyRoutes = require("./routes/storyRoutes");
 
 // Initialize Express App
 const app = express();
@@ -36,6 +37,7 @@ app.use("/api/subscribe", subscribersRoutes);
 app.use("/api/contributors", contributorRoutes);
 app.use("/api", usersRoutes);
 app.use("/api/articles", articleRoutes);
+app.use("/api/stories", storyRoutes);
 
 // Serve static files for uploads (if any)
 const path = require("path");
