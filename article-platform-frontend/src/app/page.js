@@ -230,17 +230,15 @@ export default function Home() {
     <main className="flex-grow">
       <div className="min-h-screen bg-gradient-to-br from-orange-100 to-pink-100">
         {/* Navigation Bar */}
-        <header className="bg-white shadow-md py-3 sticky top-0 z-10">
+                <header className="bg-gradient-to-r from-orange-400 to-pink-400 text-white py-4 sticky top-0 z-10 shadow-lg">
           <div className="container mx-auto flex justify-between items-center px-4 sm:px-10">
             {/* Logo Section */}
             <Link href="/">
               <div className="flex items-center space-x-2 cursor-pointer">
-                <div className="w-9 h-9 sm:w-10 sm:h-10 bg-gradient-to-r from-orange-400 to-pink-400 rounded-full flex items-center justify-center">
-                  <span className="text-white text-lg sm:text-xl font-bold">
-                    sA
-                  </span>
+                <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md">
+                  <span className="text-orange-500 text-xl font-bold">sA</span>
                 </div>
-                <h1 className="text-lg sm:text-xl font-extrabold text-gray-800 tracking-tight">
+                <h1 className="text-lg sm:text-xl font-extrabold tracking-tight">
                   SimpleArticle
                 </h1>
               </div>
@@ -253,7 +251,7 @@ export default function Home() {
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6 text-gray-800"
+                className="h-6 w-6 text-white"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -271,9 +269,9 @@ export default function Home() {
             <div
               className={`${
                 mobileMenuOpen ? "block" : "hidden"
-              } sm:flex sm:items-center absolute sm:relative top-16 left-0 sm:top-0 w-full sm:w-auto bg-white sm:bg-transparent shadow-lg sm:shadow-none z-20`}
+              } sm:flex sm:items-center absolute sm:relative top-16 left-0 sm:top-0 w-full sm:w-auto bg-white sm:bg-transparent shadow-lg sm:shadow-none z-20 rounded-lg sm:rounded-none`}
             >
-              <nav className="flex flex-col sm:flex-row items-center sm:space-x-4 px-4 sm:px-0 py-4 sm:py-0">
+              <nav className="flex flex-col sm:flex-row items-center sm:space-x-4 px-6 py-6 sm:px-0 sm:py-0">
                 <Link
                   href="/create"
                   className="w-full sm:w-auto px-4 py-2 mb-2 sm:mb-0 text-center bg-orange-500 text-white rounded-full font-semibold shadow-md hover:bg-orange-600 transition text-sm sm:text-base"
@@ -282,7 +280,7 @@ export default function Home() {
                 </Link>
                 <button
                   onClick={() => setIsPopupOpen(true)}
-                  className="px-3 py-1 sm:px-4 sm:py-2 bg-orange-500 text-white rounded-full font-semibold shadow-md hover:bg-orange-600 transition text-sm sm:text-base"
+                  className="w-full sm:w-auto px-4 py-2 mb-2 sm:mb-0 bg-pink-500 text-white rounded-full font-semibold shadow-md hover:bg-pink-600 transition text-sm sm:text-base"
                 >
                   Subscribe
                 </button>
@@ -291,7 +289,7 @@ export default function Home() {
                 {user ? (
                   <div className="relative w-full sm:w-auto">
                     <button
-                      className="flex items-center justify-center w-full sm:w-auto px-4 py-2 bg-gray-200 text-gray-800 rounded-full font-semibold shadow-md hover:bg-gray-300 transition text-sm sm:text-base"
+                      className="flex items-center justify-center w-full sm:w-auto px-4 py-2 bg-gray-100 text-gray-800 rounded-full font-semibold shadow-md hover:bg-gray-200 transition text-sm sm:text-base"
                       onClick={() => setDropdownOpen(!dropdownOpen)}
                     >
                       {user.name}
@@ -309,7 +307,13 @@ export default function Home() {
                       </svg>
                     </button>
                     {dropdownOpen && (
-                      <div className="absolute sm:relative top-full right-0 mt-2 sm:mt-0 w-full sm:w-48 bg-white rounded-lg shadow-lg py-2 z-50">
+                      <div className="absolute top-full right-0 mt-2 w-full sm:w-48 bg-white rounded-lg shadow-lg py-2 z-50">
+                        <Link
+                          href="/my-articles"
+                          className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100"
+                        >
+                          My Articles
+                        </Link>
                         <button
                           className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100"
                           onClick={handleLogout}
@@ -323,13 +327,13 @@ export default function Home() {
                   <div className="flex flex-col sm:flex-row sm:space-x-2 w-full sm:w-auto">
                     <Link
                       href="/login"
-                      className="w-full sm:w-auto px-4 py-2 text-center bg-gray-200 text-gray-800 rounded-full font-semibold shadow-md hover:bg-gray-300 transition text-sm sm:text-base"
+                      className="w-full sm:w-auto px-4 py-2 mb-2 sm:mb-0 text-center bg-gray-100 text-gray-800 rounded-full font-semibold shadow-md hover:bg-gray-200 transition text-sm sm:text-base"
                     >
                       Login
                     </Link>
                     <Link
                       href="/signup"
-                      className="w-full sm:w-auto px-4 py-2 text-center bg-gray-200 text-gray-800 rounded-full font-semibold shadow-md hover:bg-gray-300 transition text-sm sm:text-base"
+                      className="w-full sm:w-auto px-4 py-2 text-center bg-gray-100 text-gray-800 rounded-full font-semibold shadow-md hover:bg-gray-200 transition text-sm sm:text-base"
                     >
                       Register
                     </Link>
