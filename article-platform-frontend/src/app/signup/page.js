@@ -16,7 +16,7 @@ export default function SignupPage() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    if (name === "username") {
+    if (name === "username" && name === "name") {
       setFormData({ ...formData, [name]: value.replace(/\s/g, "") });
     } else {
       setFormData({ ...formData, [name]: value });
