@@ -14,7 +14,8 @@ export default function LoginPage() {
   const router = useRouter();
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const value = e.target.value.replace(/\s/g, ""); // Remove all spaces
+    setFormData({ ...formData, [e.target.name]: value });
   };
 
   const handleSubmit = async (e) => {
