@@ -209,6 +209,18 @@ export default function ArticlePage() {
               </p>
             </div>
           </div>
+
+          {/* New Request Link */}
+          <div className="mt-6">
+            <a
+              href="https://tripetto.app/run/NOTBEYJ8UX"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-600 hover:underline text-sm font-medium"
+            >
+              Put a request regarding this article
+            </a>
+          </div>
         </div>
       </div>
 
