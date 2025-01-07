@@ -20,18 +20,40 @@ const upload = multer({ storage: storage });
 
 
 
-// Update Article creation route to handle thumbnail uploads
-router.post("/", upload.single("thumbnail"), async (req, res) => {
+router.post("/", async (req, res) => {
+  const { title, content } = req.body;
+  const author = req.body.author; // This should be the username
+
+  if (!title || !content || !author) {
+    return res
+      .status(400)
+      .json({ message: "Title, content, and author are required." });
+  }
+
   try {
-    const { title, content, author } = req.body;
-    const thumbnail = req.file ? `/uploads/${req.file.filename}` : null;
-    const newArticle = new Article({ title, content, author, thumbnail });
+    const newArticle = new Article({ title, content, author });
     await newArticle.save();
     res.status(201).json(newArticle);
   } catch (error) {
-    res.status(500).json({ message: "Error creating article", error });
+    console.error("Error creating article:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 });
+
+router.get("/user/:username", async (req, res) => {
+  const { username } = req.params;
+
+  try {
+    const articles = await Article.find({ author: username }).sort({
+      createdAt: -1,
+    });
+    res.status(200).json(articles);
+  } catch (error) {
+    console.error("Error fetching user's articles:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 
 // Get Paginated Articles
 router.get("/", async (req, res) => {
@@ -106,13 +128,14 @@ router.get("/user/:userId", async (req, res) => {
   const { userId } = req.params;
 
   try {
-    const articles = await Article.find({ authorId: userId });
+    const articles = await Article.find({ author: userId }).sort({ createdAt: -1 });
     res.status(200).json(articles);
   } catch (error) {
     console.error("Error fetching user's articles:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 });
+
 
 
 module.exports = router;
