@@ -123,6 +123,7 @@ router.post("/:id/report", async (req, res) => {
 });
 
 
+
 // Fetch articles written by a specific user
 router.get("/user/:userId", async (req, res) => {
   const { userId } = req.params;
