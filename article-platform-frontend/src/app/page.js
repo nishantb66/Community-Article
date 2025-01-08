@@ -376,6 +376,9 @@ export default function Home() {
               placeholder="Search articles..."
               className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-400 focus:outline-none"
             />
+            <p className="text-base sm:text-sm text-gray-600 mb-1">
+              📝Load all articles and then apply search
+            </p>
           </div>
           <br />
           <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
