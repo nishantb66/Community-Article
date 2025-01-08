@@ -230,7 +230,7 @@ export default function Home() {
     <main className="flex-grow">
       <div className="min-h-screen bg-gradient-to-br from-orange-100 to-pink-100">
         {/* Navigation Bar */}
-                <header className="bg-gradient-to-r from-orange-400 to-pink-400 text-white py-4 sticky top-0 z-10 shadow-lg">
+         <header className="bg-gradient-to-r from-orange-400 to-pink-400 text-white py-4 sticky top-0 z-10 shadow-lg">
           <div className="container mx-auto flex justify-between items-center px-4 sm:px-10">
             {/* Logo Section */}
             <Link href="/">
@@ -244,25 +244,29 @@ export default function Home() {
               </div>
             </Link>
 
-            {/* Hamburger Menu for Mobile */}
+            {/* Hamburger Menu with Animation */}
             <button
-              className="block sm:hidden focus:outline-none"
+              className={`relative block sm:hidden focus:outline-none ${
+                mobileMenuOpen ? "open" : ""
+              }`}
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6 text-white"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16m-7 6h7"
-                />
-              </svg>
+              <div className="h-1 w-6 bg-white rounded transition-all duration-300 transform"></div>
+              <div className="h-1 w-6 bg-white rounded transition-all duration-300 transform mt-1"></div>
+              <div className="h-1 w-6 bg-white rounded transition-all duration-300 transform mt-1"></div>
+
+              {/* Toggle Animation */}
+              <style jsx>{`
+                button.open div:nth-child(1) {
+                  transform: translateY(8px) rotate(45deg);
+                }
+                button.open div:nth-child(2) {
+                  opacity: 0;
+                }
+                button.open div:nth-child(3) {
+                  transform: translateY(-8px) rotate(-45deg);
+                }
+              `}</style>
             </button>
 
             {/* Navigation Menu */}
@@ -276,7 +280,7 @@ export default function Home() {
                   href={user ? "/create" : ""}
                   onClick={(e) => {
                     if (!user) {
-                      e.preventDefault(); // Prevent navigation if the user is not logged in
+                      e.preventDefault();
                       setNotification(
                         "Please log in or register to write an article."
                       );
@@ -291,7 +295,7 @@ export default function Home() {
                   Write
                 </Link>
                 <button
-                  onClick={() => setIsPopupOpen(true)}
+                  onClick={() => alert("Subscribe popup coming soon!")}
                   className="w-full sm:w-auto px-4 py-2 mb-2 sm:mb-0 bg-pink-500 text-white rounded-full font-semibold shadow-md hover:bg-pink-600 transition text-sm sm:text-base"
                 >
                   Subscribe
@@ -326,15 +330,12 @@ export default function Home() {
                         >
                           My Articles
                         </Link>
-                        {/* Bookmarks Button */}
-                        {user && (
-                          <Link
-                            href="/bookmarks"
-                            className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100"
-                          >
-                            View Bookmarks
-                          </Link>
-                        )}
+                        <Link
+                          href="/bookmarks"
+                          className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100"
+                        >
+                          View Bookmarks
+                        </Link>
                         <button
                           className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100"
                           onClick={handleLogout}
