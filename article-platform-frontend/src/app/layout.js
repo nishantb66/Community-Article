@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 
 // Metadata for the app
 export const metadata = {
-  title: "Community Article Platform",
-  description: "A platform to write and share articles.",
+  title: "SimpleArticle",
+  description: "A platform to write, read and share",
 };
 
 // Root layout component
