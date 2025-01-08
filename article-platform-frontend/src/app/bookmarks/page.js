@@ -17,26 +17,25 @@ export default function BookmarksPage() {
     }
   }, []);
 
-  useEffect(() => {
-    async function fetchBookmarks() {
-      if (!userId) return;
+  const fetchBookmarks = async () => {
+    if (!userId) return;
 
-      try {
-        const res = await fetch(
-          `https://community-article-backend.onrender.com/api/bookmarks/${userId}`
-        );
-        if (!res.ok) {
-          throw new Error("Failed to fetch bookmarks");
-        }
-        const data = await res.json();
-        setBookmarks(data);
-      } catch (err) {
-        console.error("Error fetching bookmarks:", err);
-      } finally {
-        setLoading(false);
+    setLoading(true);
+    try {
+      const res = await fetch(`https://community-article-backend.onrender.com/api/bookmarks/${userId}`);
+      if (!res.ok) {
+        throw new Error("Failed to fetch bookmarks");
       }
+      const data = await res.json();
+      setBookmarks(data);
+    } catch (err) {
+      console.error("Error fetching bookmarks:", err);
+    } finally {
+      setLoading(false);
     }
+  };
 
+  useEffect(() => {
     fetchBookmarks();
   }, [userId]);
 
@@ -55,8 +54,8 @@ export default function BookmarksPage() {
         throw new Error("Failed to remove bookmark");
       }
 
-      const data = await res.json();
-      setBookmarks(data.bookmarks); // Update bookmarks list after removal
+      // Refresh bookmarks after removal
+      await fetchBookmarks();
 
       // Set notification message
       setNotification("Bookmark removed successfully!");
@@ -97,31 +96,35 @@ export default function BookmarksPage() {
           </p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {bookmarks.map((article, index) => (
+            {bookmarks.map((article) => (
               <div
-                key={article._id || index} // Fallback to index if article._id is undefined
+                key={article._id} // Ensure _id is present and unique
                 className="bg-white rounded-lg shadow-md hover:shadow-lg transition-transform transform hover:-translate-y-1"
               >
                 <div className="p-4">
                   <h2 className="text-xl font-semibold text-gray-800">
-                    {article.title || "Untitled Article"}
+                    {article.title || "Untitled Article"}{" "}
+                    {/* Fallback to "Untitled Article" */}
                   </h2>
-                  
-                    <div
-                      className="text-sm text-gray-600 mt-2 line-clamp-3"
-                      dangerouslySetInnerHTML={{
-                        __html: article.content
-                          ? article.content.slice(0, 120)
-                          : "No content available.",
-                      }}
-                    ></div>
-        
-                  <Link
-                    href={`/article/${article._id}`}
-                    className="text-orange-500 font-semibold hover:underline mt-4 inline-block"
-                  >
-                    Read More
-                  </Link>
+                  <p className="text-sm text-gray-600 mt-2 line-clamp-3">
+                    {article.content ? (
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: article.content.slice(0, 120),
+                        }}
+                      />
+                    ) : (
+                      "No content available."
+                    )}
+                  </p>
+                  {article._id && (
+                    <Link
+                      href={`/article/${article._id}`}
+                      className="text-orange-500 font-semibold hover:underline mt-4 inline-block"
+                    >
+                      Read More
+                    </Link>
+                  )}
                   <button
                     onClick={() => handleRemoveBookmark(article._id)}
                     className="mt-4 block bg-red-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-600 transition"
@@ -137,4 +140,3 @@ export default function BookmarksPage() {
     </div>
   );
 }
-
