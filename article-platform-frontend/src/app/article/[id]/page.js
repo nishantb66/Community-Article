@@ -317,9 +317,13 @@ const handleReportArticle = async (reason) => {
             </p>
             <textarea
               placeholder="Reason for reporting..."
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-orange-400"
+              className={`w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-orange-400 ${
+                darkMode
+                  ? "bg-gray-700 text-white border-gray-600"
+                  : "bg-gray-100 text-gray-900 border-gray-300"
+              }`}
               rows="3"
-              onChange={(e) => setNewComment(e.target.value)} // Update this to capture reason
+              onChange={(e) => setNewComment(e.target.value)} // Capture reason here
             ></textarea>
             <div className="flex justify-between items-center gap-4 mt-4">
               <button
@@ -338,6 +342,7 @@ const handleReportArticle = async (reason) => {
           </div>
         </div>
       )}
+
 
       {/* Comments Slider */}
       <div>
