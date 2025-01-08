@@ -122,28 +122,29 @@ export default function ArticlePage() {
     }
   };
 
-  const handleReportArticle = async () => {
-    try {
-      const res = await fetch(
-        `https://community-article-backend.onrender.com/api/articles/${id}/report`,
-        {
-          method: "POST",
-        }
-      );
+const handleReportArticle = async (reason) => {
+  try {
+    const res = await fetch(`http://localhost:5000/api/articles/${id}/report`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ reason }),
+    });
 
-      if (res.ok) {
-        setIsReported(true);
-        setIsConfirmationPopupOpen(false);
-        setIsReportPopupOpen(false);
-        alert("Reported! Article is under review.");
-      } else {
-        alert("Failed to report article. Please try again.");
-      }
-    } catch (err) {
-      console.error("Error reporting article:", err);
-      alert("An error occurred. Please try again.");
+    if (res.ok) {
+      setIsReported(true);
+      setIsConfirmationPopupOpen(false);
+      setIsReportPopupOpen(false);
+      alert("Reported! Article is under review.");
+    } else {
+      const data = await res.json();
+      alert(data.message || "Failed to report article. Please try again.");
     }
-  };
+  } catch (err) {
+    console.error("Error reporting article:", err);
+    alert("An error occurred. Please try again.");
+  }
+};
+
 
   useEffect(() => {
     const handleScroll = () => {
@@ -307,18 +308,22 @@ export default function ArticlePage() {
         </div>
       )}
 
-      {/* Confirmation Popup */}
       {isConfirmationPopupOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
           <div className="bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg shadow-lg p-6 max-w-sm w-full">
             <h2 className="text-lg font-bold mb-4">Confirm Report</h2>
             <p className="text-sm mb-4">
-              Are you sure you want to report this article? This action cannot
-              be undone.
+              Are you sure you want to report this article? Please provide a reason.
             </p>
-            <div className="flex justify-between items-center gap-4">
+            <textarea
+              placeholder="Reason for reporting..."
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-orange-400"
+              rows="3"
+              onChange={(e) => setNewComment(e.target.value)} // Update this to capture reason
+            ></textarea>
+            <div className="flex justify-between items-center gap-4 mt-4">
               <button
-                onClick={handleReportArticle}
+                onClick={() => handleReportArticle(newComment)}
                 className="bg-red-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-600 transition"
               >
                 Yes, Report
@@ -333,6 +338,7 @@ export default function ArticlePage() {
           </div>
         </div>
       )}
+
       {/* Comments Slider */}
       <div>
         <button
