@@ -32,7 +32,7 @@ const QuillEditor = ({ setContent }) => {
       ref={editorRef}
       theme="snow"
       className="h-40 border border-gray-300 rounded-md"
-      style={{ height: "160px" }}
+      style={{ height: "450px", width: "100%", fontSize: "1rem" }}
     ></div>
   );
 };
