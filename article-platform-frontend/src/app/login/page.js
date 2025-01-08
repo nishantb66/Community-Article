@@ -36,6 +36,7 @@ export default function LoginPage() {
           localStorage.setItem("token", data.token);
           localStorage.setItem("userId", data.userId);
           localStorage.setItem("userName", data.name);
+          localStorage.setItem("isVerified", data.isVerified);
         }
 
         // Show success message
@@ -137,6 +138,16 @@ export default function LoginPage() {
             className="cursor-pointer text-orange-500 hover:underline"
           >
             Go to Home
+          </a>
+        </p>
+        {/* Link for Email Verification */}
+        <p className="mt-4 text-sm text-center text-gray-500 sm:text-base lg:text-lg">
+          Haven’t verified your email?{" "}
+          <a
+            onClick={() => router.push("/otp-verification")}
+            className="text-blue-500 hover:underline cursor-pointer"
+          >
+            Verify Now
           </a>
         </p>
       </form>
