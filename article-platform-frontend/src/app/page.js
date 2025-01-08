@@ -273,7 +273,19 @@ export default function Home() {
             >
               <nav className="flex flex-col sm:flex-row items-center sm:space-x-4 px-6 py-6 sm:px-0 sm:py-0">
                 <Link
-                  href="/create"
+                  href={user ? "/create" : ""}
+                  onClick={(e) => {
+                    if (!user) {
+                      e.preventDefault(); // Prevent navigation if the user is not logged in
+                      setNotification(
+                        "Please log in or register to write an article."
+                      );
+                      setNotificationType("error");
+
+                      // Clear the notification after 3 seconds
+                      setTimeout(() => setNotification(""), 3000);
+                    }
+                  }}
                   className="w-full sm:w-auto px-4 py-2 mb-2 sm:mb-0 text-center bg-orange-500 text-white rounded-full font-semibold shadow-md hover:bg-orange-600 transition text-sm sm:text-base"
                 >
                   Write
