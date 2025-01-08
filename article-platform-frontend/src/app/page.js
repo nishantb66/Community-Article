@@ -295,7 +295,7 @@ export default function Home() {
                   Write
                 </Link>
                 <button
-                  onClick={() => alert("Subscribe popup coming soon!")}
+                  onClick={() => setIsPopupOpen(true)}
                   className="w-full sm:w-auto px-4 py-2 mb-2 sm:mb-0 bg-pink-500 text-white rounded-full font-semibold shadow-md hover:bg-pink-600 transition text-sm sm:text-base"
                 >
                   Subscribe
@@ -607,7 +607,7 @@ export default function Home() {
           <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
             <div className="bg-white rounded-lg shadow-lg p-6 sm:p-8 max-w-xs sm:max-w-md w-full">
               <h2 className="text-lg sm:text-xl font-bold text-gray-800 mb-4">
-                Subscribe to Our Newsletter
+                Subscribe to our newsletter for email updates
               </h2>
               <form onSubmit={handleSubscribe}>
                 <input
