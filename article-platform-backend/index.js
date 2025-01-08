@@ -13,6 +13,8 @@ const usersRoutes = require("./routes/users");
 const articleRoutes = require("./routes/articles");
 const storyRoutes = require("./routes/storyRoutes");
 const adminRoutes = require("./routes/admin");
+const otpRoutes = require("./routes/otp");
+
 
 // Initialize Express App
 const app = express();
@@ -40,6 +42,7 @@ app.use("/api", usersRoutes);
 app.use("/api/articles", articleRoutes);
 app.use("/api/stories", storyRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/otp", otpRoutes);
 
 // Serve static files for uploads (if any)
 const path = require("path");
