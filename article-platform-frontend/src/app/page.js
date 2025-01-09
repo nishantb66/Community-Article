@@ -528,28 +528,35 @@ export default function Home() {
           </div>
         )}
 
-        {/* Main Section */}
-        <main className="container mx-auto mt-6 px-4 sm:px-10">
-          <div className="mb-6 sm:mb-8 text-center">
-            <h2 className="text-xl sm:text-3xl font-bold text-gray-800">
+        {/* Main Article Section */}
+        <main className="container mx-auto mt-10 px-4 sm:px-10">
+          {/* Section Header */}
+          <div className="mb-10 text-center">
+            <h2
+              className="text-2xl sm:text-4xl font-extrabold text-gray-800 animate-fadeIn"
+              style={{ animationDelay: "0.3s" }}
+            >
               Explore
             </h2>
-            <p className="text-gray-600 text-sm sm:text-base mt-2">
+            <p
+              className="text-gray-600 text-sm sm:text-base mt-2 animate-fadeIn"
+              style={{ animationDelay: "0.6s" }}
+            >
               Stay updated with the latest articles from the community
             </p>
           </div>
-
+        
+          {/* Loader */}
           {loading && page === 1 ? (
-            // Skeleton Loader for Initial Load
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 animate-pulse">
               {Array.from({ length: 6 }).map((_, index) => (
                 <div
                   key={index}
-                  className="bg-white rounded-lg shadow-md overflow-hidden animate-pulse"
+                  className="bg-white rounded-lg shadow-md overflow-hidden"
                 >
-                  <div className="h-40 bg-gray-300"></div>
+                  <div className="h-48 bg-gray-200"></div>
                   <div className="p-4">
-                    <div className="h-5 bg-gray-300 rounded-md w-3/4 mb-3"></div>
+                    <div className="h-6 bg-gray-300 rounded-md w-3/4 mb-3"></div>
                     <div className="h-4 bg-gray-300 rounded-md w-full mb-2"></div>
                     <div className="h-4 bg-gray-300 rounded-md w-5/6 mb-2"></div>
                     <div className="h-4 bg-gray-300 rounded-md w-1/3"></div>
@@ -558,54 +565,55 @@ export default function Home() {
               ))}
             </div>
           ) : (
-            // Filtered Articles
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            // Articles Grid
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
               {(searchQuery ? filteredArticles : articles).map((article) => (
                 <div
                   key={article._id}
-                  className="bg-white rounded-lg shadow-md hover:shadow-xl transition-transform transform hover:-translate-y-2 overflow-hidden"
+                  className="relative group bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all transform hover:-translate-y-2 hover:scale-105"
                 >
-                  {/* Article Container */}
+                  {/* Article Thumbnail */}
                   <div
                     onClick={() => router.push(`/article/${article._id}`)}
-                    className="cursor-pointer p-4"
+                    className="cursor-pointer relative h-48 bg-gradient-to-r from-orange-200 to-pink-200 flex justify-center items-center"
                   >
-                    <h3 className="text-lg sm:text-2xl font-semibold text-gray-800 hover:text-orange-500">
-                      {article.title}
-                    </h3>
-                    <div
-                      className="text-gray-700 mt-3 text-sm sm:text-base line-clamp-2"
+                    <h3
+                      className="text-white text-lg sm:text-xl font-semibold group-hover:opacity-100 opacity-70 transition duration-300"
+                      dangerouslySetInnerHTML={{
+                        __html: article.title.length > 30
+                          ? `${article.title.slice(0, 30)}...`
+                          : article.title,
+                      }}
+                    ></h3>
+                  </div>
+        
+                  {/* Article Content */}
+                  <div className="p-4">
+                    <p
+                      className="text-sm sm:text-base text-gray-700 mb-4 line-clamp-3"
                       dangerouslySetInnerHTML={{
                         __html: article.content.slice(0, 120),
                       }}
-                    ></div>
-                    <p className="text-xs sm:text-sm text-gray-500 mt-4">
-                      By {article.author}
-                    </p>
+                    ></p>
+                    <p className="text-xs sm:text-sm text-gray-500">By {article.author}</p>
                   </div>
-
+        
                   {/* Bookmark Button */}
-                  <div className="p-4">
+                  <div className="absolute top-4 right-4">
                     <button
                       onClick={(e) => {
-                        e.stopPropagation(); // Prevent navigation on card click
-
+                        e.stopPropagation();
                         if (!user) {
-                          // Set notification for login requirement
                           setNotification(
                             "Please log in or register to bookmark articles."
                           );
                           setNotificationType("error");
-
-                          // Clear the notification after 3 seconds
                           setTimeout(() => setNotification(""), 3000);
                           return;
                         }
-
-                        // Call the bookmark handler if the user is logged in
                         handleBookmark(article._id);
                       }}
-                      className="mt-4 px-3 py-1 bg-orange-400 text-white text-xs rounded-full font-semibold shadow-md hover:bg-orange-500 transition"
+                      className="bg-orange-400 hover:bg-orange-500 text-white text-xs rounded-full px-3 py-1 font-semibold shadow-md transition"
                     >
                       Bookmark
                     </button>
@@ -614,19 +622,20 @@ export default function Home() {
               ))}
             </div>
           )}
-
+        
           {/* Load More Button */}
           {page < totalPages && !loading && (
-            <div className="flex justify-center mt-8 sm:mt-12">
+            <div className="flex justify-center mt-12">
               <button
                 onClick={loadMoreArticles}
-                className="px-4 py-2 bg-orange-500 text-white rounded-full font-semibold shadow-md hover:bg-orange-600 transition"
+                className="px-6 py-2 bg-gradient-to-r from-orange-500 to-pink-500 text-white font-bold rounded-full shadow-md hover:shadow-lg hover:scale-105 transition-transform"
               >
                 Load More
               </button>
             </div>
           )}
         </main>
+
 
         {/* Newsletter Popup */}
         {isPopupOpen && (
