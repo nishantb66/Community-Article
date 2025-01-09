@@ -546,99 +546,155 @@ export default function Home() {
           </div>
         )}
 
-          {/*Article section */}
-        <main className="container mx-auto mt-8 px-4 sm:px-6 lg:px-8">
+        {/*Article section */}
+                <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
           {/* Section Header */}
-          <div className="mb-12 text-center space-y-2">
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-800 tracking-tight">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-orange-600 to-pink-600 mb-4">
               Explore Articles
             </h2>
-            <p className="text-gray-600 text-sm sm:text-base max-w-2xl mx-auto">
+            <p className="text-gray-600 text-sm sm:text-base">
               Discover thought-provoking stories and insights from our community
             </p>
           </div>
-        
-          {/* Articles Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-            {(searchQuery ? filteredArticles : articles).map((article) => (
-              <div
-                key={article._id}
-                className="group bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 sm:hover:-translate-y-2 sm:transition-all"
-              >
-                {/* Thumbnail */}
-                <div
-                  onClick={() => router.push(`/article/${article._id}`)}
-                  className="cursor-pointer relative overflow-hidden h-48"
-                >
-                  <div className="absolute inset-0 bg-gradient-to-br from-orange-200 to-pink-200 sm:group-hover:scale-105 transition-transform duration-300"></div>
-                  <div className="absolute inset-0 flex items-center justify-center p-6">
-                    <h3 className="text-xl sm:text-2xl font-bold text-gray-800 text-center line-clamp-2">
-                      {article.title}
-                    </h3>
-                  </div>
-                </div>
-        
-                {/* Content */}
-                <div className="p-6">
-                  <div className="mb-4">
-                    <div
-                      className="text-gray-700 line-clamp-3 text-sm sm:text-base"
-                      dangerouslySetInnerHTML={{
-                        __html: article.content.slice(0, 150) + "...",
-                      }}
-                    />
-                  </div>
-                  <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                    <div className="flex items-center space-x-2">
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-r from-orange-400 to-pink-400 flex items-center justify-center text-white font-semibold text-sm">
-                        {article.author.charAt(0)}
+
+          {/* Loading State or Articles Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {loading && page === 1
+              ? // Loading Skeleton Cards
+                Array.from({ length: 6 }).map((_, index) => (
+                  <div
+                    key={index}
+                    className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-md overflow-hidden"
+                  >
+                    <div className="h-48 bg-gradient-to-r from-gray-200 to-gray-300 animate-pulse" />
+                    <div className="p-6">
+                      <div className="space-y-4">
+                        <div className="h-6 bg-gray-200 rounded-lg w-3/4 animate-pulse" />
+                        <div className="space-y-2">
+                          <div className="h-4 bg-gray-200 rounded-lg animate-pulse" />
+                          <div className="h-4 bg-gray-200 rounded-lg w-5/6 animate-pulse" />
+                          <div className="h-4 bg-gray-200 rounded-lg w-4/6 animate-pulse" />
+                        </div>
                       </div>
-                      <span className="text-sm text-gray-600">{article.author}</span>
+                      <div className="flex items-center justify-between pt-4 mt-6 border-t border-gray-100">
+                        <div className="flex items-center space-x-3">
+                          <div className="w-8 h-8 rounded-full bg-gray-200 animate-pulse" />
+                          <div className="h-4 bg-gray-200 rounded-lg w-20 animate-pulse" />
+                        </div>
+                        <div className="w-20 h-8 bg-gray-200 rounded-full animate-pulse" />
+                      </div>
                     </div>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        if (!user) {
-                          setNotification("Please log in to bookmark articles");
-                          setNotificationType("error");
-                          setTimeout(() => setNotification(""), 3000);
-                          return;
-                        }
-                        handleBookmark(article._id);
-                      }}
-                      className="flex items-center space-x-1 px-4 py-2 bg-gradient-to-r from-orange-400 to-pink-400 text-white rounded-full text-sm font-medium hover:shadow-lg transition-shadow duration-300"
-                    >
-                      <svg
-                        className="w-4 h-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"
-                        />
-                      </svg>
-                      <span>Save</span>
-                    </button>
                   </div>
-                </div>
-              </div>
-            ))}
+                ))
+              : // Actual Articles
+                (searchQuery ? filteredArticles : articles).map((article) => (
+                  <div
+                    key={article._id}
+                    className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300"
+                  >
+                    {/* Loading Overlay */}
+                    {clickedArticleId === article._id && (
+                      <div className="absolute inset-0 bg-white/60 backdrop-blur-sm rounded-2xl z-10 flex items-center justify-center">
+                        <div className="w-10 h-10 border-4 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
+                      </div>
+                    )}
+
+                    {/* Article Header */}
+                    <div
+                      onClick={async () => {
+                        setClickedArticleId(article._id);
+                        await new Promise((resolve) =>
+                          setTimeout(resolve, 500)
+                        );
+                        router.push(`/article/${article._id}`);
+                      }}
+                      className={`cursor-pointer relative h-48 overflow-hidden rounded-t-2xl transition-all duration-300 ${
+                        clickedArticleId === article._id ? "blur-sm" : ""
+                      }`}
+                    >
+                      <div className="absolute inset-0 bg-gradient-to-br from-orange-100 to-pink-100 opacity-75" />
+                      <div className="absolute inset-0 p-6 flex items-center justify-center">
+                        <h3 className="text-xl font-bold text-gray-800 text-center line-clamp-2">
+                          {article.title}
+                        </h3>
+                      </div>
+                    </div>
+
+                    {/* Article Content */}
+                    <div
+                      className={`p-6 transition-all duration-300 ${
+                        clickedArticleId === article._id ? "blur-sm" : ""
+                      }`}
+                    >
+                      <div className="mb-6">
+                        <div
+                          className="prose prose-sm text-gray-600 line-clamp-3"
+                          dangerouslySetInnerHTML={{
+                            __html: article.content.slice(0, 150) + "...",
+                          }}
+                        />
+                      </div>
+
+                      {/* Article Footer */}
+                      <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                        <div className="flex items-center space-x-3">
+                          <div className="w-8 h-8 rounded-full bg-gradient-to-r from-orange-400 to-pink-400 flex items-center justify-center">
+                            <span className="text-white font-medium text-sm">
+                              {article.author.charAt(0)}
+                            </span>
+                          </div>
+                          <span className="text-sm text-gray-600 font-medium">
+                            {article.author}
+                          </span>
+                        </div>
+
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            if (!user) {
+                              setNotification(
+                                "Please log in to bookmark articles"
+                              );
+                              setNotificationType("error");
+                              setTimeout(() => setNotification(""), 3000);
+                              return;
+                            }
+                            handleBookmark(article._id);
+                          }}
+                          className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-orange-400 to-pink-400 text-white text-sm font-medium rounded-full shadow-sm hover:shadow-md transition-shadow duration-300"
+                        >
+                          <svg
+                            className="w-4 h-4 mr-2"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"
+                            />
+                          </svg>
+                          Save
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
           </div>
-        
+
           {/* Load More Button */}
           {page < totalPages && !loading && (
             <div className="flex justify-center mt-12">
               <button
                 onClick={loadMoreArticles}
-                className="group px-8 py-3 bg-gradient-to-r from-orange-400 to-pink-400 text-white rounded-full font-semibold shadow-lg hover:shadow-xl transition-shadow duration-300 sm:hover:scale-105 sm:transition-all flex items-center space-x-2"
+                className="group inline-flex items-center px-8 py-3 bg-gradient-to-r from-orange-400 to-pink-400 text-white font-semibold rounded-full shadow-md hover:shadow-lg transition-shadow duration-300"
               >
                 <span>Load More Articles</span>
                 <svg
-                  className="w-4 h-4 sm:group-hover:translate-x-1 transition-transform"
+                  className="w-4 h-4 ml-2 sm:group-hover:translate-x-1 transition-transform"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
