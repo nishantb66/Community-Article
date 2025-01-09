@@ -798,45 +798,75 @@ export default function Home() {
 
         {/* Newsletter Popup */}
         {isPopupOpen && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-            <div className="bg-white rounded-lg shadow-lg p-6 sm:p-8 max-w-xs sm:max-w-md w-full">
-              <h2 className="text-lg sm:text-xl font-bold text-gray-800 mb-4">
-                Subscribe to our newsletter for email updates
-              </h2>
-              <form onSubmit={handleSubscribe}>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-400 focus:outline-none mb-4 text-sm sm:text-base"
-                />
-                <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fadeIn">
+            <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl max-w-md w-full p-6 sm:p-8 transform transition-all duration-300 scale-100 animate-slideUp">
+              {/* Header */}
+              <div className="flex justify-between items-start mb-6">
+                <div>
+                  <h2 className="text-2xl font-bold bg-gradient-to-r from-orange-600 to-pink-600 bg-clip-text text-transparent">
+                    Stay Updated
+                  </h2>
+                  <p className="text-sm text-gray-600 mt-1">
+                    Get the latest articles directly in your inbox
+                  </p>
+                </div>
+                <button
+                  onClick={() => setIsPopupOpen(false)}
+                  className="text-gray-400 hover:text-gray-500 transition-colors"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+        
+              {/* Form */}
+              <form onSubmit={handleSubscribe} className="space-y-6">
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                  </div>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Enter your email address"
+                    className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none transition-all duration-300"
+                  />
+                </div>
+        
+                <div className="space-y-4">
                   <button
                     type="submit"
-                    className="bg-orange-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-orange-600 transition text-sm sm:text-base"
+                    className="w-full px-6 py-3 bg-gradient-to-r from-orange-500 to-pink-500 text-white font-semibold rounded-xl shadow-md hover:shadow-lg transform transition-all duration-300 hover:from-orange-600 hover:to-pink-600"
                   >
-                    Subscribe
+                    Subscribe Now
                   </button>
                   <button
                     type="button"
                     onClick={() => setIsPopupOpen(false)}
-                    className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg font-semibold hover:bg-gray-400 transition text-sm sm:text-base"
+                    className="w-full px-6 py-3 bg-gray-100 text-gray-700 font-semibold rounded-xl hover:bg-gray-200 transition-all duration-300"
                   >
-                    Close
+                    Maybe Later
                   </button>
                 </div>
               </form>
+        
+              {/* Message Display */}
               {message && (
-                <p
-                  className={`mt-4 text-center ${
-                    message.includes("successful")
-                      ? "text-green-500"
-                      : "text-red-500"
-                  }`}
-                >
-                  {message}
-                </p>
+                <div className={`mt-4 p-4 rounded-xl ${
+                  message.includes("successful")
+                    ? "bg-green-50 border border-green-200"
+                    : "bg-red-50 border border-red-200"
+                }`}>
+                  <p className={`text-sm font-medium text-center ${
+                    message.includes("successful") ? "text-green-600" : "text-red-600"
+                  }`}>
+                    {message}
+                  </p>
+                </div>
               )}
             </div>
           </div>
