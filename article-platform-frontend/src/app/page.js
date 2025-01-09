@@ -526,108 +526,137 @@ export default function Home() {
         )}
 
         {/* Main Article Section */}
-        <main className="container mx-auto mt-10 px-4 sm:px-10">
+        <main className="container mx-auto mt-8 px-4 sm:px-6 lg:px-8">
           {/* Section Header */}
-          <div className="mb-10 text-center">
-            <h2
-              className="text-2xl sm:text-4xl font-extrabold text-gray-800 animate-fadeIn"
-              style={{ animationDelay: "0.3s" }}
-            >
-              Explore
+          <div className="mb-12 text-center space-y-2">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-800 tracking-tight">
+              Explore Articles
             </h2>
-            <p
-              className="text-gray-600 text-sm sm:text-base mt-2 animate-fadeIn"
-              style={{ animationDelay: "0.6s" }}
-            >
-              Stay updated with the latest articles from the community
+            <p className="text-gray-600 text-sm sm:text-base max-w-2xl mx-auto">
+              Discover thought-provoking stories and insights from our community
             </p>
           </div>
-        
+
           {/* Loader */}
           {loading && page === 1 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 animate-pulse">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
               {Array.from({ length: 6 }).map((_, index) => (
                 <div
                   key={index}
-                  className="bg-white rounded-lg shadow-md overflow-hidden"
+                  className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg overflow-hidden"
                 >
-                  <div className="h-48 bg-gray-200"></div>
-                  <div className="p-4">
-                    <div className="h-6 bg-gray-300 rounded-md w-3/4 mb-3"></div>
-                    <div className="h-4 bg-gray-300 rounded-md w-full mb-2"></div>
-                    <div className="h-4 bg-gray-300 rounded-md w-5/6 mb-2"></div>
-                    <div className="h-4 bg-gray-300 rounded-md w-1/3"></div>
+                  <div className="h-48 bg-gradient-to-r from-gray-200 to-gray-300 animate-pulse"></div>
+                  <div className="p-6 space-y-4">
+                    <div className="h-6 bg-gray-200 rounded-lg w-3/4 animate-pulse"></div>
+                    <div className="space-y-2">
+                      <div className="h-4 bg-gray-200 rounded-lg animate-pulse"></div>
+                      <div className="h-4 bg-gray-200 rounded-lg w-5/6 animate-pulse"></div>
+                    </div>
+                    <div className="flex justify-between items-center pt-4">
+                      <div className="h-4 bg-gray-200 rounded-lg w-1/3 animate-pulse"></div>
+                      <div className="h-8 w-24 bg-gray-200 rounded-full animate-pulse"></div>
+                    </div>
                   </div>
                 </div>
               ))}
             </div>
           ) : (
-            // Articles Grid
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
               {(searchQuery ? filteredArticles : articles).map((article) => (
                 <div
                   key={article._id}
-                  className="relative group bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all transform hover:-translate-y-2 hover:scale-105"
+                  className="group bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
                 >
-                  {/* Article Thumbnail */}
+                  {/* Thumbnail */}
                   <div
                     onClick={() => router.push(`/article/${article._id}`)}
-                    className="cursor-pointer relative h-48 bg-gradient-to-r from-orange-200 to-pink-200 flex justify-center items-center"
+                    className="cursor-pointer relative overflow-hidden h-48"
                   >
-                    <h3
-                      className="text-black text-lg sm:text-xl font-semibold group-hover:opacity-100 opacity-70 transition duration-300"
-                      dangerouslySetInnerHTML={{
-                        __html: article.title.length > 30
-                          ? `${article.title.slice(0, 30)}...`
-                          : article.title,
-                      }}
-                    ></h3>
+                    <div className="absolute inset-0 bg-gradient-to-br from-orange-200 to-pink-200 group-hover:scale-105 transition-transform duration-300"></div>
+                    <div className="absolute inset-0 flex items-center justify-center p-6">
+                      <h3 className="text-xl sm:text-2xl font-bold text-gray-800 text-center line-clamp-2 group-hover:scale-105 transition-transform duration-300">
+                        {article.title}
+                      </h3>
+                    </div>
                   </div>
-        
-                  {/* Article Content */}
-                  <div className="p-4">
-                    <p
-                      className="text-sm sm:text-base text-gray-700 mb-4 line-clamp-3"
-                      dangerouslySetInnerHTML={{
-                        __html: article.content.slice(0, 120),
-                      }}
-                    ></p>
-                    <p className="text-xs sm:text-sm text-gray-500">By {article.author}</p>
-                  </div>
-        
-                  {/* Bookmark Button */}
-                  <div className="absolute top-4 right-4">
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        if (!user) {
-                          setNotification(
-                            "Please log in or register to bookmark articles."
-                          );
-                          setNotificationType("error");
-                          setTimeout(() => setNotification(""), 3000);
-                          return;
-                        }
-                        handleBookmark(article._id);
-                      }}
-                      className="bg-orange-400 hover:bg-orange-500 text-white text-xs rounded-full px-3 py-1 font-semibold shadow-md transition"
-                    >
-                      Bookmark
-                    </button>
+
+                  {/* Content */}
+                  <div className="p-6">
+                    <div className="mb-4">
+                      <div
+                        className="text-gray-700 line-clamp-3 text-sm sm:text-base"
+                        dangerouslySetInnerHTML={{
+                          __html: article.content.slice(0, 150) + "...",
+                        }}
+                      />
+                    </div>
+                    <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                      <div className="flex items-center space-x-2">
+                        <div className="w-8 h-8 rounded-full bg-gradient-to-r from-orange-400 to-pink-400 flex items-center justify-center text-white font-semibold text-sm">
+                          {article.author.charAt(0)}
+                        </div>
+                        <span className="text-sm text-gray-600">
+                          {article.author}
+                        </span>
+                      </div>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (!user) {
+                            setNotification(
+                              "Please log in to bookmark articles"
+                            );
+                            setNotificationType("error");
+                            setTimeout(() => setNotification(""), 3000);
+                            return;
+                          }
+                          handleBookmark(article._id);
+                        }}
+                        className="flex items-center space-x-1 px-4 py-2 bg-gradient-to-r from-orange-400 to-pink-400 text-white rounded-full text-sm font-medium hover:shadow-lg transition-all duration-300 transform hover:scale-105"
+                      >
+                        <svg
+                          className="w-4 h-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"
+                          />
+                        </svg>
+                        <span>Save</span>
+                      </button>
+                    </div>
                   </div>
                 </div>
               ))}
             </div>
           )}
-        
+
           {/* Load More Button */}
           {page < totalPages && !loading && (
             <div className="flex justify-center mt-12">
               <button
                 onClick={loadMoreArticles}
-                className="px-6 py-2 bg-gradient-to-r from-orange-500 to-pink-500 text-white font-bold rounded-full shadow-md hover:shadow-lg hover:scale-105 transition-transform"
+                className="group px-8 py-3 bg-gradient-to-r from-orange-400 to-pink-400 text-white rounded-full font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 flex items-center space-x-2"
               >
-                Load More
+                <span>Load More Articles</span>
+                <svg
+                  className="w-4 h-4 transform group-hover:translate-x-1 transition-transform"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M17 8l4 4m0 0l-4 4m4-4H3"
+                  />
+                </svg>
               </button>
             </div>
           )}
