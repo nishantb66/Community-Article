@@ -578,7 +578,7 @@ export default function Home() {
                     className="cursor-pointer relative h-48 bg-gradient-to-r from-orange-200 to-pink-200 flex justify-center items-center"
                   >
                     <h3
-                      className="text-white text-lg sm:text-xl font-semibold group-hover:opacity-100 opacity-70 transition duration-300"
+                      className="text-black text-lg sm:text-xl font-semibold group-hover:opacity-100 opacity-70 transition duration-300"
                       dangerouslySetInnerHTML={{
                         __html: article.title.length > 30
                           ? `${article.title.slice(0, 30)}...`
