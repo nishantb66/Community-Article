@@ -230,7 +230,7 @@ export default function Home() {
     <main className="flex-grow">
       <div className="min-h-screen bg-gradient-to-br from-orange-100 to-pink-100">
         {/* Navigation Bar */}
-         <header className="bg-gradient-to-r from-orange-400 to-pink-400 text-white py-4 sticky top-0 z-10 shadow-lg">
+         <header className="bg-gradient-to-r from-orange-400 to-pink-400 text-white py-4 sticky top-0 z-50 shadow-lg">
           <div className="container mx-auto flex justify-between items-center px-4 sm:px-10">
             {/* Logo Section */}
             <Link href="/">
@@ -273,7 +273,7 @@ export default function Home() {
             <div
               className={`${
                 mobileMenuOpen ? "block" : "hidden"
-              } sm:flex sm:items-center absolute sm:relative top-16 left-0 sm:top-0 w-full sm:w-auto bg-white sm:bg-transparent shadow-lg sm:shadow-none z-20 rounded-lg sm:rounded-none`}
+              } sm:flex sm:items-center fixed sm:relative top-[72px] left-0 sm:top-0 w-full sm:w-auto bg-white sm:bg-transparent shadow-lg sm:shadow-none z-50 rounded-lg sm:rounded-none`}
             >
               <nav className="flex flex-col sm:flex-row items-center sm:space-x-4 px-6 py-6 sm:px-0 sm:py-0">
                 <Link
@@ -367,81 +367,102 @@ export default function Home() {
         </header>
 
         {/* Hero Section */}
-        <div className="text-center bg-gradient-to-br from-orange-50 to-pink-50 py-10 px-6 sm:py-16 sm:px-10">
-          {/* Collaborate Button Below Logo */}
-          <h1
-            className="text-3xl sm:text-5xl font-extrabold text-gray-800 mb-4 leading-tight animate-fadeIn"
-            style={{ animationDelay: "0.5s" }}
-          >
-            Discover a Variety of Stories
-          </h1>
-          <p
-            className="text-base sm:text-lg text-gray-600 mb-6 animate-fadeIn"
-            style={{ animationDelay: "0.8s" }}
-          >
-            Explore articles, stories written by the community
-          </p>
-          {/* Search Bar */}
-          <div
-            className="max-w-md mx-auto animate-fadeIn"
-            style={{ animationDelay: "1.1s" }}
-          >
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => {
-                setSearchQuery(e.target.value);
-                handleSearch(e.target.value);
-              }}
-              placeholder="Search articles..."
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-400 focus:outline-none"
-            />
-            <p className="text-base sm:text-sm text-gray-600 mb-1">
-              📝Load all articles and then apply search
+        <div
+          className={`relative min-h-[60vh] flex items-center justify-center bg-gradient-to-br from-orange-50 via-pink-50 to-orange-50 ${
+            mobileMenuOpen ? "mt-[320px] sm:mt-0" : ""
+          } transition-all duration-300`}
+        >
+          <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
+
+          <div className="relative z-10 container mx-auto text-center px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+            {/* Main Content */}
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-pink-600 mb-6 leading-tight animate-fadeIn">
+              Discover a Variety of Stories
+            </h1>
+
+            <p className="text-base sm:text-lg lg:text-xl text-gray-600 mb-12 max-w-2xl mx-auto animate-fadeIn opacity-90">
+              Explore articles, stories written by the community
             </p>
-          </div>
-          <br />
-          <div
-            className="flex flex-col sm:flex-row justify-center items-center gap-4 animate-fadeIn"
-            style={{ animationDelay: "1.4s" }}
-          >
-            <div className="flex flex-row gap-2">
-              <Link
-                href="/deleteRequest"
-                className="text-xs sm:text-sm text-orange-600 font-semibold hover:underline text-center"
-              >
-                Want your article removed? Put your request here
-              </Link>
-            </div>
-            <button
-              onClick={() => setIsCollaboratePopupOpen(true)}
-              className="px-6 py-2 bg-orange-400 text-white font-semibold rounded-full shadow-md hover:bg-orange-500 transition"
-            >
-              Collaborate
-            </button>
-          </div>
 
-          {user && (
-            <>
-              <button
-                onClick={() => {
-                  router.push("/stories"); // Redirect to the stories page
-                }}
-                className="mt-6 inline-block px-6 py-2 bg-gray-800 text-white font-semibold rounded-full shadow-md hover:bg-gray-900 transition text-sm sm:text-base animate-fadeIn"
-                style={{ animationDelay: "1.7s" }}
-              >
-                Stories by SimpleArticles
-              </button>
-
-              {/* Popup Notification */}
-              {popupMessage && (
-                <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
-                  <div className="bg-blue-500 text-white py-4 px-8 rounded-lg shadow-md text-center">
-                    <p className="text-lg font-semibold">{popupMessage}</p>
-                  </div>
+            {/* Search Section */}
+            <div className="max-w-2xl mx-auto space-y-4 animate-fadeIn">
+              <div className="relative group">
+                {/* Search Message */}
+                <div
+                  className={`absolute -top-8 left-0 right-0 text-sm text-gray-500 transition-opacity duration-300 ${
+                    searchQuery.length > 0 ? "opacity-100" : "opacity-0"
+                  }`}
+                >
+                  📝 Load all articles and then apply search
                 </div>
+
+                {/* Search Input */}
+                <div className="relative">
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => {
+                      setSearchQuery(e.target.value);
+                      handleSearch(e.target.value);
+                    }}
+                    placeholder="Search articles..."
+                    className="w-full px-6 py-4 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-full shadow-lg focus:shadow-xl focus:ring-2 focus:ring-orange-400 focus:border-transparent outline-none transition-all duration-300 text-gray-800 placeholder-gray-400"
+                  />
+                  <span className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400">
+                    <svg
+                      className="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                      />
+                    </svg>
+                  </span>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mt-8 animate-fadeIn">
+                <Link
+                  href="/deleteRequest"
+                  className="text-sm text-orange-600 hover:text-orange-700 font-medium hover:underline transition-colors duration-300"
+                >
+                  Want your article removed? Put your request here
+                </Link>
+
+                <button
+                  onClick={() => setIsCollaboratePopupOpen(true)}
+                  className="px-8 py-3 bg-gradient-to-r from-orange-400 to-pink-500 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+                >
+                  Collaborate
+                </button>
+              </div>
+
+              {/* User Stories Button */}
+              {user && (
+                <button
+                  onClick={() => router.push("/stories")}
+                  className="mt-8 px-8 py-3 bg-gradient-to-r from-gray-800 to-gray-900 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 animate-fadeIn"
+                >
+                  Stories by SimpleArticles
+                </button>
               )}
-            </>
+            </div>
+          </div>
+
+          {/* Popup Notification */}
+          {popupMessage && (
+            <div className="fixed inset-0 flex items-center justify-center z-50 animate-fadeIn">
+              <div className="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
+              <div className="relative bg-gradient-to-r from-blue-500 to-blue-600 text-white py-4 px-8 rounded-lg shadow-2xl transform transition-all duration-300">
+                <p className="text-lg font-semibold">{popupMessage}</p>
+              </div>
+            </div>
           )}
         </div>
 
