@@ -577,6 +577,20 @@ export default function Home() {
                     <button
                       onClick={(e) => {
                         e.stopPropagation(); // Prevent navigation on card click
+
+                        if (!user) {
+                          // Set notification for login requirement
+                          setNotification(
+                            "Please log in or register to bookmark articles."
+                          );
+                          setNotificationType("error");
+
+                          // Clear the notification after 3 seconds
+                          setTimeout(() => setNotification(""), 3000);
+                          return;
+                        }
+
+                        // Call the bookmark handler if the user is logged in
                         handleBookmark(article._id);
                       }}
                       className="mt-4 px-3 py-1 bg-orange-400 text-white text-xs rounded-full font-semibold shadow-md hover:bg-orange-500 transition"
