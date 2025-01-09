@@ -79,94 +79,168 @@ const CreateArticle = () => {
     }
   };
 
-  return (
-    <div className="bg-gradient-to-br from-orange-50 to-pink-100 min-h-screen py-10 px-4 sm:px-6 lg:px-8">
+ return (
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-pink-50 to-orange-50">
+      {/* Notification Toast */}
       {notification && (
         <div className="fixed top-5 left-1/2 transform -translate-x-1/2 z-50">
-          <div className="bg-green-500 text-white py-2 px-6 rounded-lg shadow-md flex items-center">
-            <div className="mr-2 text-lg font-semibold">✔</div>
-            <span>Article published successfully!</span>
+          <div className="bg-white/90 backdrop-blur-sm border border-green-500/20 text-green-700 py-3 px-6 rounded-xl shadow-lg flex items-center gap-2">
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M5 13l4 4L19 7"
+              />
+            </svg>
+            <span className="font-medium">Article published successfully!</span>
           </div>
         </div>
       )}
 
-      <div className="max-w-4xl mx-auto bg-white shadow-2xl rounded-xl overflow-hidden">
-        {/* Header */}
-        <div className="bg-gradient-to-r from-orange-400 to-pink-400 py-8 px-6 text-white text-center">
-          <h1 className="text-3xl font-bold">Create an Article</h1>
-          <p className="mt-2 text-sm">Share your ideas with the world!</p>
-        </div>
-
-        {/* Form */}
-        <div className="p-8 space-y-6">
-          <div>
-            <label
-              htmlFor="title"
-              className="block text-lg font-medium text-gray-700"
-            >
-              Title
-            </label>
-            <input
-              id="title"
-              type="text"
-              placeholder="Enter a catchy title..."
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              className="mt-2 w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400 text-base"
-            />
-          </div>
-          <div>
-            <label
-              htmlFor="content"
-              className="block text-lg font-medium text-gray-700"
-            >
-              Content
-            </label>
-            <div className="mt-6">
-              <QuillEditor setContent={setContent} />
+      <div className="container max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="bg-white/80 backdrop-blur-sm shadow-2xl rounded-2xl overflow-hidden">
+          {/* Header */}
+          <div className="relative bg-gradient-to-r from-orange-400 via-pink-400 to-orange-500 py-12 px-6 text-center">
+            <div className="relative z-10">
+              <h1 className="text-3xl sm:text-4xl font-extrabold text-white mb-2">
+                Create Your Story
+              </h1>
+              <p className="text-white/90 text-sm sm:text-base">
+                Share your insights and inspire others
+              </p>
             </div>
+            <div className="absolute inset-0 bg-black/10"></div>
           </div>
-          {!username && (
-            <div>
+
+          {/* Form Container */}
+          <div className="p-6 sm:p-8 lg:p-10 space-y-8">
+            {/* Title Input */}
+            <div className="space-y-2">
               <label
-                htmlFor="author"
-                className="block text-lg font-medium text-gray-700"
+                htmlFor="title"
+                className="block text-lg font-semibold text-gray-800"
               >
-                Author
+                Title
               </label>
               <input
-                id="author"
+                id="title"
                 type="text"
-                placeholder="Your name..."
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                className="mt-2 w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400 text-base"
+                placeholder="Enter a captivating title..."
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none transition-all duration-300"
+                maxLength="100"
               />
+              <div className="flex justify-end">
+                <span className="text-sm text-gray-500">
+                  {title.length}/100
+                </span>
+              </div>
             </div>
-          )}
-          <button
-            onClick={handleSubmit}
-            disabled={loading}
-            className={`w-full py-3 rounded-lg text-lg font-semibold text-white ${
-              loading
-                ? "bg-orange-300 cursor-not-allowed"
-                : "bg-orange-500 hover:bg-orange-600 transition"
-            } shadow-lg`}
-          >
-            {loading ? "Publishing..." : "Publish Article"}
-          </button>
-        </div>
-      </div>
 
-      <div className="mt-6 text-center">
-        <a
-          href="/guidelines"
-          className="text-blue-600 hover:underline font-medium"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          simpleArticle regulations
-        </a>
+            {/* Content Editor */}
+            <div className="space-y-2">
+              <label
+                htmlFor="content"
+                className="block text-lg font-semibold text-gray-800"
+              >
+                Content
+              </label>
+              <div className="mt-2 rounded-xl overflow-hidden border border-gray-200 shadow-sm">
+                <QuillEditor setContent={setContent} />
+              </div>
+            </div>
+
+            {/* Author Input (Conditional) */}
+            {!username && (
+              <div className="space-y-2">
+                <label
+                  htmlFor="author"
+                  className="block text-lg font-semibold text-gray-800"
+                >
+                  Author
+                </label>
+                <input
+                  id="author"
+                  type="text"
+                  placeholder="Your pen name..."
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none transition-all duration-300"
+                />
+              </div>
+            )}
+
+            {/* Submit Button */}
+            <button
+              onClick={handleSubmit}
+              disabled={loading}
+              className={`w-full sm:w-auto px-8 py-4 rounded-xl text-base sm:text-lg font-semibold text-white ${
+                loading
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600"
+              } shadow-lg transform transition-all duration-300 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2`}
+            >
+              {loading ? (
+                <div className="flex items-center justify-center gap-2">
+                  <svg
+                    className="animate-spin h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    />
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    />
+                  </svg>
+                  <span>Publishing...</span>
+                </div>
+              ) : (
+                "Publish Article"
+              )}
+            </button>
+          </div>
+        </div>
+
+        {/* Guidelines Link */}
+        <div className="mt-8 text-center">
+          <a
+            href="/guidelines"
+            className="inline-flex items-center gap-2 text-gray-600 hover:text-orange-500 font-medium transition-colors duration-300"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+              />
+            </svg>
+            <span>Community Guidelines</span>
+          </a>
+        </div>
       </div>
     </div>
   );
