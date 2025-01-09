@@ -515,54 +515,91 @@ export default function Home() {
 
         {/* Collaborate Popup */}
         {isCollaboratePopupOpen && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-            <div className="bg-white rounded-lg shadow-lg p-6 max-w-lg w-full">
-              <h2 className="text-xl font-bold text-gray-800 mb-4">
-                Collaborate
-              </h2>
-              <p className="text-sm text-gray-700 mb-6">
-                Let’s join together and make the community larger.
-              </p>
-              <form onSubmit={handleCollaborateSubmit} className="space-y-4">
-                <input
-                  type="text"
-                  value={collaborateName}
-                  onChange={(e) => setCollaborateName(e.target.value)}
-                  placeholder="Your Name"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-orange-400 focus:outline-none"
-                />
-                <input
-                  type="email"
-                  value={collaborateEmail}
-                  onChange={(e) => setCollaborateEmail(e.target.value)}
-                  placeholder="Your Email"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-orange-400 focus:outline-none"
-                />
-                <textarea
-                  value={collaborateReason}
-                  onChange={(e) => setCollaborateReason(e.target.value)}
-                  placeholder="Why do you want to join?"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-orange-400 focus:outline-none"
-                  rows="4"
-                ></textarea>
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fadeIn">
+            <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl max-w-md w-full p-6 transform transition-all duration-300 scale-100 animate-slideUp">
+              {/* Header */}
+              <div className="flex justify-between items-start mb-6">
+                <div>
+                  <h2 className="text-2xl font-bold bg-gradient-to-r from-orange-600 to-pink-600 bg-clip-text text-transparent">
+                    Join Our Community
+                  </h2>
+                  <p className="text-sm text-gray-600 mt-1">
+                    Connect, collaborate, and create together
+                  </p>
+                </div>
                 <button
-                  type="submit"
-                  className="w-full px-4 py-2 bg-orange-500 text-white font-semibold rounded-md shadow-md hover:bg-orange-600 transition"
+                  onClick={() => setIsCollaboratePopupOpen(false)}
+                  className="text-gray-400 hover:text-gray-500 transition-colors"
                 >
-                  Submit
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
                 </button>
+              </div>
+        
+              {/* Form */}
+              <form onSubmit={handleCollaborateSubmit} className="space-y-4">
+                <div className="space-y-1">
+                  <input
+                    type="text"
+                    value={collaborateName}
+                    onChange={(e) => setCollaborateName(e.target.value)}
+                    placeholder="Your Name"
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none transition-all duration-300"
+                  />
+                </div>
+        
+                <div className="space-y-1">
+                  <input
+                    type="email"
+                    value={collaborateEmail}
+                    onChange={(e) => setCollaborateEmail(e.target.value)}
+                    placeholder="Your Email"
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none transition-all duration-300"
+                  />
+                </div>
+        
+                <div className="space-y-1">
+                  <textarea
+                    value={collaborateReason}
+                    onChange={(e) => setCollaborateReason(e.target.value)}
+                    placeholder="Tell us why you'd like to join..."
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none transition-all duration-300 resize-none"
+                    rows="4"
+                    maxLength="500"
+                  ></textarea>
+                  <div className="flex justify-end">
+                    <span className="text-xs text-gray-500">
+                      {collaborateReason.length}/500
+                    </span>
+                  </div>
+                </div>
+        
+                <div className="space-y-4 pt-2">
+                  <button
+                    type="submit"
+                    className="w-full px-6 py-3 bg-gradient-to-r from-orange-500 to-pink-500 text-white font-semibold rounded-xl shadow-md hover:shadow-lg transform transition-all duration-300 hover:from-orange-600 hover:to-pink-600"
+                  >
+                    Submit Application
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setIsCollaboratePopupOpen(false)}
+                    className="w-full px-6 py-3 bg-gray-100 text-gray-700 font-semibold rounded-xl hover:bg-gray-200 transition-all duration-300"
+                  >
+                    Cancel
+                  </button>
+                </div>
               </form>
+        
+              {/* Success Message */}
               {collaborateMessage && (
-                <p className="text-center mt-4 text-sm text-green-500">
-                  {collaborateMessage}
-                </p>
+                <div className="mt-4 p-4 bg-green-50 border border-green-200 rounded-xl">
+                  <p className="text-sm text-green-600 font-medium text-center">
+                    {collaborateMessage}
+                  </p>
+                </div>
               )}
-              <button
-                onClick={() => setIsCollaboratePopupOpen(false)}
-                className="mt-4 w-full px-4 py-2 bg-gray-300 text-gray-700 font-semibold rounded-md shadow-md hover:bg-gray-400 transition"
-              >
-                Close
-              </button>
             </div>
           </div>
         )}
