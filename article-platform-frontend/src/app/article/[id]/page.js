@@ -404,75 +404,109 @@ const handleReportArticle = async (reason) => {
       )}
 
 
-      {/* Comments Slider */}
+      {/* Comments System */}
       <div>
+        {/* Floating Action Button */}
         <button
           onClick={() => setIsCommentSliderOpen(true)}
-          className="fixed bottom-5 right-5 bg-orange-500 text-white px-4 py-3 rounded-full shadow-lg hover:bg-orange-600 transition"
+          className="fixed bottom-6 right-6 z-40 flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-full shadow-lg hover:shadow-xl transform transition-all duration-300 hover:scale-105 sm:hover:-translate-y-1"
         >
-          Responses
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+          </svg>
+          <span className="font-medium">Responses</span>
         </button>
-
+      
+        {/* Comments Drawer */}
         <div
-          className={`fixed top-0 right-0 h-full bg-white dark:bg-gray-800 shadow-lg transform transition-transform duration-300 ${
-            isCommentSliderOpen ? "translate-x-0" : "translate-x-full"
+          className={`fixed inset-y-0 right-0 w-full sm:max-w-md bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm shadow-2xl transform transition-transform duration-300 ease-in-out z-50 ${
+            isCommentSliderOpen ? 'translate-x-0' : 'translate-x-full'
           }`}
-          style={{ width: "100%", maxWidth: "400px" }}
         >
-          <div className="p-6 relative flex flex-col h-full">
-            {/* Cross Button */}
-            <button
-              onClick={() => setIsCommentSliderOpen(false)}
-              className="absolute top-4 right-4 text-red-500 hover:text-red-700 text-2xl font-bold"
-            >
-              &times;
-            </button>
-            <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white text-center">
-              Comments
-            </h2>
-            <form onSubmit={handleCommentSubmit} className="mb-6">
-              <textarea
-                value={newComment}
-                onChange={(e) => setNewComment(e.target.value)}
-                className={`w-full px-4 py-2 border ${
-                  darkMode
-                    ? "border-gray-600 bg-gray-700 text-white"
-                    : "border-gray-300 bg-gray-100 text-gray-900"
-                } rounded-lg focus:ring-2 focus:ring-orange-400 focus:outline-none resize-none`}
-                rows="4"
-                placeholder="Leave a comment..."
-              ></textarea>
+          <div className="flex flex-col h-full">
+            {/* Header */}
+            <div className="flex items-center justify-between p-4 border-b dark:border-gray-700">
+              <h2 className="text-xl font-bold bg-gradient-to-r from-orange-600 to-pink-600 bg-clip-text text-transparent">
+                Responses ({comments.length})
+              </h2>
               <button
-                type="submit"
-                className="mt-4 w-full bg-orange-500 text-white py-3 rounded-lg font-semibold hover:bg-orange-600 transition"
+                onClick={() => setIsCommentSliderOpen(false)}
+                className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
               >
-                Submit Comment
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
               </button>
-            </form>
-            <div className="flex-1 overflow-y-auto">
+            </div>
+      
+            {/* Comment Form */}
+            <div className="p-4 border-b dark:border-gray-700">
+              <form onSubmit={handleCommentSubmit} className="space-y-4">
+                <div className="relative">
+                  <textarea
+                    value={newComment}
+                    onChange={(e) => setNewComment(e.target.value)}
+                    maxLength="500"
+                    rows="4"
+                    placeholder="Share your thoughts..."
+                    className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none resize-none text-gray-800 dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
+                  />
+                  <div className="absolute bottom-2 right-2 text-xs text-gray-400">
+                    {newComment.length}/500
+                  </div>
+                </div>
+                <button
+                  type="submit"
+                  className="w-full px-6 py-3 bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-semibold rounded-xl shadow-md hover:shadow-lg transition-all duration-300"
+                >
+                  Post Response
+                </button>
+              </form>
+            </div>
+      
+            {/* Comments List */}
+            <div className="flex-1 overflow-y-auto p-4 space-y-4">
               {comments.length > 0 ? (
-                <ul className="space-y-4">
-                  {comments.map((comment) => (
-                    <li key={comment._id} className="border-b pb-4">
-                      <p className="text-gray-900 dark:text-white">
-                        {comment.content}
-                      </p>
-                      <p className="text-sm mt-2 text-gray-600 dark:text-gray-400">
-                        {new Date(comment.createdAt).toLocaleString()}
-                      </p>
-                    </li>
-                  ))}
-                </ul>
+                comments.map((comment) => (
+                  <div
+                    key={comment._id}
+                    className="p-4 bg-white dark:bg-gray-700/50 rounded-xl shadow-sm"
+                  >
+                    <div className="flex items-center gap-3 mb-2">
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-r from-orange-400 to-pink-400 flex items-center justify-center text-white font-medium text-sm">
+                        {comment.author?.charAt(0) || 'A'}
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-gray-900 dark:text-white">
+                          {comment.author || 'Anonymous'}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          {new Date(comment.createdAt).toLocaleDateString('en-US', {
+                            month: 'short',
+                            day: 'numeric',
+                            year: 'numeric'
+                          })}
+                        </p>
+                      </div>
+                    </div>
+                    <p className="text-gray-800 dark:text-gray-200">{comment.content}</p>
+                  </div>
+                ))
               ) : (
-                <p className="text-gray-900 dark:text-gray-400 text-center">
-                  No comments yet. Be the first to comment!
-                </p>
+                <div className="flex flex-col items-center justify-center h-full text-center text-gray-500 dark:text-gray-400">
+                  <svg className="w-16 h-16 mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                  </svg>
+                  <p className="font-medium">No responses yet</p>
+                  <p className="text-sm">Be the first to share your thoughts!</p>
+                </div>
               )}
             </div>
           </div>
         </div>
       </div>
-              {/* Footer Section */}
+
+      {/* Footer Section */}
       <footer className="bg-gradient-to-r from-gray-900 to-gray-800 text-white py-10 mt-12">
         <div className="container mx-auto px-6 md:px-10 lg:px-16">
           {/* Top Section */}
