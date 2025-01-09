@@ -31,6 +31,7 @@ export default function Home() {
   const [notification, setNotification] = useState(""); // State for notifications
   const [popupMessage, setPopupMessage] = useState("");
   const [notificationType, setNotificationType] = useState(""); // Success or Error
+  const [clickedArticleId, setClickedArticleId] = useState(null);
 
   useEffect(() => {
     // Fetch user data from localStorage on load
