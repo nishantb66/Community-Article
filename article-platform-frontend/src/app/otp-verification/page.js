@@ -1,25 +1,60 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 export default function EmailVerification() {
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
   const [step, setStep] = useState(1);
-  const [loading, setLoading] = useState(false); // Loading state
-  const [notification, setNotification] = useState(""); // Notification state
+  const [loading, setLoading] = useState(false);
+  const [notification, setNotification] = useState("");
+  const [isAlreadyVerified, setIsAlreadyVerified] = useState(false);
   const router = useRouter();
+
+  // Check verification status when email is entered
+  const checkVerificationStatus = async (email) => {
+    try {
+      const response = await fetch(
+        "https://community-article-backend.onrender.com/api/otp/check-status",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email }),
+        }
+      );
+
+      const data = await response.json();
+      if (data.isVerified) {
+        setIsAlreadyVerified(true);
+      }
+    } catch (error) {
+      console.error("Error checking verification status:", error);
+    }
+  };
 
   const showNotification = (message) => {
     setNotification(message);
     setTimeout(() => {
-      setNotification(""); // Clear notification after 2 seconds
+      setNotification("");
     }, 2000);
   };
 
+  const handleEmailChange = (e) => {
+    const newEmail = e.target.value;
+    setEmail(newEmail);
+    if (newEmail) {
+      checkVerificationStatus(newEmail);
+    }
+  };
+
   const handleSendOtp = async () => {
-    setLoading(true); // Start loading
+    if (isAlreadyVerified) {
+      showNotification("This email is already verified!");
+      return;
+    }
+
+    setLoading(true);
     try {
       const response = await fetch("https://community-article-backend.onrender.com/api/otp/send", {
         method: "POST",
@@ -38,12 +73,12 @@ export default function EmailVerification() {
       console.error("Error sending OTP:", error);
       showNotification("An error occurred. Please try again.");
     } finally {
-      setLoading(false); // Stop loading
+      setLoading(false);
     }
   };
 
   const handleVerifyOtp = async () => {
-    setLoading(true); // Start loading
+    setLoading(true);
     try {
       const response = await fetch("https://community-article-backend.onrender.com/api/otp/verify", {
         method: "POST",
@@ -53,9 +88,9 @@ export default function EmailVerification() {
 
       if (response.ok) {
         showNotification("Email verified successfully!");
-        localStorage.setItem("isVerified", true); // Update verification status
+        localStorage.setItem("isVerified", true);
         setTimeout(() => {
-          router.push("/"); // Redirect to main page after notification
+          router.push("/");
         }, 2000);
       } else {
         const data = await response.json();
@@ -65,13 +100,33 @@ export default function EmailVerification() {
       console.error("Error verifying OTP:", error);
       showNotification("An error occurred. Please try again.");
     } finally {
-      setLoading(false); // Stop loading
+      setLoading(false);
     }
   };
 
+  // If user is already verified, show message and redirect
+  // If user is already verified, show message and redirect
+  if (isAlreadyVerified) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-blue-100 p-6">
+        <div className="w-full max-w-md">
+          {/* Replaced Alert with custom notification */}
+          <div className="bg-green-50 border border-green-200 rounded-lg p-6 text-center text-green-800">
+            This email is already verified!
+          </div>
+          <button
+            onClick={() => router.push("/")}
+            className="w-full mt-4 py-3 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600 focus:outline-none"
+          >
+            Go to Main Page
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-blue-100 p-6">
-      {/* Notification Banner */}
       {notification && (
         <div className="fixed top-5 left-1/2 transform -translate-x-1/2 bg-green-500 text-white py-2 px-4 rounded-lg shadow-lg text-sm z-50">
           {notification}
@@ -92,7 +147,7 @@ export default function EmailVerification() {
               type="email"
               placeholder="Enter your email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={handleEmailChange}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 mb-4"
             />
             <button
@@ -184,8 +239,8 @@ export default function EmailVerification() {
           </>
         )}
       </div>
-      
     </div>
   );
 }
+
 
