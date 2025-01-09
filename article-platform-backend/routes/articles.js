@@ -138,6 +138,40 @@ router.get("/user/:userId", async (req, res) => {
 });
 
 
+// Add this new PUT route for updating articles
+router.put("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title, content, author } = req.body;
+    
+    // Find the article first
+    const article = await Article.findById(id);
+    
+    if (!article) {
+      return res.status(404).json({ message: "Article not found" });
+    }
+    
+    // Check if the current user is the author
+    if (article.author !== author) {
+      return res.status(403).json({ message: "Unauthorized to edit this article" });
+    }
+    
+    // Update the article
+    const updatedArticle = await Article.findByIdAndUpdate(
+      id,
+      { title, content },
+      { new: true }
+    );
+    
+    res.status(200).json(updatedArticle);
+  } catch (error) {
+    console.error("Error updating article:", error);
+    res.status(500).json({ message: "Error updating article" });
+  }
+});
+
+
+
 
 module.exports = router;
 
