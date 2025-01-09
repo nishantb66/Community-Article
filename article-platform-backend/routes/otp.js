@@ -81,4 +81,25 @@ router.post("/verify", async (req, res) => {
   }
 });
 
+// Route: Check Verification Status
+router.post("/check-status", async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    return res.status(400).json({ message: "Email is required." });
+  }
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "Email not found." });
+    }
+
+    res.status(200).json({ isVerified: user.isVerified });
+  } catch (error) {
+    console.error("Error checking verification status:", error);
+    res.status(500).json({ message: "Error checking verification status." });
+  }
+});
+
 module.exports = router;
