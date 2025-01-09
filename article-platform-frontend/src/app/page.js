@@ -367,85 +367,82 @@ export default function Home() {
         </header>
 
         {/* Hero Section */}
-        <div className="relative bg-gradient-to-br from-orange-50 to-pink-50 py-12 px-6 sm:py-20 sm:px-10 overflow-hidden">
-          {/* Animated Background Design */}
-          <div className="absolute inset-0">
-            <div className="absolute top-0 left-0 w-48 h-48 bg-orange-200 rounded-full blur-2xl opacity-50 animate-pulse"></div>
-            <div className="absolute bottom-0 right-0 w-64 h-64 bg-pink-200 rounded-full blur-3xl opacity-40 animate-pulse"></div>
-          </div>
-
-          {/* Content */}
-          <div className="relative z-10 text-center">
-            <h1
-              className="text-4xl sm:text-5xl font-extrabold text-gray-800 mb-4 leading-tight animate-fadeIn"
-              style={{ animationDelay: "0.5s" }}
-            >
-              Discover a Variety of Stories
-            </h1>
-            <p
-              className="text-lg sm:text-xl text-gray-600 mb-6 animate-fadeIn"
-              style={{ animationDelay: "0.8s" }}
-            >
-              Explore articles, stories written by the community
+        <div className="text-center bg-gradient-to-br from-orange-50 to-pink-50 py-10 px-6 sm:py-16 sm:px-10">
+          {/* Collaborate Button Below Logo */}
+          <h1
+            className="text-3xl sm:text-5xl font-extrabold text-gray-800 mb-4 leading-tight animate-fadeIn"
+            style={{ animationDelay: "0.5s" }}
+          >
+            Discover a Variety of Stories
+          </h1>
+          <p
+            className="text-base sm:text-lg text-gray-600 mb-6 animate-fadeIn"
+            style={{ animationDelay: "0.8s" }}
+          >
+            Explore articles, stories written by the community
+          </p>
+          {/* Search Bar */}
+          <div
+            className="max-w-md mx-auto animate-fadeIn"
+            style={{ animationDelay: "1.1s" }}
+          >
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                handleSearch(e.target.value);
+              }}
+              placeholder="Search articles..."
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-400 focus:outline-none"
+            />
+            <p className="text-base sm:text-sm text-gray-600 mb-1">
+              📝Load all articles and then apply search
             </p>
-
-            {/* Search Bar */}
-            <div
-              className="max-w-md mx-auto animate-fadeIn"
-              style={{ animationDelay: "1.1s" }}
-            >
-              <div className="relative">
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => {
-                    setSearchQuery(e.target.value);
-                    handleSearch(e.target.value);
-                  }}
-                  placeholder="Search articles..."
-                  className="w-full px-4 py-3 border border-gray-300 rounded-full shadow-lg focus:ring-4 focus:ring-orange-400 focus:outline-none transition"
-                />
-                <span className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400">
-                  🔍
-                </span>
-              </div>
-              <p className="text-sm text-gray-500 mt-2">
-                📝Load all articles and then apply search
-              </p>
-            </div>
-
-            {/* Buttons */}
-            <div
-              className="flex flex-col sm:flex-row justify-center items-center gap-4 mt-8 animate-fadeIn"
-              style={{ animationDelay: "1.4s" }}
-            >
+          </div>
+          <br />
+          <div
+            className="flex flex-col sm:flex-row justify-center items-center gap-4 animate-fadeIn"
+            style={{ animationDelay: "1.4s" }}
+          >
+            <div className="flex flex-row gap-2">
               <Link
                 href="/deleteRequest"
-                className="text-sm text-orange-600 font-medium hover:underline"
+                className="text-xs sm:text-sm text-orange-600 font-semibold hover:underline text-center"
               >
                 Want your article removed? Put your request here
               </Link>
-              <button
-                onClick={() => setIsCollaboratePopupOpen(true)}
-                className="px-6 py-2 bg-gradient-to-r from-orange-400 to-pink-500 text-white font-semibold rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-transform"
-              >
-                Collaborate
-              </button>
             </div>
+            <button
+              onClick={() => setIsCollaboratePopupOpen(true)}
+              className="px-6 py-2 bg-orange-400 text-white font-semibold rounded-full shadow-md hover:bg-orange-500 transition"
+            >
+              Collaborate
+            </button>
+          </div>
 
-            {/* Stories Button */}
-            {user && (
+          {user && (
+            <>
               <button
                 onClick={() => {
                   router.push("/stories"); // Redirect to the stories page
                 }}
-                className="mt-6 px-8 py-3 bg-gray-800 text-white font-semibold rounded-full shadow-lg hover:bg-gray-900 hover:scale-105 transition-transform animate-fadeIn"
+                className="mt-6 inline-block px-6 py-2 bg-gray-800 text-white font-semibold rounded-full shadow-md hover:bg-gray-900 transition text-sm sm:text-base animate-fadeIn"
                 style={{ animationDelay: "1.7s" }}
               >
                 Stories by SimpleArticles
               </button>
-            )}
-          </div>
+
+              {/* Popup Notification */}
+              {popupMessage && (
+                <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
+                  <div className="bg-blue-500 text-white py-4 px-8 rounded-lg shadow-md text-center">
+                    <p className="text-lg font-semibold">{popupMessage}</p>
+                  </div>
+                </div>
+              )}
+            </>
+          )}
         </div>
 
         {/* Collaborate Popup */}
