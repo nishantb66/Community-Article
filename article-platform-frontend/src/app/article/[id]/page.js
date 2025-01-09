@@ -273,71 +273,131 @@ const handleReportArticle = async (reason) => {
         </div>
       </main>
 
-      {/* Report Popup */}
+            {/* Report Initial Modal */}
       {isReportPopupOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg shadow-lg p-6 max-w-sm w-full">
-            <h2 className="text-lg font-bold mb-4">Report Article</h2>
-            <p className="text-sm mb-4">
-              If you find this article disturbing, vulgar, or violating the
-              <a
-                href="/guidelines"
-                className="text-blue-500 hover:underline mx-1"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                simpleArticle regulations
-              </a>
-              , please click "Report" below. We will review the article.
-            </p>
-            <div className="flex justify-between items-center gap-4">
-              <button
-                onClick={() => setIsConfirmationPopupOpen(true)}
-                className="bg-red-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-600 transition"
-              >
-                Report
-              </button>
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fadeIn">
+          <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl shadow-xl max-w-md w-full p-6 transform transition-all duration-300 scale-100 animate-slideUp">
+            <div className="flex justify-between items-start mb-6">
+              <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                Report Article
+              </h2>
               <button
                 onClick={() => setIsReportPopupOpen(false)}
-                className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg font-semibold hover:bg-gray-400 transition"
+                className="text-gray-400 hover:text-gray-500 transition-colors"
               >
-                Close
+                <svg
+                  className="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
+
+            <div className="mb-6">
+              <p className="text-sm text-gray-600 dark:text-gray-300">
+                Help us maintain a safe and respectful environment. If this
+                article violates our
+                <a
+                  href="/guidelines"
+                  className="text-orange-500 hover:text-orange-600 mx-1 font-medium"
+                >
+                  community guidelines
+                </a>
+                , please let us know.
+              </p>
+            </div>
+
+            <div className="space-y-4">
+              <select
+                className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-600 bg-white/50 dark:bg-gray-700/50 backdrop-blur-sm focus:ring-2 focus:ring-orange-500 outline-none transition-all text-white"
+                defaultValue=""
+              >
+                <option value="" disabled>
+                  Select a reason
+                </option>
+                <option value="inappropriate">Inappropriate Content</option>
+                <option value="spam">Spam or Misleading</option>
+                <option value="copyright">Copyright Violation</option>
+                <option value="harassment">Harassment</option>
+                <option value="other">Other</option>
+              </select>
+
+              <button
+                onClick={() => {
+                  setIsReportPopupOpen(false);
+                  setIsConfirmationPopupOpen(true);
+                }}
+                className="w-full px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+              >
+                Continue
               </button>
             </div>
           </div>
         </div>
       )}
 
+      {/* Report Confirmation Modal */}
       {isConfirmationPopupOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg shadow-lg p-6 max-w-sm w-full">
-            <h2 className="text-lg font-bold mb-4">Confirm Report</h2>
-            <p className="text-sm mb-4">
-              Are you sure you want to report this article? Please provide a reason.
-            </p>
-            <textarea
-              placeholder="Reason for reporting..."
-              className={`w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-orange-400 ${
-                darkMode
-                  ? "bg-gray-700 text-white border-gray-600"
-                  : "bg-gray-100 text-gray-900 border-gray-300"
-              }`}
-              rows="3"
-              onChange={(e) => setNewComment(e.target.value)} // Capture reason here
-            ></textarea>
-            <div className="flex justify-between items-center gap-4 mt-4">
-              <button
-                onClick={() => handleReportArticle(newComment)}
-                className="bg-red-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-600 transition"
-              >
-                Yes, Report
-              </button>
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fadeIn">
+          <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl shadow-xl max-w-md w-full p-6 transform transition-all duration-300 scale-100 animate-slideUp">
+            <div className="flex justify-between items-start mb-6">
+              <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                Provide Details
+              </h2>
               <button
                 onClick={() => setIsConfirmationPopupOpen(false)}
-                className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg font-semibold hover:bg-gray-400 transition"
+                className="text-gray-400 hover:text-gray-500 transition-colors"
               >
-                Cancel
+                <svg
+                  className="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
               </button>
+            </div>
+
+            <div className="space-y-4">
+              <textarea
+                placeholder="Please provide specific details about your report..."
+                className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 bg-white/50 dark:bg-gray-700/50 backdrop-blur-sm focus:ring-2 focus:ring-orange-500 outline-none transition-all resize-none text-gray-800 dark:text-white"
+                rows="4"
+                maxLength="500"
+                onChange={(e) => setNewComment(e.target.value)}
+              ></textarea>
+              <div className="text-right text-sm text-gray-500">
+                {newComment.length}/500 characters
+              </div>
+
+              <div className="flex items-center gap-3 pt-2">
+                <button
+                  onClick={() => handleReportArticle(newComment)}
+                  className="flex-1 px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+                >
+                  Submit Report
+                </button>
+                <button
+                  onClick={() => setIsConfirmationPopupOpen(false)}
+                  className="px-6 py-3 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-semibold rounded-xl hover:bg-gray-200 dark:hover:bg-gray-600 transition-all duration-300"
+                >
+                  Cancel
+                </button>
+              </div>
             </div>
           </div>
         </div>
