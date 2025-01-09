@@ -2,9 +2,16 @@ import { useEffect, useRef } from "react";
 import "quill/dist/quill.snow.css"; // Import Quill styles
 import Quill from "quill";
 
-const QuillEditor = ({ setContent }) => {
+const QuillEditor = ({ setContent, initialContent = ""  }) => {
   const editorRef = useRef(null);
   const quillInstance = useRef(null);
+
+  useEffect(() => {
+    if (initialContent) {
+      // Set the initial content when the component mounts
+      setContent(initialContent);
+    }
+  }, [initialContent, setContent]);
 
   useEffect(() => {
     if (editorRef.current && !quillInstance.current) {
