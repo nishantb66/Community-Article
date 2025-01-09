@@ -231,52 +231,57 @@ export default function Home() {
     <main className="flex-grow">
       <div className="min-h-screen bg-gradient-to-br from-orange-100 to-pink-100">
         {/* Navigation Bar */}
-         <header className="bg-gradient-to-r from-orange-400 to-pink-400 text-white py-4 sticky top-0 z-50 shadow-lg">
-          <div className="container mx-auto flex justify-between items-center px-4 sm:px-10">
+         <header className="bg-gradient-to-r from-orange-400 via-pink-400 to-orange-500 text-white py-4 sticky top-0 z-50 backdrop-blur-sm shadow-lg border-b border-white/10">
+          <div className="container mx-auto flex justify-between items-center px-4 sm:px-6 lg:px-8">
             {/* Logo Section */}
             <Link href="/">
-              <div className="flex items-center space-x-2 cursor-pointer">
-                <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md">
-                  <span className="text-orange-500 text-xl font-bold">sA</span>
+              <div className="flex items-center space-x-3 group">
+                <div className="w-12 h-12 bg-white/90 backdrop-blur-sm rounded-xl flex items-center justify-center shadow-lg transform transition-all duration-300 group-hover:scale-105 group-hover:rotate-3">
+                  <span className="text-transparent bg-clip-text bg-gradient-to-br from-orange-500 to-pink-500 text-2xl font-black">
+                    sA
+                  </span>
                 </div>
-                <h1 className="text-lg sm:text-xl font-extrabold tracking-tight">
-                  SimpleArticle
+                <h1 className="text-xl sm:text-2xl font-black tracking-tight">
+                  Simple<span className="text-orange-100">Article</span>
                 </h1>
               </div>
             </Link>
 
-            {/* Hamburger Menu with Animation */}
+            {/* Hamburger Menu */}
             <button
-              className={`relative block sm:hidden focus:outline-none ${
+              className={`relative block sm:hidden focus:outline-none z-50 ${
                 mobileMenuOpen ? "open" : ""
               }`}
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
-              <div className="h-1 w-6 bg-white rounded transition-all duration-300 transform"></div>
-              <div className="h-1 w-6 bg-white rounded transition-all duration-300 transform mt-1"></div>
-              <div className="h-1 w-6 bg-white rounded transition-all duration-300 transform mt-1"></div>
-
-              {/* Toggle Animation */}
-              <style jsx>{`
-                button.open div:nth-child(1) {
-                  transform: translateY(8px) rotate(45deg);
-                }
-                button.open div:nth-child(2) {
-                  opacity: 0;
-                }
-                button.open div:nth-child(3) {
-                  transform: translateY(-8px) rotate(-45deg);
-                }
-              `}</style>
+              <div className="w-7 h-7 flex items-center justify-center">
+                <div className="flex flex-col justify-between w-6 h-5 transform transition-all duration-300">
+                  <div
+                    className={`h-0.5 w-6 bg-white rounded-full transform transition-all duration-300 ${
+                      mobileMenuOpen ? "rotate-45 translate-y-2.5" : ""
+                    }`}
+                  />
+                  <div
+                    className={`h-0.5 w-6 bg-white rounded-full transition-all duration-300 ${
+                      mobileMenuOpen ? "opacity-0" : ""
+                    }`}
+                  />
+                  <div
+                    className={`h-0.5 w-6 bg-white rounded-full transform transition-all duration-300 ${
+                      mobileMenuOpen ? "-rotate-45 -translate-y-2.5" : ""
+                    }`}
+                  />
+                </div>
+              </div>
             </button>
 
             {/* Navigation Menu */}
             <div
               className={`${
-                mobileMenuOpen ? "block" : "hidden"
-              } sm:flex sm:items-center fixed sm:relative top-[72px] left-0 sm:top-0 w-full sm:w-auto bg-white sm:bg-transparent shadow-lg sm:shadow-none z-50 rounded-lg sm:rounded-none`}
+                mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
+              } sm:translate-x-0 fixed sm:relative top-0 left-0 h-screen sm:h-auto w-3/4 sm:w-auto bg-white sm:bg-transparent transform transition-transform duration-300 ease-in-out sm:transition-none sm:transform-none flex flex-col sm:flex-row items-start sm:items-center pt-20 sm:pt-0 px-6 sm:px-0 shadow-2xl sm:shadow-none z-40`}
             >
-              <nav className="flex flex-col sm:flex-row items-center sm:space-x-4 px-6 py-6 sm:px-0 sm:py-0">
+              <nav className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-6 w-full sm:w-auto">
                 <Link
                   href={user ? "/create" : ""}
                   onClick={(e) => {
@@ -286,18 +291,17 @@ export default function Home() {
                         "Please log in or register to write an article."
                       );
                       setNotificationType("error");
-
-                      // Clear the notification after 3 seconds
                       setTimeout(() => setNotification(""), 3000);
                     }
                   }}
-                  className="w-full sm:w-auto px-4 py-2 mb-2 sm:mb-0 text-center bg-orange-500 text-white rounded-full font-semibold shadow-md hover:bg-orange-600 transition text-sm sm:text-base"
+                  className="w-full sm:w-auto px-6 py-2.5 text-center bg-white/10 backdrop-blur-sm text-gray-800 rounded-xl font-semibold shadow-lg hover:bg-white/20 transition-all duration-300 text-sm sm:text-base"
                 >
-                  Write
+                  Write Article
                 </Link>
+
                 <button
                   onClick={() => setIsPopupOpen(true)}
-                  className="w-full sm:w-auto px-4 py-2 mb-2 sm:mb-0 bg-pink-500 text-white rounded-full font-semibold shadow-md hover:bg-pink-600 transition text-sm sm:text-base"
+                  className="w-full sm:w-auto px-6 py-2.5 bg-white/90 backdrop-blur-sm text-orange-500 rounded-xl font-semibold shadow-lg hover:bg-white transition-all duration-300 text-sm sm:text-base"
                 >
                   Subscribe
                 </button>
@@ -306,57 +310,99 @@ export default function Home() {
                 {user ? (
                   <div className="relative w-full sm:w-auto">
                     <button
-                      className="flex items-center justify-center w-full sm:w-auto px-4 py-2 bg-gray-100 text-gray-800 rounded-full font-semibold shadow-md hover:bg-gray-200 transition text-sm sm:text-base"
                       onClick={() => setDropdownOpen(!dropdownOpen)}
+                      className="flex items-center justify-center w-full sm:w-auto px-6 py-2.5 bg-white/10 backdrop-blur-sm text-gray-800 rounded-xl font-semibold shadow-lg hover:bg-white/20 transition-all duration-300 text-sm sm:text-base"
                     >
                       {user.name}
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5 ml-2"
+                        className={`h-5 w-5 ml-2 transform transition-transform duration-300 ${
+                          dropdownOpen ? "rotate-180" : ""
+                        }`}
                         viewBox="0 0 20 20"
                         fill="currentColor"
                       >
                         <path
                           fillRule="evenodd"
-                          d="M5.292 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                          d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
                           clipRule="evenodd"
                         />
                       </svg>
                     </button>
+
                     {dropdownOpen && (
-                      <div className="absolute top-full right-0 mt-2 w-full sm:w-48 bg-white rounded-lg shadow-lg py-2 z-50">
+                      <div className="absolute top-full right-0 mt-2 w-56 bg-white/90 backdrop-blur-sm rounded-xl shadow-xl py-2 z-50 border border-gray-100">
                         <Link
                           href="/my-articles"
-                          className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100"
+                          className="flex items-center px-4 py-2.5 text-gray-700 hover:bg-orange-50 transition-colors duration-300"
                         >
+                          <svg
+                            className="w-5 h-5 mr-3"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+                            />
+                          </svg>
                           My Articles
                         </Link>
                         <Link
                           href="/bookmarks"
-                          className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100"
+                          className="flex items-center px-4 py-2.5 text-gray-700 hover:bg-orange-50 transition-colors duration-300"
                         >
-                          View Bookmarks
+                          <svg
+                            className="w-5 h-5 mr-3"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"
+                            />
+                          </svg>
+                          Bookmarks
                         </Link>
                         <button
-                          className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100"
                           onClick={handleLogout}
+                          className="flex items-center w-full px-4 py-2.5 text-gray-700 hover:bg-orange-50 transition-colors duration-300"
                         >
+                          <svg
+                            className="w-5 h-5 mr-3"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                            />
+                          </svg>
                           Logout
                         </button>
                       </div>
                     )}
                   </div>
                 ) : (
-                  <div className="flex flex-col sm:flex-row sm:space-x-2 w-full sm:w-auto">
+                  <div className="flex flex-col sm:flex-row sm:space-x-3 space-y-4 sm:space-y-0 w-full sm:w-auto">
                     <Link
                       href="/login"
-                      className="w-full sm:w-auto px-4 py-2 mb-2 sm:mb-0 text-center bg-gray-100 text-gray-800 rounded-full font-semibold shadow-md hover:bg-gray-200 transition text-sm sm:text-base"
+                      className="w-full sm:w-auto px-6 py-2.5 text-center bg-white/10 backdrop-blur-sm text-gray-800 rounded-xl font-semibold shadow-lg hover:bg-white/20 transition-all duration-300 text-sm sm:text-base"
                     >
                       Login
                     </Link>
                     <Link
                       href="/signup"
-                      className="w-full sm:w-auto px-4 py-2 text-center bg-gray-100 text-gray-800 rounded-full font-semibold shadow-md hover:bg-gray-200 transition text-sm sm:text-base"
+                      className="w-full sm:w-auto px-6 py-2.5 text-center bg-white/90 backdrop-blur-sm text-orange-500 rounded-xl font-semibold shadow-lg hover:bg-white transition-all duration-300 text-sm sm:text-base"
                     >
                       Register
                     </Link>
