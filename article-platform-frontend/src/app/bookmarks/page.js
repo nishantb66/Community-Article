@@ -6,26 +6,22 @@ import Link from "next/link";
 export default function BookmarksPage() {
   const [bookmarks, setBookmarks] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [notification, setNotification] = useState(""); // State for notification message
-  const [userId, setUserId] = useState(null); // State for userId
+  const [notification, setNotification] = useState("");
+  const [userId, setUserId] = useState(null);
 
   useEffect(() => {
-    // Access localStorage on the client-side
     if (typeof window !== "undefined") {
       const storedUserId = localStorage.getItem("userId");
-      setUserId(storedUserId); // Set userId from localStorage
+      setUserId(storedUserId);
     }
   }, []);
 
   const fetchBookmarks = async () => {
     if (!userId) return;
-
     setLoading(true);
     try {
       const res = await fetch(`https://community-article-backend.onrender.com/api/bookmarks/${userId}`);
-      if (!res.ok) {
-        throw new Error("Failed to fetch bookmarks");
-      }
+      if (!res.ok) throw new Error("Failed to fetch bookmarks");
       const data = await res.json();
       setBookmarks(data);
     } catch (err) {
@@ -39,98 +35,142 @@ export default function BookmarksPage() {
     fetchBookmarks();
   }, [userId]);
 
-  // Function to remove a bookmark
   const handleRemoveBookmark = async (articleId) => {
     try {
       const res = await fetch("https://community-article-backend.onrender.com/api/bookmarks/remove", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId, articleId }),
       });
 
-      if (!res.ok) {
-        throw new Error("Failed to remove bookmark");
-      }
-
-      // Refresh bookmarks after removal
+      if (!res.ok) throw new Error("Failed to remove bookmark");
       await fetchBookmarks();
-
-      // Set notification message
       setNotification("Bookmark removed successfully!");
-      setTimeout(() => setNotification(""), 3000); // Clear notification after 3 seconds
+      setTimeout(() => setNotification(""), 3000);
     } catch (err) {
       console.error("Error removing bookmark:", err);
       setNotification("Failed to remove bookmark.");
-      setTimeout(() => setNotification(""), 3000); // Clear notification after 3 seconds
+      setTimeout(() => setNotification(""), 3000);
     }
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen flex justify-center items-center">
-        <p className="text-lg font-semibold text-gray-500">Loading...</p>
+      <div className="min-h-screen bg-gradient-to-br from-orange-50 to-pink-50 flex justify-center items-center">
+        <div className="space-y-4">
+          <div className="w-16 h-16 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
+          <p className="text-orange-600 font-medium">
+            Loading your bookmarks...
+          </p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-100 to-pink-100 py-10">
-      <div className="container mx-auto px-4 sm:px-10">
-        <h1 className="text-3xl font-extrabold text-gray-800 mb-6">
-          Your Bookmarked Articles
-        </h1>
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-pink-50">
+      {/* Hero Section */}
+      <div className="bg-white/30 backdrop-blur-md border-b border-white/20">
+        <div className="container mx-auto px-4 py-8 sm:py-12">
+          <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-800 text-center mb-4">
+            Your Bookmarked Articles
+          </h1>
+          <p className="text-gray-600 text-center max-w-2xl mx-auto">
+            Your personal collection of inspiring articles and stories
+          </p>
+        </div>
+      </div>
 
-        {/* Notification */}
+      {/* Main Content */}
+      <div className="container mx-auto px-4 py-8 sm:py-12">
+        {/* Toast Notification */}
         {notification && (
-          <div className="mb-6 p-4 bg-green-100 border border-green-500 text-green-700 rounded-lg">
-            {notification}
+          <div className="fixed top-4 right-4 z-50 animate-fade-in-down">
+            <div className="bg-white px-6 py-4 rounded-lg shadow-lg border-l-4 border-green-500">
+              <p className="text-gray-800">{notification}</p>
+            </div>
           </div>
         )}
 
         {bookmarks.length === 0 ? (
-          <p className="text-lg text-gray-600">
-            You have no bookmarks yet. Start exploring and bookmark articles you
-            like!
-          </p>
+          <div className="text-center py-16 px-4">
+            <div className="w-24 h-24 mx-auto mb-6 text-orange-400">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"
+                />
+              </svg>
+            </div>
+            <h2 className="text-2xl font-bold text-gray-800 mb-4">
+              No bookmarks yet
+            </h2>
+            <p className="text-gray-600 mb-8">
+              Start exploring and save articles that inspire you!
+            </p>
+            <Link
+              href="/"
+              className="inline-flex items-center px-6 py-3 bg-orange-500 text-white font-semibold rounded-full hover:bg-orange-600 transition transform hover:scale-105"
+            >
+              Explore Articles
+            </Link>
+          </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {bookmarks.map((article) => (
               <div
-                key={article._id} // Ensure _id is present and unique
-                className="bg-white rounded-lg shadow-md hover:shadow-lg transition-transform transform hover:-translate-y-1"
+                key={article._id}
+                className="group bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden"
               >
-                <div className="p-4">
-                  <h2 className="text-xl font-semibold text-gray-800">
-                    {article.title || "Untitled Article"}{" "}
-                    {/* Fallback to "Untitled Article" */}
+                <div className="p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-xs font-medium text-orange-500 bg-orange-50 px-3 py-1 rounded-full">
+                      {new Date(article.createdAt).toLocaleDateString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                      })}
+                    </span>
+                  </div>
+                  <h2 className="text-xl font-bold text-gray-800 group-hover:text-orange-500 transition-colors duration-300 mb-3">
+                    {article.title || "Untitled Article"}
                   </h2>
-                  <p className="text-sm text-gray-600 mt-2 line-clamp-3">
+                  <div className="text-sm text-gray-600 mb-4 line-clamp-3">
                     {article.content ? (
                       <div
                         dangerouslySetInnerHTML={{
-                          __html: article.content.slice(0, 120),
+                          __html: article.content.slice(0, 150) + "...",
                         }}
                       />
                     ) : (
                       "No content available."
                     )}
-                  </p>
-                  {article._id && (
+                  </div>
+                  <div className="flex items-center justify-between pt-4 border-t border-gray-100">
                     <Link
                       href={`/article/${article._id}`}
-                      className="text-orange-500 font-semibold hover:underline mt-4 inline-block"
+                      className="text-orange-500 font-semibold hover:text-orange-600 transition-colors duration-300"
                     >
-                      Read More
+                      Read Article →
                     </Link>
-                  )}
-                  <button
-                    onClick={() => handleRemoveBookmark(article._id)}
-                    className="mt-4 block bg-red-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-600 transition"
-                  >
-                    Remove Bookmark
-                  </button>
+                    <button
+                      onClick={() => handleRemoveBookmark(article._id)}
+                      className="text-gray-400 hover:text-red-500 transition-colors duration-300"
+                    >
+                      <svg
+                        className="w-6 h-6"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}
@@ -140,3 +180,4 @@ export default function BookmarksPage() {
     </div>
   );
 }
+
