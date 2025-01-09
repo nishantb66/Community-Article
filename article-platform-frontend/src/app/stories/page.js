@@ -27,14 +27,14 @@ const StoriesPage = () => {
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-pink-50 to-orange-100">
       {/* Header Section */}
-      <header className="py-10 text-center">
-        <h1 className="text-4xl font-extrabold text-gray-800">
+      <header className="py-12 text-center animate-fadeIn">
+        <h1 className="text-5xl sm:text-4xl font-extrabold text-gray-800 tracking-tight">
           Stories by SimpleArticles
         </h1>
-        <p className="mt-2 text-gray-600">
+        <p className="mt-4 text-lg sm:text-xl text-gray-600">
           Explore inspiring stories from the community
         </p>
-        <p className="mt-4 text-orange-600 font-medium">
+        <p className="mt-6 text-xl text-orange-600 font-medium">
           More latest articles and stories on various topics will be coming
           soon. Stay tuned!
         </p>
@@ -50,26 +50,29 @@ const StoriesPage = () => {
           </div>
         </div>
       ) : (
-        <main className="flex-grow container mx-auto px-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <main className="flex-grow container mx-auto px-6 sm:px-12 lg:px-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {stories.map((story) => (
             <div
               key={story._id}
-              className="bg-white rounded-lg shadow-md hover:shadow-lg transition duration-300 overflow-hidden"
+              className="bg-white rounded-lg shadow-xl hover:shadow-2xl transition-transform transform hover:scale-105 overflow-hidden"
             >
-              <div className="p-6">
-                <h2 className="text-xl font-bold text-gray-800 truncate">
+              {/* Story Content */}
+              <div className="p-6 space-y-4">
+                <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 hover:text-orange-500 cursor-pointer">
                   {story.title}
                 </h2>
-                <p className="mt-2 text-sm text-gray-600">By {story.author}</p>
+                <p className="text-sm sm:text-base text-gray-600">
+                  By {story.author}
+                </p>
                 <div
-                  className="mt-4 text-gray-700 text-sm line-clamp-3"
+                  className="text-sm sm:text-base text-gray-700 line-clamp-3"
                   dangerouslySetInnerHTML={{
                     __html: story.content.slice(0, 120),
                   }}
                 ></div>
                 <button
                   onClick={() => router.push(`/story/${story._id}`)}
-                  className="mt-4 text-orange-500 font-semibold hover:underline"
+                  className="mt-4 text-orange-500 font-semibold hover:text-orange-600 hover:underline transition duration-300"
                 >
                   Read More
                 </button>
@@ -80,16 +83,18 @@ const StoriesPage = () => {
       )}
 
       {/* Footer Section */}
-      <footer className="bg-gray-900 text-white py-10 mt-12">
+      <footer className="bg-gray-900 text-white py-12 mt-16">
         <div className="container mx-auto px-6 md:px-10 lg:px-16">
-          <div className="flex flex-col lg:flex-row justify-between items-center border-b border-gray-700 pb-6">
-            <div className="text-center lg:text-left mb-6 lg:mb-0">
-              <h2 className="text-2xl font-extrabold">SimpleArticle</h2>
+          <div className="flex flex-col lg:flex-row justify-between items-center border-b border-gray-700 pb-8">
+            <div className="text-center lg:text-left mb-8 lg:mb-0">
+              <h2 className="text-2xl sm:text-3xl font-extrabold">
+                SimpleArticle
+              </h2>
               <p className="mt-2 text-sm text-gray-400">
                 Building a better future, one article at a time.
               </p>
             </div>
-            <div className="flex space-x-6">
+            <div className="flex space-x-8 mt-4 lg:mt-0">
               <a
                 href="mailto:nishantbarua3@gmail.com"
                 className="text-orange-400 hover:text-orange-500 transition duration-300 text-sm"
@@ -114,7 +119,7 @@ const StoriesPage = () => {
               </a>
             </div>
           </div>
-          <div className="flex flex-col md:flex-row justify-between items-center mt-6">
+          <div className="flex flex-col md:flex-row justify-between items-center mt-8">
             <p className="text-xs text-gray-500 text-center md:text-left">
               © {new Date().getFullYear()} Nishant Baruah. All rights reserved.
             </p>
