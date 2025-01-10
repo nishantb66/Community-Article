@@ -1,14 +1,56 @@
 import { useEffect, useRef } from "react";
-import "quill/dist/quill.snow.css"; // Import Quill styles
+import "quill/dist/quill.snow.css";
 import Quill from "quill";
 
-const QuillEditor = ({ setContent, initialContent = ""  }) => {
+const MAX_FILE_SIZE = 1000000; // 1MB limit
+const ALLOWED_FORMATS = ["image/jpeg", "image/png", "image/gif"];
+
+const QuillEditor = ({ setContent, initialContent = "" }) => {
   const editorRef = useRef(null);
   const quillInstance = useRef(null);
 
+  const imageHandler = () => {
+    const input = document.createElement("input");
+    input.setAttribute("type", "file");
+    input.setAttribute("accept", "image/*");
+    input.click();
+
+    input.onchange = async () => {
+      const file = input.files[0];
+
+      // Validate file type
+      if (!ALLOWED_FORMATS.includes(file.type)) {
+        alert("Please upload only images (JPEG, PNG, GIF)");
+        return;
+      }
+
+      // Validate file size
+      if (file.size > MAX_FILE_SIZE) {
+        alert("Image size should be less than 1MB");
+        return;
+      }
+
+      try {
+        // Convert to base64
+        const reader = new FileReader();
+        reader.onload = () => {
+          const range = quillInstance.current.getSelection(true);
+          quillInstance.current.insertEmbed(
+            range.index,
+            "image",
+            reader.result
+          );
+        };
+        reader.readAsDataURL(file);
+      } catch (error) {
+        console.error("Error uploading image:", error);
+        alert("Failed to upload image. Please try again.");
+      }
+    };
+  };
+
   useEffect(() => {
     if (initialContent) {
-      // Set the initial content when the component mounts
       setContent(initialContent);
     }
   }, [initialContent, setContent]);
@@ -19,28 +61,50 @@ const QuillEditor = ({ setContent, initialContent = ""  }) => {
         theme: "snow",
         placeholder: "Write your content here...",
         modules: {
-          toolbar: [
-            ["bold", "italic", "underline", "strike"],
-            [{ font: [] }], // Font styles including size
-            [{ list: "ordered" }, { list: "bullet" }],
-            ["link", "image"],
-          ],
+          toolbar: {
+            container: [
+              ["bold", "italic", "underline", "strike"],
+              [{ font: [] }],
+              [{ list: "ordered" }, { list: "bullet" }],
+              ["link"],
+              ["image"],
+            ],
+            handlers: {
+              image: imageHandler,
+            },
+          },
         },
       });
 
       quillInstance.current.on("text-change", () => {
-        setContent(quillInstance.current.root.innerHTML); // Set content as HTML
+        const content = quillInstance.current.root.innerHTML;
+        // Remove base64 images larger than limit
+        const processedContent = content.replace(
+          /data:image\/[^;]+;base64[^"]+/g,
+          (match) => {
+            if (match.length > MAX_FILE_SIZE * 1.37) {
+              // base64 is ~1.37x larger
+              return "";
+            }
+            return match;
+          }
+        );
+        setContent(processedContent);
       });
     }
   }, [setContent]);
 
   return (
-    <div
-      ref={editorRef}
-      theme="snow"
-      className="h-40 border border-gray-300 rounded-md"
-      style={{ height: "450px", width: "100%", fontSize: "1rem" }}
-    ></div>
+    <div className="editor-container">
+      <div
+        ref={editorRef}
+        className="h-40 border border-gray-300 rounded-md"
+        style={{ height: "450px", width: "100%", fontSize: "1rem" }}
+      />
+      <div className="text-xs text-gray-500 mt-2">
+        * Images must be less than 1MB in size
+      </div>
+    </div>
   );
 };
 
