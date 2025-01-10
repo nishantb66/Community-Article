@@ -690,7 +690,7 @@ export default function Home() {
             <div className="fixed inset-0 bg-white/70 z-50 flex items-center justify-center">
               <div className="flex flex-col items-center">
                 <div className="w-12 h-12 border-3 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
-                <p className="mt-4 text-gray-600 font-medium">Cooking...</p>
+                <p className="mt-4 text-gray-600 font-medium">Loading...may take some time</p>
               </div>
             </div>
           )}
