@@ -683,225 +683,149 @@ export default function Home() {
           </div>
         )}
 
-        <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 lg:py-20">
-          {/* Enhanced Section Header */}
-          {/* Global Loading Indicator */}
+        {/* Main Article section */}
+        <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+          {/* Loading Indicator */}
           {loading && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="fixed inset-0 bg-white/80 backdrop-blur-sm z-50 flex flex-col items-center justify-center"
-            >
-              <div className="w-16 h-16 border-4 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
-              <p className="mt-4 text-gray-600 font-medium animate-pulse">
-                Loading articles...
-              </p>
-            </motion.div>
+            <div className="fixed inset-0 bg-white/70 z-50 flex items-center justify-center">
+              <div className="flex flex-col items-center">
+                <div className="w-12 h-12 border-3 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
+                <p className="mt-4 text-gray-600 font-medium">Loading articles...</p>
+              </div>
+            </div>
           )}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-center max-w-3xl mx-auto mb-16 md:mb-20"
-          >
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-orange-600 via-pink-500 to-purple-600 mb-6">
+        
+          {/* Section Header */}
+          <div className="text-center max-w-3xl mx-auto mb-12">
+            <h2 className="text-4xl sm:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-orange-600 to-pink-600 mb-4">
               Explore Articles
             </h2>
-            <p className="text-gray-600 text-lg sm:text-xl max-w-2xl mx-auto leading-relaxed">
+            <p className="text-gray-600 text-lg">
               Discover thought-provoking stories and insights from our community
             </p>
-          </motion.div>
-
-          {/* Enhanced Articles Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
-            {loading && page === 1
+          </div>
+        
+          {/* Articles Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {loading && page === 1 
               ? Array.from({ length: 6 }).map((_, index) => (
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.1 }}
-                    key={index}
-                    className="group bg-white/90 backdrop-blur-xl rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden"
-                  >
-                    <div className="h-52 bg-gradient-to-br from-gray-200 to-gray-300 animate-pulse" />
-                    <div className="p-6 md:p-8">
-                      <div className="space-y-4">
-                        <div className="h-7 bg-gray-200 rounded-xl w-3/4 animate-pulse" />
-                        <div className="space-y-3">
-                          <div className="h-4 bg-gray-200 rounded-xl animate-pulse" />
-                          <div className="h-4 bg-gray-200 rounded-xl w-5/6 animate-pulse" />
-                          <div className="h-4 bg-gray-200 rounded-xl w-4/6 animate-pulse" />
+                  <div key={index} className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                    <div className="h-48 bg-gray-100 animate-pulse" />
+                    <div className="p-5">
+                      <div className="space-y-3">
+                        <div className="h-6 bg-gray-100 rounded w-3/4 animate-pulse" />
+                        <div className="space-y-2">
+                          <div className="h-4 bg-gray-100 rounded animate-pulse" />
+                          <div className="h-4 bg-gray-100 rounded w-5/6 animate-pulse" />
                         </div>
                       </div>
-                      <div className="flex items-center justify-between pt-6 mt-6 border-t border-gray-100">
+                      <div className="flex items-center justify-between mt-6 pt-4 border-t border-gray-100">
                         <div className="flex items-center space-x-3">
-                          <div className="w-10 h-10 rounded-full bg-gray-200 animate-pulse" />
-                          <div className="h-4 bg-gray-200 rounded-xl w-24 animate-pulse" />
+                          <div className="w-8 h-8 rounded-full bg-gray-100 animate-pulse" />
+                          <div className="h-4 w-20 bg-gray-100 rounded animate-pulse" />
                         </div>
-                        <div className="w-24 h-10 bg-gray-200 rounded-full animate-pulse" />
+                        <div className="w-20 h-8 bg-gray-100 rounded-full animate-pulse" />
                       </div>
                     </div>
-                  </motion.div>
+                  </div>
                 ))
-              : (searchQuery ? filteredArticles : articles).map(
-                  (article, idx) => (
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: idx * 0.1 }}
-                      key={article._id}
-                      className="group bg-white/90 backdrop-blur-xl rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden"
-                    >
-                      {clickedArticleId === article._id && (
-                        <div className="absolute inset-0 bg-white/80 backdrop-blur-sm rounded-2xl z-10 flex items-center justify-center">
-                          <div className="w-12 h-12 border-4 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
-                        </div>
-                      )}
-
-                      <div
-                        onClick={async () => {
-                          setClickedArticleId(article._id);
-                          await new Promise((resolve) =>
-                            setTimeout(resolve, 500)
-                          );
-                          router.push(`/article/${article._id}`);
-                        }}
-                        className={`cursor-pointer relative h-52 overflow-hidden transition-all duration-500 ${
-                          clickedArticleId === article._id ? "blur-sm" : ""
-                        }`}
-                      >
-                        <div className="absolute inset-0 bg-gradient-to-br from-orange-100 via-pink-100 to-purple-100 opacity-75 group-hover:opacity-90 transition-opacity duration-500" />
-                        <div className="absolute inset-0 p-8 flex items-center justify-center">
-                          <h3 className="text-2xl font-bold text-gray-800 text-center line-clamp-2 group-hover:scale-105 transition-transform duration-500">
-                            {article.title}
-                          </h3>
-                        </div>
+              : (searchQuery ? filteredArticles : articles).map((article) => (
+                  <div 
+                    key={article._id}
+                    className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow"
+                  >
+                    {/* Loading Overlay */}
+                    {clickedArticleId === article._id && (
+                      <div className="absolute inset-0 bg-white/60 z-10 flex items-center justify-center">
+                        <div className="w-8 h-8 border-3 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
                       </div>
-
-                      <div
-                        className={`p-6 md:p-8 transition-all duration-300 ${
-                          clickedArticleId === article._id ? "blur-sm" : ""
-                        }`}
-                      >
-                        <div className="mb-6">
-                          <div
-                            className="prose prose-lg text-gray-600 line-clamp-3"
-                            dangerouslySetInnerHTML={{
-                              __html: article.content.slice(0, 150) + "...",
-                            }}
-                          />
-                        </div>
-
-                        <div className="flex items-center justify-between pt-6 border-t border-gray-100">
-                          <div className="flex items-center space-x-4">
-                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-400 via-pink-500 to-purple-600 p-[2px]">
-                              <div className="w-full h-full rounded-full bg-white flex items-center justify-center">
-                                <span className="text-transparent bg-clip-text bg-gradient-to-br from-orange-400 via-pink-500 to-purple-600 font-bold text-lg">
-                                  {article.author.charAt(0)}
-                                </span>
-                              </div>
-                            </div>
-                            <span className="font-medium text-gray-700">
-                              {article.author}
+                    )}
+        
+                    {/* Article Header */}
+                    <div
+                      onClick={() => {
+                        setClickedArticleId(article._id);
+                        router.push(`/article/${article._id}`);
+                      }}
+                      className="cursor-pointer h-48 relative bg-gradient-to-r from-orange-50 to-pink-50"
+                    >
+                      <div className="absolute inset-0 p-6 flex items-center justify-center">
+                        <h3 className="text-xl font-bold text-gray-800 text-center line-clamp-2">
+                          {article.title}
+                        </h3>
+                      </div>
+                    </div>
+        
+                    {/* Article Content */}
+                    <div className="p-5">
+                      <div className="mb-4">
+                        <div
+                          className="prose prose-sm text-gray-600 line-clamp-3"
+                          dangerouslySetInnerHTML={{
+                            __html: article.content.slice(0, 150) + "..."
+                          }}
+                        />
+                      </div>
+        
+                      {/* Article Footer */}
+                      <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                        <div className="flex items-center space-x-3">
+                          <div className="w-8 h-8 rounded-full bg-gradient-to-r from-orange-400 to-pink-400 flex items-center justify-center">
+                            <span className="text-white font-medium text-sm">
+                              {article.author.charAt(0)}
                             </span>
                           </div>
-
-                          <motion.button
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              if (!user) {
-                                setNotification(
-                                  "Please log in to bookmark articles"
-                                );
-                                setNotificationType("error");
-                                setTimeout(() => setNotification(""), 3000);
-                                return;
-                              }
-                              handleBookmark(article._id);
-                            }}
-                            className="inline-flex items-center px-5 py-2.5 bg-gradient-to-br from-orange-400 via-pink-500 to-purple-600 text-white text-sm font-medium rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
-                          >
-                            <svg
-                              className="w-4 h-4 mr-2"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"
-                              />
-                            </svg>
-                            Save
-                          </motion.button>
+                          <span className="text-sm text-gray-600 font-medium">
+                            {article.author}
+                          </span>
                         </div>
+        
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            if (!user) {
+                              setNotification("Please log in to bookmark articles");
+                              setNotificationType("error");
+                              setTimeout(() => setNotification(""), 3000);
+                              return;
+                            }
+                            handleBookmark(article._id);
+                          }}
+                          className="inline-flex items-center px-3 py-1.5 bg-gradient-to-r from-orange-400 to-pink-400 text-white text-sm font-medium rounded-full"
+                        >
+                          <svg className="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+                          </svg>
+                          Save
+                        </button>
                       </div>
-                    </motion.div>
-                  )
-                )}
+                    </div>
+                  </div>
+                ))}
           </div>
-
-          {/* Enhanced Load More Button with Loading State */}
-          {page < totalPages && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="flex justify-center mt-16"
-            >
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+        
+          {/* Load More Button */}
+          {page < totalPages && !loading && (
+            <div className="flex justify-center mt-10">
+              <button
                 onClick={loadMoreArticles}
-                disabled={loading}
-                className="group inline-flex items-center px-8 py-4 bg-gradient-to-r from-orange-400 via-pink-500 to-purple-600 text-white font-bold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-70"
+                className="inline-flex items-center px-6 py-2.5 bg-gradient-to-r from-orange-400 to-pink-400 text-white font-medium rounded-full shadow-sm"
               >
                 {loading ? (
                   <>
-                    <svg
-                      className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      ></circle>
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      ></path>
-                    </svg>
-                    Loading more...
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                    Loading...
                   </>
                 ) : (
                   <>
                     <span>Load More Articles</span>
-                    <svg
-                      className="w-5 h-5 ml-3 group-hover:translate-x-2 transition-transform duration-300"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M17 8l4 4m0 0l-4 4m4-4H3"
-                      />
+                    <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
                     </svg>
                   </>
                 )}
-              </motion.button>
-            </motion.div>
+              </button>
+            </div>
           )}
         </main>
 
