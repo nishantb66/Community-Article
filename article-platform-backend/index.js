@@ -14,6 +14,7 @@ const articleRoutes = require("./routes/articles");
 const storyRoutes = require("./routes/storyRoutes");
 const adminRoutes = require("./routes/admin");
 const otpRoutes = require("./routes/otp");
+const communityRoutes = require("./routes/community");
 
 
 // Initialize Express App
@@ -43,6 +44,7 @@ app.use("/api/articles", articleRoutes);
 app.use("/api/stories", storyRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/otp", otpRoutes);
+app.use("/api/community", communityRoutes);
 
 // Serve static files for uploads (if any)
 const path = require("path");
