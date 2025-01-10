@@ -11,6 +11,7 @@ import {
   TwitterIcon,
 } from "react-share";
 import "../../../styles/globals.css";
+import { motion } from "framer-motion";
 
 
 export default function ArticlePage() {
@@ -236,44 +237,105 @@ const handleReportArticle = async (reason) => {
         {darkMode ? "Light Mode" : "Dark Mode"}
       </button>
 
+
       {/* Article Content */}
-      <main className="max-w-4xl mx-auto px-6 py-12 text-2xl">
-        <div
-          className={`prose prose-lg ${
-            darkMode ? "prose-invert" : "prose-gray"
-          } whitespace-pre-line leading-relaxed`}
+      <main className="relative max-w-4xl mx-auto px-4 md:px-6 py-8 md:py-12">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className={`backdrop-blur-sm ${
+            darkMode ? "bg-gray-900/50" : "bg-white/50"
+          } rounded-2xl shadow-xl p-6 md:p-8 mb-8`}
         >
-          <div dangerouslySetInnerHTML={{ __html: article.content }}></div>
-        </div>
-
-        {/* Social Media Share Buttons */}
-        <div className="mt-10 flex justify-between items-center">
-          <div>
-            <h2 className="text-xl font-bold mb-4">Share this article:</h2>
-            <div className="flex gap-4">
-              <TwitterShareButton url={shareUrl} title={article.title}>
-                <TwitterIcon size={40} round />
-              </TwitterShareButton>
-              <FacebookShareButton url={shareUrl} quote={article.title}>
-                <FacebookIcon size={40} round />
-              </FacebookShareButton>
-              <LinkedinShareButton url={shareUrl} title={article.title}>
-                <LinkedinIcon size={40} round />
-              </LinkedinShareButton>
-            </div>
-          </div>
-
-          {/* Report Button */}
-          <button
-            onClick={() => setIsReportPopupOpen(true)}
-            className="text-sm text-red-500 font-semibold hover:underline"
+          <div
+            className={`prose prose-lg max-w-none text-2xl ${
+              darkMode ? "prose-invert" : "prose-gray"
+            } whitespace-pre-line leading-relaxed`}
           >
-            Report
-          </button>
-        </div>
+            <div dangerouslySetInnerHTML={{ __html: article.content }}></div>
+          </div>
+        </motion.div>
+
+        {/* Share and Actions Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className={`fixed bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-4 p-3 ${
+            darkMode ? "bg-gray-800/90" : "bg-white/90"
+          } backdrop-blur-md rounded-full shadow-lg z-40`}
+        >
+          <div className="flex items-center gap-2">
+            <motion.div
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              className="flex gap-2"
+            >
+              <TwitterShareButton url={shareUrl} title={article.title}>
+                <div
+                  className={`p-2 rounded-full transition-all ${
+                    darkMode ? "hover:bg-gray-700/50" : "hover:bg-gray-100/50"
+                  }`}
+                >
+                  <TwitterIcon size={32} round />
+                </div>
+              </TwitterShareButton>
+
+              <FacebookShareButton url={shareUrl} quote={article.title}>
+                <div
+                  className={`p-2 rounded-full transition-all ${
+                    darkMode ? "hover:bg-gray-700/50" : "hover:bg-gray-100/50"
+                  }`}
+                >
+                  <FacebookIcon size={32} round />
+                </div>
+              </FacebookShareButton>
+
+              <LinkedinShareButton url={shareUrl} title={article.title}>
+                <div
+                  className={`p-2 rounded-full transition-all ${
+                    darkMode ? "hover:bg-gray-700/50" : "hover:bg-gray-100/50"
+                  }`}
+                >
+                  <LinkedinIcon size={32} round />
+                </div>
+              </LinkedinShareButton>
+            </motion.div>
+
+            <div
+              className={`w-px h-6 ${darkMode ? "bg-gray-700" : "bg-gray-200"}`}
+            ></div>
+
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setIsReportPopupOpen(true)}
+              className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium ${
+                darkMode
+                  ? "bg-red-500/10 text-red-400 hover:bg-red-500/20"
+                  : "bg-red-50 text-red-500 hover:bg-red-100"
+              } transition-all`}
+            >
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                />
+              </svg>
+              <span>Report</span>
+            </motion.button>
+          </div>
+        </motion.div>
       </main>
 
-            {/* Report Initial Modal */}
+      {/* Report Initial Modal */}
       {isReportPopupOpen && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fadeIn">
           <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl shadow-xl max-w-md w-full p-6 transform transition-all duration-300 scale-100 animate-slideUp">
