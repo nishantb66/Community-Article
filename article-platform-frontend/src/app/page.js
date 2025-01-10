@@ -37,25 +37,16 @@ export default function Home() {
   const [showWelcomePopup, setShowWelcomePopup] = useState(false);
 
 
-    useEffect(() => {
-    // Clear localStorage for testing
-    localStorage.removeItem("hasVisited");
+  useEffect(() => {
+    const sessionCheck = sessionStorage.getItem("pageLoaded");
+    const token = localStorage.getItem("token");
 
-    const hasVisited = localStorage.getItem("hasVisited");
-    console.log("Has visited:", hasVisited); // Debug log
-
-    if (!hasVisited && !user) {
-      console.log("Showing popup"); // Debug log
+    if (!sessionCheck && !token) {
       setShowWelcomePopup(true);
-      localStorage.setItem("hasVisited", "true");
+      sessionStorage.setItem("pageLoaded", "true");
 
-      const timer = setTimeout(() => {
-        setShowWelcomePopup(false);
-      }, 3000);
-
-      return () => clearTimeout(timer);
     }
-  }, [user]);
+  }, []); // Remove user dependency
 
   useEffect(() => {
     // Fetch user data from localStorage on load
@@ -70,6 +61,7 @@ export default function Home() {
   }, []);
 
   const handleLogout = () => {
+    sessionStorage.removeItem("pageLoaded");
     // Clear user session
     if (typeof window !== "undefined") {
       localStorage.removeItem("token");
