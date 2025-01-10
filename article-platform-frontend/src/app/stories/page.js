@@ -48,29 +48,62 @@ return (
       </div>
     ) : (
       <main className="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {stories.map((story) => (
             <div
               key={story._id}
-              className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200 border border-gray-100"
+              className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden group relative"
             >
-              <div className="p-6">
-                <h2 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2">
+              <div className="p-6 space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium text-orange-500 bg-orange-50 px-3 py-1 rounded-full">
+                    {new Date(story.createdAt).toLocaleDateString("en-US", {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                    })}
+                  </span>
+                  <div className="flex items-center space-x-3">
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-orange-400 to-pink-400 flex items-center justify-center">
+                      <span className="text-white font-medium text-sm">
+                        {story.author.charAt(0)}
+                      </span>
+                    </div>
+                    <span className="text-sm text-gray-600 font-medium">
+                      {story.author}
+                    </span>
+                  </div>
+                </div>
+    
+                <h2
+                  onClick={() => router.push(`/story/${story._id}`)}
+                  className="text-xl font-bold text-gray-900 cursor-pointer group-hover:text-orange-500 transition-colors duration-300"
+                >
                   {story.title}
                 </h2>
-                <p className="text-sm text-gray-500 mb-4">By {story.author}</p>
+    
                 <div
-                  className="text-gray-600 line-clamp-3 mb-6 text-sm"
+                  className="prose prose-sm text-gray-600 line-clamp-3"
                   dangerouslySetInnerHTML={{
-                    __html: story.content.slice(0, 120),
+                    __html: story.content.slice(0, 150) + "..."
                   }}
                 />
-                <button
-                  onClick={() => router.push(`/story/${story._id}`)}
-                  className="text-orange-500 font-medium text-sm hover:text-orange-600 transition-colors"
-                >
-                  Read More →
-                </button>
+    
+                <div className="flex items-center justify-between pt-4 border-t">
+                  <button
+                    onClick={() => router.push(`/story/${story._id}`)}
+                    className="text-gray-600 hover:text-orange-500 transition-colors duration-300"
+                  >
+                    Read More
+                  </button>
+    
+                  <button
+                    onClick={() => router.push(`/story/${story._id}`)}
+                    className="inline-flex items-center px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium rounded-full transition-colors duration-300"
+                  >
+                    View Story
+                  </button>
+                </div>
               </div>
             </div>
           ))}
