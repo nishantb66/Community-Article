@@ -49,6 +49,10 @@ export default function Home() {
       setShowWelcomePopup(true);
       localStorage.setItem("hasVisited", "true");
 
+      const timer = setTimeout(() => {
+        setShowWelcomePopup(false);
+      }, 3000);
+
       return () => clearTimeout(timer);
     }
   }, [user]);
