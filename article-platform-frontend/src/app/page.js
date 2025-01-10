@@ -978,7 +978,7 @@ export default function Home() {
                 <h3 className="text-white font-semibold text-lg">Stay Connected</h3>
                 <div className="flex space-x-4">
                   <a
-                    href="#"
+                    href="https://x.com/Nishant03129296"
                     className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-orange-400 hover:bg-gray-700 hover:text-orange-300 transition-all duration-300 hover:-translate-y-1"
                   >
                     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -986,7 +986,7 @@ export default function Home() {
                     </svg>
                   </a>
                   <a
-                    href="#"
+                    href="https://github.com/nishantb66"
                     className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-orange-400 hover:bg-gray-700 hover:text-orange-300 transition-all duration-300 hover:-translate-y-1"
                   >
                     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
