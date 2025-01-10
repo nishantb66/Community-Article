@@ -180,9 +180,11 @@ const handleReportArticle = async (reason) => {
     >
       {/* Reading Progress Bar */}
       <div
-        className={`fixed top-0 left-0 h-2 ${
-          darkMode ? "bg-teal-500" : "bg-orange-500"
-        } transition-all`}
+        className={`fixed top-0 left-0 h-1.5 z-50 shadow-sm ${
+          darkMode
+            ? "bg-teal-500"
+            : "bg-gradient-to-r from-orange-500 to-pink-500"
+        } transition-all duration-300`}
         style={{ width: `${scrollProgress}%` }}
       ></div>
 
