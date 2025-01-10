@@ -704,74 +704,47 @@ export default function Home() {
               Discover thought-provoking stories and insights from our community
             </p>
           </div>
-        
-          {/* Articles Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+            {/*Article Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {loading && page === 1 
               ? Array.from({ length: 6 }).map((_, index) => (
-                  <div key={index} className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                    <div className="h-48 bg-gray-100 animate-pulse" />
-                    <div className="p-5">
+                  <div key={index} className="bg-white rounded-2xl shadow-lg overflow-hidden">
+                    <div className="p-6 space-y-4">
+                      <div className="h-6 bg-gray-100 rounded-full w-32 animate-pulse" />
                       <div className="space-y-3">
                         <div className="h-6 bg-gray-100 rounded w-3/4 animate-pulse" />
-                        <div className="space-y-2">
-                          <div className="h-4 bg-gray-100 rounded animate-pulse" />
-                          <div className="h-4 bg-gray-100 rounded w-5/6 animate-pulse" />
-                        </div>
+                        <div className="h-4 bg-gray-100 rounded animate-pulse" />
+                        <div className="h-4 bg-gray-100 rounded w-5/6 animate-pulse" />
                       </div>
-                      <div className="flex items-center justify-between mt-6 pt-4 border-t border-gray-100">
-                        <div className="flex items-center space-x-3">
-                          <div className="w-8 h-8 rounded-full bg-gray-100 animate-pulse" />
-                          <div className="h-4 w-20 bg-gray-100 rounded animate-pulse" />
-                        </div>
-                        <div className="w-20 h-8 bg-gray-100 rounded-full animate-pulse" />
+                      <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                        <div className="w-24 h-8 bg-gray-100 rounded-full animate-pulse" />
+                        <div className="w-24 h-8 bg-gray-100 rounded-full animate-pulse" />
                       </div>
                     </div>
                   </div>
                 ))
               : (searchQuery ? filteredArticles : articles).map((article) => (
-                  <div 
+                  <div
                     key={article._id}
-                    className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow"
+                    className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden group relative"
                   >
                     {/* Loading Overlay */}
                     {clickedArticleId === article._id && (
-                      <div className="absolute inset-0 bg-white/60 z-10 flex items-center justify-center">
-                        <div className="w-8 h-8 border-3 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
-                        <p className="text-sm font-medium text-gray-600">
-                          Loading article...
-                        </p>
+                      <div className="absolute inset-0 bg-white/80 backdrop-blur-sm z-10 flex items-center justify-center">
+                        <div className="w-8 h-8 border-3 border-orange-500 border-t-transparent rounded-full animate-spin" />
                       </div>
                     )}
-        
-                    {/* Article Header */}
-                    <div
-                      onClick={() => {
-                        setClickedArticleId(article._id);
-                        router.push(`/article/${article._id}`);
-                      }}
-                      className="cursor-pointer h-48 relative bg-gradient-to-r from-orange-50 to-pink-50"
-                    >
-                      <div className="absolute inset-0 p-6 flex items-center justify-center">
-                        <h3 className="text-xl font-bold text-gray-800 text-center line-clamp-2">
-                          {article.title}
-                        </h3>
-                      </div>
-                    </div>
-        
-                    {/* Article Content */}
-                    <div className="p-5">
-                      <div className="mb-4">
-                        <div
-                          className="prose prose-sm text-gray-600 line-clamp-3"
-                          dangerouslySetInnerHTML={{
-                            __html: article.content.slice(0, 150) + "..."
-                          }}
-                        />
-                      </div>
-        
-                      {/* Article Footer */}
-                      <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+          
+                    <div className="p-6 space-y-4">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-medium text-orange-500 bg-orange-50 px-3 py-1 rounded-full">
+                          {new Date(article.createdAt).toLocaleDateString("en-US", {
+                            month: "short",
+                            day: "numeric",
+                            year: "numeric",
+                          })}
+                        </span>
                         <div className="flex items-center space-x-3">
                           <div className="w-8 h-8 rounded-full bg-gradient-to-r from-orange-400 to-pink-400 flex items-center justify-center">
                             <span className="text-white font-medium text-sm">
@@ -782,7 +755,36 @@ export default function Home() {
                             {article.author}
                           </span>
                         </div>
-        
+                      </div>
+          
+                      <h2
+                        onClick={() => {
+                          setClickedArticleId(article._id);
+                          router.push(`/article/${article._id}`);
+                        }}
+                        className="text-xl font-bold text-gray-900 cursor-pointer group-hover:text-orange-500 transition-colors duration-300"
+                      >
+                        {article.title}
+                      </h2>
+          
+                      <div
+                        className="prose prose-sm text-gray-600 line-clamp-3"
+                        dangerouslySetInnerHTML={{
+                          __html: article.content.slice(0, 150) + "..."
+                        }}
+                      />
+          
+                      <div className="flex items-center justify-between pt-4 border-t">
+                        <button
+                          onClick={() => {
+                            setClickedArticleId(article._id);
+                            router.push(`/article/${article._id}`);
+                          }}
+                          className="text-gray-600 hover:text-orange-500 transition-colors duration-300"
+                        >
+                          Read More
+                        </button>
+          
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
@@ -794,7 +796,7 @@ export default function Home() {
                             }
                             handleBookmark(article._id);
                           }}
-                          className="inline-flex items-center px-3 py-1.5 bg-gradient-to-r from-orange-400 to-pink-400 text-white text-sm font-medium rounded-full"
+                          className="inline-flex items-center px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium rounded-full transition-colors duration-300"
                         >
                           <svg className="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
