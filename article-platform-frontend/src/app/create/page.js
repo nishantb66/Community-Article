@@ -179,7 +179,7 @@ const CreateArticle = () => {
                       If you receive a "Failed to create article" error, please
                       remove images from your content and try again by adding
                       one or two images and if the error exist futher then
-                      remove all images. We're working on supporting images in
+                      remove all images. We're working on supporting high quality images and videos in
                       future updates.
                     </p>
                   </div>
