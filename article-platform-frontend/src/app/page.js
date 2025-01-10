@@ -1,4 +1,4 @@
-"use client";
+33"use client";
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
@@ -34,6 +34,24 @@ export default function Home() {
   const [notificationType, setNotificationType] = useState(""); // Success or Error
   const [clickedArticleId, setClickedArticleId] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [showWelcomePopup, setShowWelcomePopup] = useState(false);
+
+
+    useEffect(() => {
+    // Clear localStorage for testing
+    localStorage.removeItem("hasVisited");
+
+    const hasVisited = localStorage.getItem("hasVisited");
+    console.log("Has visited:", hasVisited); // Debug log
+
+    if (!hasVisited && !user) {
+      console.log("Showing popup"); // Debug log
+      setShowWelcomePopup(true);
+      localStorage.setItem("hasVisited", "true");
+
+      return () => clearTimeout(timer);
+    }
+  }, [user]);
 
   useEffect(() => {
     // Fetch user data from localStorage on load
@@ -232,6 +250,64 @@ export default function Home() {
   return (
     <main className="flex-grow">
       <div className="min-h-screen bg-gradient-to-br from-orange-100 to-pink-100">
+          {showWelcomePopup && (
+                <div className="fixed inset-0 z-[60] flex items-center justify-center px-4">
+                  <div
+                    className="absolute inset-0 bg-black/20 backdrop-blur-sm"
+                    onClick={() => setShowWelcomePopup(false)}
+                  />
+                  <div className="relative bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 w-full max-w-sm transform transition-all duration-300 scale-100 opacity-100">
+                    <button
+                      onClick={() => setShowWelcomePopup(false)}
+                      className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                    >
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M6 18L18 6M6 6l12 12"
+                        />
+                      </svg>
+                    </button>
+                    <div className="text-center">
+                      <div className="w-16 h-16 bg-orange-100 dark:bg-orange-900/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg
+                          className="w-8 h-8 text-orange-500"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"
+                          />
+                        </svg>
+                      </div>
+                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                        Welcome to SimpleArticle!
+                      </h3>
+                      <p className="text-gray-600 dark:text-gray-300 mb-4">
+                        Please log in to access all features and start sharing your
+                        stories with our community.
+                      </p>
+                      <a
+                        href="/login"
+                        className="bg-white/10 hover:bg-white/20 px-6 py-2 rounded-full font-medium transition-colors text-orange-600"
+                      >
+                        Get Started
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              )}
         {/* Navigation Bar */}
          <header className="bg-gradient-to-r from-orange-400 via-pink-400 to-orange-500 text-white py-4 sticky top-0 z-50 backdrop-blur-sm shadow-lg border-b border-white/10">
           <div className="container mx-auto flex justify-between items-center px-4 sm:px-6 lg:px-8">
