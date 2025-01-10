@@ -164,7 +164,7 @@ return (
             </h3>
             <div className="flex space-x-4">
               <a
-                href="#"
+                href="https://x.com/Nishant03129296"
                 className="p-2 bg-gray-800 rounded-full text-orange-400 hover:bg-gray-700 transition-colors"
               >
                 <svg
@@ -176,7 +176,7 @@ return (
                 </svg>
               </a>
               <a
-                href="#"
+                href="https://github.com/nishantb66"
                 className="p-2 bg-gray-800 rounded-full text-orange-400 hover:bg-gray-700 transition-colors"
               >
                 <svg
