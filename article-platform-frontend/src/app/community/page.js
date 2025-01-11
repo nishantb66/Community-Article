@@ -56,170 +56,174 @@ export default function CommunityPage() {
     fetchDiscussions();
   }, []);
 
-return (
-  <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-    <header className="backdrop-blur-sm bg-white/30 border-b border-gray-200 sticky top-0 z-10">
-      <div className="bg-gradient-to-r from-orange-500 to-orange-600">
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="container mx-auto px-4 py-6 max-w-5xl"
-        >
-          <h1 className="text-2xl md:text-4xl font-bold tracking-tight text-white text-center">
-            Community Forum
-          </h1>
-        </motion.div>
-      </div>
-      <Link
-        href="/guidelines"
-        className="w-full sm:w-auto px-6 py-2.5 text-center bg-white/10 backdrop-blur-sm text-gray-800 rounded-xl font-semibold shadow-lg hover:bg-white/20 transition-all duration-300 text-sm sm:text-base flex items-center justify-center space-x-2"
-      >
-        <svg
-          className="w-5 h-5"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-          />
-        </svg>
-        <span>Guidelines</span>
-      </Link>
-    </header>
+ return (
+   <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
+     {/* Modern Header */}
+     <header className="bg-white/80 backdrop-blur-md border-b border-gray-100 sticky top-0 z-10 shadow-sm">
+       <div className="relative">
+         <div className="absolute inset-0 bg-gradient-to-r from-orange-500/10 to-orange-600/10" />
+         <div className="container mx-auto px-4 py-6 relative">
+           <h1 className="text-2xl md:text-3xl font-bold text-gray-900 text-center">
+             Discussion Forum
+           </h1>
+           <p className="text-center text-gray-600 mt-2 max-w-2xl mx-auto">
+             Share ideas, ask questions, and connect with the community
+           </p>
+         </div>
+       </div>
+       <nav className="container mx-auto px-4 py-2 flex justify-end">
+         <Link
+           href="/guidelines"
+           className="inline-flex items-center px-4 py-2 text-sm text-gray-700 hover:text-orange-600 transition-colors"
+         >
+           <svg
+             className="w-4 h-4 mr-2"
+             fill="none"
+             stroke="currentColor"
+             viewBox="0 0 24 24"
+           >
+             <path
+               strokeLinecap="round"
+               strokeLinejoin="round"
+               strokeWidth="2"
+               d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+             />
+           </svg>
+           Guidelines
+         </Link>
+       </nav>
+     </header>
 
-    <main className="container mx-auto px-4 py-8 max-w-5xl">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="mb-10 backdrop-blur-sm bg-white/80 p-6 md:p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300"
-      >
-        <h2 className="text-2xl md:text-3xl font-bold mb-6 text-gray-800 text-center">
-          Start a New Discussion
-        </h2>
-        <div className="space-y-6 max-w-3xl mx-auto">
-          <input
-            type="text"
-            placeholder="What's on your mind?"
-            value={newDiscussion.title}
-            onChange={(e) =>
-              setNewDiscussion({ ...newDiscussion, title: e.target.value })
-            }
-            className="block w-full p-4 text-lg border border-gray-200 rounded-xl focus:ring-4 focus:ring-orange-500/20 focus:border-orange-500 transition-all"
-          />
-          <textarea
-            placeholder="Share your thoughts in detail..."
-            rows="5"
-            value={newDiscussion.body}
-            onChange={(e) =>
-              setNewDiscussion({ ...newDiscussion, body: e.target.value })
-            }
-            className="block w-full p-4 text-lg border border-gray-200 rounded-xl focus:ring-4 focus:ring-orange-500/20 focus:border-orange-500 transition-all resize-none"
-          />
-          <div className="text-center">
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={handleCreateDiscussion}
-              disabled={loading}
-              className="px-8 py-4 text-lg text-white bg-gradient-to-r from-orange-500 to-orange-600 rounded-xl font-semibold shadow-lg hover:shadow-orange-500/25 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {loading ? (
-                <span className="flex items-center justify-center">
-                  <svg
-                    className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    ></circle>
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    ></path>
-                  </svg>
-                  Creating Discussion...
-                </span>
-              ) : (
-                "Create Discussion"
-              )}
-            </motion.button>
-          </div>
-        </div>
-      </motion.div>
+     <main className="container mx-auto px-4 py-8 max-w-5xl">
+       {/* Create Discussion Section */}
+       <section className="mb-12 bg-white rounded-2xl shadow-sm border border-gray-100 hover:border-orange-100 transition-colors p-6 md:p-8">
+         <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">
+           Start a New Discussion
+         </h2>
+         <div className="space-y-4 max-w-3xl mx-auto">
+           <input
+             type="text"
+             placeholder="What's on your mind?"
+             value={newDiscussion.title}
+             onChange={(e) =>
+               setNewDiscussion({ ...newDiscussion, title: e.target.value })
+             }
+             className="w-full px-4 py-3 text-gray-900 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all"
+           />
+           <textarea
+             placeholder="Share your thoughts in detail..."
+             rows="4"
+             value={newDiscussion.body}
+             onChange={(e) =>
+               setNewDiscussion({ ...newDiscussion, body: e.target.value })
+             }
+             className="w-full px-4 py-3 text-gray-900 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all resize-none"
+           />
+           <div className="text-right">
+             <button
+               onClick={handleCreateDiscussion}
+               disabled={loading}
+               className="px-6 py-2.5 text-white bg-orange-500 rounded-xl font-medium hover:bg-orange-600 focus:ring-4 focus:ring-orange-500/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+             >
+               {loading ? (
+                 <span className="inline-flex items-center">
+                   <svg
+                     className="w-4 h-4 animate-spin mr-2"
+                     viewBox="0 0 24 24"
+                   >
+                     <circle
+                       className="opacity-25"
+                       cx="12"
+                       cy="12"
+                       r="10"
+                       stroke="currentColor"
+                       strokeWidth="4"
+                     />
+                     <path
+                       className="opacity-75"
+                       fill="currentColor"
+                       d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                     />
+                   </svg>
+                   Creating...
+                 </span>
+               ) : (
+                 "Create Discussion"
+               )}
+             </button>
+           </div>
+         </div>
+       </section>
 
-      <div className="space-y-8">
-        <h2 className="text-2xl md:text-3xl font-bold text-gray-800 text-center">
-          Recent Discussions
-        </h2>
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="grid gap-6 md:grid-cols-2"
-        >
-          {discussions.map((discussion, index) => (
-            <motion.div
-              key={discussion._id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-              className="group backdrop-blur-sm bg-white/80 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300"
-            >
-              <h3 className="text-xl font-bold text-gray-800 mb-3 group-hover:text-orange-500 transition-colors">
-                {discussion.title}
-              </h3>
-              <p className="text-gray-600 mb-4 line-clamp-2">
-                {discussion.body}
-              </p>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2 text-gray-500">
-                  <svg
-                    className="w-5 h-5"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" />
-                  </svg>
-                  <span className="font-medium">
-                    {discussion.author?.username}
-                  </span>
-                </div>
-                <Link
-                  href={`/community/${discussion._id}`}
-                  className="inline-flex items-center px-4 py-2 text-sm font-semibold text-orange-500 bg-orange-50 rounded-lg hover:bg-orange-100 transition-colors"
-                >
-                  Share your thoughts
-                  <svg
-                    className="w-4 h-4 ml-2"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 5l7 7-7 7"
-                    />
-                  </svg>
-                </Link>
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
-      </div>
-    </main>
-  </div>
-);
+       {/* Discussions List */}
+       <section className="space-y-6">
+         <h2 className="text-xl md:text-2xl font-bold text-gray-900">
+           Recent Discussions
+         </h2>
+         <div className="grid gap-6 sm:grid-cols-2">
+           {discussions.map((discussion) => (
+             <article
+               key={discussion._id}
+               className="group relative bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-lg hover:border-orange-100 transition-all duration-200"
+             >
+               {/* Status Indicator */}
+               <div className="absolute top-4 right-4">
+                 <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+               </div>
+
+               {/* Title & Content */}
+               <div className="mb-4">
+                 <h3 className="text-lg font-semibold text-gray-900 group-hover:text-orange-600 transition-colors mb-2">
+                   {discussion.title}
+                 </h3>
+                 <p className="text-gray-600 text-sm leading-relaxed line-clamp-2">
+                   {discussion.body}
+                 </p>
+               </div>
+
+               {/* Footer with Metadata */}
+               <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                 <div className="flex items-center space-x-3">
+                   <div className="flex items-center">
+                     <div className="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center text-orange-600">
+                       {discussion.author?.username?.[0]?.toUpperCase()}
+                     </div>
+                     <span className="ml-2 text-sm font-medium text-gray-700">
+                       {discussion.author?.username}
+                     </span>
+                   </div>
+                   <span className="text-sm text-gray-500">•</span>
+                   <span className="text-sm text-gray-500">
+                     {new Date(discussion.createdAt).toLocaleDateString()}
+                   </span>
+                 </div>
+
+                 <Link
+                   href={`/community/${discussion._id}`}
+                   className="inline-flex items-center px-4 py-2 text-sm font-medium text-orange-600 bg-orange-50 rounded-lg hover:bg-orange-100 transition-colors"
+                 >
+                   View Discussion
+                   <svg
+                     className="w-4 h-4 ml-2"
+                     fill="none"
+                     stroke="currentColor"
+                     viewBox="0 0 24 24"
+                   >
+                     <path
+                       strokeLinecap="round"
+                       strokeLinejoin="round"
+                       strokeWidth="2"
+                       d="M13 7l5 5m0 0l-5 5m5-5H6"
+                     />
+                   </svg>
+                 </Link>
+               </div>
+             </article>
+           ))}
+         </div>
+       </section>
+     </main>
+   </div>
+ );
 }
+
