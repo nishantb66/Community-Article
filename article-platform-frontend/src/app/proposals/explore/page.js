@@ -10,6 +10,7 @@ import {
   PhoneIcon,
   MagnifyingGlassIcon,
   ArrowRightIcon,
+  DocumentIcon,
 } from "@heroicons/react/24/outline";
 
 export default function ExploreProposalsPage() {
