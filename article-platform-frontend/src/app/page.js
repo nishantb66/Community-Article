@@ -502,7 +502,7 @@ export default function Home() {
                               d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a2 2 0 01-2-2v-6a2 2 0 012-2h8zM7 8H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l4-4h6a2 2 0 002-2v-6a2 2 0 00-2-2h-8z"
                             />
                           </svg>
-                          Community Forum
+                          Discussion Forum
                         </Link>
 
                         <Link
@@ -569,50 +569,50 @@ export default function Home() {
         </header>
 
         {/* Hero Section */}
-        <div
-          className={`relative min-h-[60vh] flex items-center justify-center bg-gradient-to-br from-orange-50 via-pink-50 to-orange-50 ${
+                <section
+          className={`relative min-h-[70vh] flex items-center bg-gradient-to-br from-gray-50 via-white to-orange-50 ${
             mobileMenuOpen ? "mt-[320px] sm:mt-0" : ""
           } transition-all duration-300`}
         >
-          <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
+          {/* Subtle Grid Background */}
+          <div className="absolute inset-0 bg-grid-pattern opacity-[0.03]"></div>
 
-          <div className="relative z-10 container mx-auto text-center px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
-            {/* Main Content */}
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-pink-600 mb-6 leading-tight animate-fadeIn">
-              Discover a Variety of Stories
-            </h1>
+          <div className="relative z-10 container mx-auto flex flex-col-reverse lg:flex-row items-center px-12 sm:px-16 lg:px-24 py-12 sm:py-16 lg:py-20">
+            {/* Text Content */}
+            <div className="lg:w-1/2 max-w-4xl mx-auto lg:mx-0 lg:mr-8 items-center">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+                Discover a Variety of
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-orange-500 ml-2">
+                  Stories
+                </span>
+              </h1>
 
-            <p className="text-base sm:text-lg lg:text-xl text-gray-600 mb-12 max-w-2xl mx-auto animate-fadeIn opacity-90">
-              Explore articles, stories written by the community
-            </p>
+              <p className="text-base sm:text-lg text-gray-600 mb-12 max-w-2xl">
+                Explore articles and stories written by the community
+              </p>
 
-            {/* Search Section */}
-            <div className="max-w-2xl mx-auto space-y-4 animate-fadeIn">
-              <div className="relative group">
-                {/* Search Message */}
-                <div
-                  className={`absolute -top-8 left-0 right-0 text-sm text-gray-500 transition-opacity duration-300 ${
-                    searchQuery.length > 0 ? "opacity-100" : "opacity-0"
-                  }`}
-                >
-                  📝 Load all articles and then apply search
-                </div>
-
-                {/* Search Input */}
+              {/* Search Interface */}
+              <div className="space-y-6">
                 <div className="relative">
-                  <input
-                    type="text"
-                    value={searchQuery}
-                    onChange={(e) => {
-                      setSearchQuery(e.target.value);
-                      handleSearch(e.target.value);
-                    }}
-                    placeholder="Search articles..."
-                    className="w-full px-6 py-4 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-full shadow-lg focus:shadow-xl focus:ring-2 focus:ring-orange-400 focus:border-transparent outline-none transition-all duration-300 text-gray-800 placeholder-gray-400"
-                  />
-                  <span className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400">
+                  {searchQuery.length > 0 && (
+                    <div className="absolute -top-8 left-0 right-0 text-sm text-gray-500">
+                      📝 Load all articles and then apply search
+                    </div>
+                  )}
+
+                  <div className="relative flex items-center">
+                    <input
+                      type="text"
+                      value={searchQuery}
+                      onChange={(e) => {
+                        setSearchQuery(e.target.value);
+                        handleSearch(e.target.value);
+                      }}
+                      placeholder="Search articles..."
+                      className="w-full px-6 py-4 bg-white border border-gray-200 rounded-xl shadow-sm focus:shadow-md focus:border-orange-500 outline-none transition-all duration-200 text-gray-800 placeholder-gray-400"
+                    />
                     <svg
-                      className="w-5 h-5"
+                      className="w-5 h-5 absolute right-4 text-gray-400"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -624,49 +624,56 @@ export default function Home() {
                         d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                       />
                     </svg>
-                  </span>
+                  </div>
                 </div>
+
+                {/* Action Items */}
+                <div className="flex flex-col sm:flex-row items-center gap-6 pt-4">
+                  <Link
+                    href="/deleteRequest"
+                    className="text-sm text-gray-600 hover:text-orange-600 transition-colors"
+                  >
+                    Request article removal
+                  </Link>
+
+                  <button
+                    onClick={() => setIsCollaboratePopupOpen(true)}
+                    className="px-8 py-3 bg-orange-500 text-white font-medium rounded-xl hover:bg-orange-600 shadow-sm hover:shadow-md transition-all duration-200"
+                  >
+                    Collaborate
+                  </button>
+                </div>
+
+                {/* User Stories Button */}
+                {user && (
+                  <div className="pt-6">
+                    <button
+                      onClick={() => router.push("/stories")}
+                      className="px-8 py-3 bg-gray-900 text-white font-medium rounded-xl hover:bg-gray-800 shadow-sm hover:shadow-md transition-all duration-200"
+                    >
+                      Stories by SimpleArticles
+                    </button>
+                  </div>
+                )}
               </div>
+            </div>
 
-              {/* Action Buttons */}
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mt-8 animate-fadeIn">
-                <Link
-                  href="/deleteRequest"
-                  className="text-sm text-orange-600 hover:text-orange-700 font-medium hover:underline transition-colors duration-300"
-                >
-                  Want your article removed? Put your request here
-                </Link>
-
-                <button
-                  onClick={() => setIsCollaboratePopupOpen(true)}
-                  className="px-8 py-3 bg-gradient-to-r from-orange-400 to-pink-500 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
-                >
-                  Collaborate
-                </button>
-              </div>
-
-              {/* User Stories Button */}
-              {user && (
-                <button
-                  onClick={() => router.push("/stories")}
-                  className="mt-8 px-8 py-3 bg-gradient-to-r from-gray-800 to-gray-900 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 animate-fadeIn"
-                >
-                  Stories by SimpleArticles
-                </button>
-              )}
+            {/* Image Section */}
+            <div className="lg:w-1/2 flex justify-center items-center relative overflow-hidden">
+              {/* Image with Blending */}
+              <div
+                className="absolute inset-0 bg-gradient-to-r from-transparent via-orange-50 to-white rounded-bl-[30%] rounded-tl-[30%] rounded-tr-[30%] rounded-br-[30%] lg:rounded-bl-[60%] lg:rounded-br-[60%] lg:rounded-tl-[60%] lg:rounded-tr-[60%]"
+                style={{ zIndex: -1 }}
+              ></div>
+              <img
+                src="/bg.jpeg"
+                alt="Hero Background"
+                className="max-w-full lg:max-w-[700px] w-auto h-auto object-cover rounded-bl-[30%] rounded-tl-[30%] rounded-tr-[30%] rounded-br-[30%] lg:rounded-bl-[60%] lg:rounded-br-[60%] lg:rounded-tl-[60%] lg:rounded-tr-[60%]"
+                style={{ transform: "scale(1.05)" }}
+              />
             </div>
           </div>
-
-          {/* Popup Notification */}
-          {popupMessage && (
-            <div className="fixed inset-0 flex items-center justify-center z-50 animate-fadeIn">
-              <div className="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
-              <div className="relative bg-gradient-to-r from-blue-500 to-blue-600 text-white py-4 px-8 rounded-lg shadow-2xl transform transition-all duration-300">
-                <p className="text-lg font-semibold">{popupMessage}</p>
-              </div>
-            </div>
-          )}
-        </div>
+        </section>
 
         {/* Collaborate Popup */}
         {isCollaboratePopupOpen && (
