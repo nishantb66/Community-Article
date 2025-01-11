@@ -174,13 +174,16 @@ export default function LoginPage() {
               Sign Up
             </a>
           </p>
+          {/* Add Forgot Password/Username Link */}
           <p className="mt-4 text-sm text-center text-gray-500 sm:text-base lg:text-lg">
-            Just want to read articles?{" "}
+            Forgot your password or username?{" "}
             <a
-              onClick={() => router.push("/")}
-              className="cursor-pointer text-orange-500 hover:underline"
+              href="https://tripetto.app/run/QJU4ZLEJTY"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-orange-500 hover:underline"
             >
-              Go to Home
+              Reset
             </a>
           </p>
           {/* Link for Email Verification */}
@@ -191,6 +194,14 @@ export default function LoginPage() {
               className="text-blue-500 hover:underline cursor-pointer"
             >
               Verify Now
+            </a>
+          </p>
+          <p className="mt-4 text-sm text-center text-gray-500 sm:text-base lg:text-lg">
+            <a
+              onClick={() => router.push("/")}
+              className="cursor-pointer text-orange-500 hover:underline"
+            >
+              Go to Home
             </a>
           </p>
         </form>
