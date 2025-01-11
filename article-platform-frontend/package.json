@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@heroicons/react": "^2.2.0",
     "@tinymce/tinymce-react": "^5.1.1",
     "dompurify": "^3.2.3",
     "next": "15.1.3",
