@@ -58,11 +58,13 @@ router.get("/user/:username", async (req, res) => {
 // Ge articles
 router.get("/all", async (req, res) => {
   try {
-    const articles = await Article.find().sort({ createdAt: -1 });
+    // Fetch only necessary fields, sorted by createdAt in descending order
+    const articles = await Article.find()
+      .sort({ createdAt: -1 }) // Sort by newest first
+      .select("title author createdAt") // Select only required fields
+      .lean(); // Use lean for faster performance
 
-    res.status(200).json({
-      articles,
-    });
+    res.status(200).json({ articles });
   } catch (error) {
     console.error("Error in GET /api/articles:", error); // Log detailed error
     res
