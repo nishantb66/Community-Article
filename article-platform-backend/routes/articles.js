@@ -55,28 +55,19 @@ router.get("/user/:username", async (req, res) => {
 });
 
 
-// Get Paginated Articles
-router.get("/", async (req, res) => {
+// Ge articles
+router.get("/all", async (req, res) => {
   try {
-    const page = parseInt(req.query.page) || 1; // Current page number (default to 1)
-    const limit = parseInt(req.query.limit) || 6; // Number of articles per page (default to 6)
-    const skip = (page - 1) * limit; // Skip articles based on page number
-
-    const articles = await Article.find()
-      .sort({ createdAt: -1 }) // Sort by latest articles
-      .skip(skip)
-      .limit(limit);
-
-    const totalArticles = await Article.countDocuments(); // Get total article count
+    const articles = await Article.find().sort({ createdAt: -1 });
 
     res.status(200).json({
       articles,
-      totalArticles,
-      totalPages: Math.ceil(totalArticles / limit),
-      currentPage: page,
     });
   } catch (error) {
-    res.status(500).json({ message: "Error fetching articles", error });
+    console.error("Error in GET /api/articles:", error); // Log detailed error
+    res
+      .status(500)
+      .json({ message: "Error fetching articles", error: error.message });
   }
 });
 
