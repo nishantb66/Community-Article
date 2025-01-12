@@ -59,7 +59,6 @@ export default function ArticlePage() {
         }
         const data = await res.json();
         setArticle(data);
-        fetchRelatedArticles(data.title);
         fetchComments();
       } catch (err) {
         console.error("Error fetching article:", err);
@@ -71,35 +70,6 @@ export default function ArticlePage() {
     }
   }, [id]);
 
-
-  
-
-  async function fetchRelatedArticles(currentTitle) {
-    try {
-      const res = await fetch("https://community-article-backend.onrender.com/api/articles");
-      if (!res.ok) {
-        throw new Error("Failed to fetch related articles");
-      }
-      const data = await res.json();
-
-      // Ensure data is an array before processing
-      // const currentTitleWords = currentTitle.toLower;
-      const currentTitleWords = currentTitle.toLowerCase().split(" ");
-      const related = Array.isArray(data)
-        ? data.filter((article) => {
-            if (article._id === id) return false;
-            const articleTitleWords = article.title.toLowerCase().split(" ");
-            return currentTitleWords.some((word) =>
-              articleTitleWords.includes(word)
-            );
-          })
-        : []; // If data is not an array, fallback to an empty array
-
-      setRelatedArticles(related);
-    } catch (err) {
-      console.error("Error fetching related articles:", err);
-    }
-  }
 
   async function fetchComments() {
     try {
