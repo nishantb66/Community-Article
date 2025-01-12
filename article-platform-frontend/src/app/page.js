@@ -37,6 +37,7 @@ export default function Home() {
     setDropdownOpen(!dropdownOpen);
   };
   const [showWelcomePopup, setShowWelcomePopup] = useState(false);
+  const [messageType, setMessageType] = useState(null);
 
   useEffect(() => {
     const sessionCheck = sessionStorage.getItem("pageLoaded");
@@ -138,31 +139,48 @@ export default function Home() {
   };
 
   // Handle subscription
+  // Updated subscription handler
   const handleSubscribe = async (e) => {
     e.preventDefault();
     setMessage("");
+    setMessageType(null);
+    setLoading(true);
 
-    if (!email.trim()) {
-      setMessage("Email is required.");
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!email.trim() || !emailRegex.test(email.trim())) {
+      setMessage("Please enter a valid email address");
+      setMessageType("error");
+      setLoading(false);
       return;
     }
 
     try {
-      const response = await fetch("https://community-article-backend.onrender.com/api/subscribe", {
+      const response = await fetch("https://community-article-backend.onrender.com/api/subscribe/sub", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email: email.trim() }),
       });
 
+      const data = await response.json();
+
       if (response.ok) {
-        setMessage("Subscription successful! 🎉");
+        setMessage("Welcome to our newsletter! 🎉");
         setEmail("");
+        setMessageType("success");
+      } else if (response.status === 409) {
+        setMessage("This email is already subscribed!");
+        setMessageType("warning");
       } else {
-        setMessage("Failed to subscribe. Please try again.");
+        setMessage(data.error || "Failed to subscribe. Please try again.");
+        setMessageType("error");
       }
     } catch (err) {
-      console.error("Error subscribing:", err);
-      setMessage("An error occurred. Please try again.");
+      console.error("Subscription error:", err);
+      setMessage("Connection error. Please try again later.");
+      setMessageType("error");
+    } finally {
+      setLoading(false);
     }
   };
 
