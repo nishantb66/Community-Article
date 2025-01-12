@@ -28,7 +28,7 @@ router.post("/create", async (req, res) => {
 });
 
 // Fetch all discussions
-router.get("/", async (req, res) => {
+router.get("/all", async (req, res) => {
   try {
     const discussions = await Discussion.find()
       .populate("author", "username")
