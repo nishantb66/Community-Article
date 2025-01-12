@@ -156,72 +156,72 @@ export default function CommunityPage() {
        </section>
 
        {/* Discussions List */}
-       <section className="space-y-6">
-         <h2 className="text-xl md:text-2xl font-bold text-gray-900">
-           Recent Discussions
-         </h2>
-         <div className="grid gap-6 sm:grid-cols-2">
-           {discussions.map((discussion) => (
-             <article
-               key={discussion._id}
-               className="group relative bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-lg hover:border-orange-100 transition-all duration-200"
-             >
-               {/* Status Indicator */}
-               <div className="absolute top-4 right-4">
-                 <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-               </div>
-
-               {/* Title & Content */}
-               <div className="mb-4">
-                 <h3 className="text-lg font-semibold text-gray-900 group-hover:text-orange-600 transition-colors mb-2">
-                   {discussion.title}
-                 </h3>
-                 <p className="text-gray-600 text-sm leading-relaxed line-clamp-2">
-                   {discussion.body}
-                 </p>
-               </div>
-
-               {/* Footer with Metadata */}
-               <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                 <div className="flex items-center space-x-3">
-                   <div className="flex items-center">
-                     <div className="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center text-orange-600">
-                       {discussion.author?.username?.[0]?.toUpperCase()}
-                     </div>
-                     <span className="ml-2 text-sm font-medium text-gray-700">
-                       {discussion.author?.username}
-                     </span>
-                   </div>
-                   <span className="text-sm text-gray-500">•</span>
-                   <span className="text-sm text-gray-500">
-                     {new Date(discussion.createdAt).toLocaleDateString()}
-                   </span>
-                 </div>
-
-                 <Link
-                   href={`/community/${discussion._id}`}
-                   className="inline-flex items-center px-4 py-2 text-sm font-medium text-orange-600 bg-orange-50 rounded-lg hover:bg-orange-100 transition-colors"
-                 >
-                   View Discussion
-                   <svg
-                     className="w-4 h-4 ml-2"
-                     fill="none"
-                     stroke="currentColor"
-                     viewBox="0 0 24 24"
-                   >
-                     <path
-                       strokeLinecap="round"
-                       strokeLinejoin="round"
-                       strokeWidth="2"
-                       d="M13 7l5 5m0 0l-5 5m5-5H6"
-                     />
-                   </svg>
-                 </Link>
-               </div>
-             </article>
-           ))}
-         </div>
-       </section>
+        <section className="space-y-4 sm:space-y-6 px-4 sm:px-0">
+          <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900">
+            Recent Discussions
+          </h2>
+          <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2">
+            {discussions.map((discussion) => (
+              <article
+                key={discussion._id}
+                className="group relative bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-sm border border-gray-100 hover:shadow-lg hover:border-orange-100 transition-all duration-200"
+              >
+                {/* Status Indicator */}
+                <div className="absolute top-3 sm:top-4 right-3 sm:right-4">
+                  <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                </div>
+        
+                {/* Title & Content */}
+                <div className="mb-3 sm:mb-4">
+                  <h3 className="text-base sm:text-lg font-semibold text-gray-900 group-hover:text-orange-600 transition-colors mb-2">
+                    {discussion.title}
+                  </h3>
+                  <p className="text-gray-600 text-xs sm:text-sm leading-relaxed line-clamp-2">
+                    {discussion.body}
+                  </p>
+                </div>
+        
+                {/* Footer with Metadata */}
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-3 sm:space-y-0 pt-3 sm:pt-4 border-t border-gray-100">
+                  <div className="flex items-center space-x-2 sm:space-x-3 w-full sm:w-auto">
+                    <div className="flex items-center">
+                      <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 text-sm">
+                        {discussion.author?.username?.[0]?.toUpperCase()}
+                      </div>
+                      <span className="ml-2 text-xs sm:text-sm font-medium text-gray-700">
+                        {discussion.author?.username}
+                      </span>
+                    </div>
+                    <span className="text-xs sm:text-sm text-gray-500">•</span>
+                    <span className="text-xs sm:text-sm text-gray-500">
+                      {new Date(discussion.createdAt).toLocaleDateString()}
+                    </span>
+                  </div>
+        
+                  <Link
+                    href={`/community/${discussion._id}`}
+                    className="inline-flex items-center w-full sm:w-auto justify-center px-4 py-2 text-xs sm:text-sm font-medium text-orange-600 bg-orange-50 rounded-lg hover:bg-orange-100 transition-colors"
+                  >
+                    View Discussion
+                    <svg
+                      className="w-3 h-3 sm:w-4 sm:h-4 ml-2"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M13 7l5 5m0 0l-5 5m5-5H6"
+                      />
+                    </svg>
+                  </Link>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
      </main>
    </div>
  );
