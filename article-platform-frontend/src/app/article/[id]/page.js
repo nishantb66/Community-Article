@@ -12,6 +12,11 @@ import {
 } from "react-share";
 import "../../../styles/globals.css";
 import { motion } from "framer-motion";
+import {
+  ClipboardIcon,
+  ClipboardCheckIcon,
+  CheckIcon,
+} from "@heroicons/react/24/outline";
 
 
 export default function ArticlePage() {
@@ -26,6 +31,24 @@ export default function ArticlePage() {
   const [darkMode, setDarkMode] = useState(false);
   const [isCommentSliderOpen, setIsCommentSliderOpen] = useState(false);
   const { id } = useParams();
+  const [isCopied, setIsCopied] = useState(false);
+
+    const copyArticleText = () => {
+    if (!article) return;
+
+    // Create temporary element
+    const tempElement = document.createElement("div");
+    tempElement.innerHTML = article.content;
+
+    // Get text content only
+    const textContent = tempElement.textContent || tempElement.innerText;
+
+    // Copy to clipboard
+    navigator.clipboard.writeText(textContent).then(() => {
+      setIsCopied(true);
+      setTimeout(() => setIsCopied(false), 2000);
+    });
+  };
 
   useEffect(() => {
     async function fetchArticle() {
@@ -387,6 +410,25 @@ const handleReportArticle = async (reason) => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                 </svg>
                 <span className="hidden sm:inline">Report</span>
+              </button>
+              <button
+                onClick={copyArticleText}
+                className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-gray-900 dark:text-gray-200 hover:text-orange-600 dark:hover:text-orange-400 transition-colors"
+                aria-label="Copy article text"
+              >
+                {isCopied ? (
+                  <>
+                    <CheckIcon className="w-5 h-5 mr-1.5 text-green-600 dark:text-green-400" />
+                    <span className="text-green-600 dark:text-green-400">
+                      Copied!
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <ClipboardIcon className="w-5 h-5 mr-1.5 text-orange-600" />
+                    <span className="text-orange-600">Copy Text</span>
+                  </>
+                )}
               </button>
             </div>
           </div>
