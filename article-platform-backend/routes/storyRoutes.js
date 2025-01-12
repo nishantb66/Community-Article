@@ -4,7 +4,7 @@ const Story = require("../models/Story");
 const router = express.Router();
 
 // Get all stories
-router.get("/", async (req, res) => {
+router.get("/all", async (req, res) => {
   try {
     const stories = await Story.find().sort({ createdAt: -1 });
     res.json(stories);
