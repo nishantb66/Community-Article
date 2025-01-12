@@ -12,7 +12,7 @@ export default function CommunityPage() {
 
   const fetchDiscussions = async () => {
     try {
-      const response = await fetch(`${apiBaseUrl}/api/community`);
+      const response = await fetch(`${apiBaseUrl}/api/community/all`);
       if (response.ok) {
         const data = await response.json();
         setDiscussions(data);
