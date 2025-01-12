@@ -950,7 +950,7 @@ export default function Home() {
                       <div
                         className="prose prose-sm text-gray-600 line-clamp-3"
                         dangerouslySetInnerHTML={{
-                          __html: article.content.slice(0, 150) + "...",
+                          __html: article.content
                         }}
                       />
 
