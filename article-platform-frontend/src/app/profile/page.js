@@ -29,14 +29,19 @@ const ProfilePage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto">
+    <div
+      className="min-h-screen bg-cover bg-center py-8 px-4 sm:px-6 lg:px-8"
+      style={{
+        backgroundImage: `url('/bg2.jpeg')`,
+      }}
+    >
+      <div className="max-w-4xl mx-auto backdrop-blur-sm bg-white/60 rounded-2xl p-8 shadow-lg">
         {/* Profile Header */}
-        <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
-          <div className="h-32 bg-gradient-to-r from-orange-400 to-pink-500"></div>
-          <div className="relative px-6 pb-6">
+        <div className="relative">
+          <div className="h-32 bg-gradient-to-r from-orange-400 to-pink-500 rounded-t-2xl"></div>
+          <div className="relative px-6 pb-6 -mt-16">
             <div className="flex flex-col sm:flex-row items-center">
-              <div className="-mt-16 relative">
+              <div>
                 <div className="w-32 h-32 bg-white rounded-full p-2 shadow-lg">
                   <div className="w-full h-full bg-orange-500 rounded-full flex items-center justify-center">
                     <span className="text-4xl font-bold text-white">
@@ -49,7 +54,7 @@ const ProfilePage = () => {
                 <h1 className="text-2xl font-bold text-gray-900">
                   {profileData.name}
                 </h1>
-                <p className="text-gray-500">@{profileData.username}</p>
+                <p className="text-gray-900">@{profileData.username}</p>
               </div>
             </div>
           </div>
