@@ -3,24 +3,48 @@ const router = express.Router();
 const Subscriber = require("../models/Subscriber");
 
 // Subscribe to newsletter
-router.post("/", async (req, res) => {
+// Subscribe to newsletter
+router.post("/sub", async (req, res) => {
   const { email } = req.body;
 
-  if (!email) {
-    return res.status(400).json({ error: "Email is required." });
+  // Email validation regex
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (!email || !emailRegex.test(email)) {
+    return res
+      .status(400)
+      .json({ error: "Please provide a valid email address." });
   }
 
   try {
-    const existingSubscriber = await Subscriber.findOne({ email });
+    // Case insensitive email check
+    const existingSubscriber = await Subscriber.findOne({
+      email: { $regex: new RegExp(`^${email}$`, "i") },
+    });
+
     if (existingSubscriber) {
-      return res.status(400).json({ error: "Email already subscribed." });
+      return res.status(409).json({
+        error: "This email is already subscribed to our newsletter.",
+      });
     }
 
-    const subscriber = new Subscriber({ email });
+    const subscriber = new Subscriber({
+      email: email.toLowerCase(),
+      subscribedAt: new Date(),
+    });
+
     await subscriber.save();
-    res.status(201).json({ message: "Subscribed 🎉" });
+
+    res.status(201).json({
+      success: true,
+      message: "Successfully subscribed to our newsletter! 🎉",
+    });
   } catch (err) {
-    res.status(500).json({ error: "Failed to subscribe." });
+    console.error("Subscription error:", err);
+    res.status(500).json({
+      error:
+        "An error occurred while processing your subscription. Please try again.",
+    });
   }
 });
 
