@@ -539,7 +539,7 @@ export default function Home() {
                               d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a2 2 0 01-2-2v-6a2 2 0 012-2h8zM7 8H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l4-4h6a2 2 0 002-2v-6a2 2 0 00-2-2h-8z"
                             />
                           </svg>
-                          Community Forum
+                          Discussion Forum
                         </Link>
                         <Link
                           href="/proposals"
