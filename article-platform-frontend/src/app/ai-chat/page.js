@@ -70,19 +70,72 @@ export default function AIChat() {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
       {/* Beta Version Popup */}
       {showBetaPopup && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center">
-          <div className="bg-white rounded-2xl p-8 max-w-md mx-4 shadow-xl">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl p-4 sm:p-8 w-full max-w-[95%] sm:max-w-md mx-auto shadow-xl max-h-[90vh] overflow-y-auto">
+            {/* Beta Version Header */}
             <div className="flex items-center gap-3 mb-4">
-              <BeakerIcon className="w-8 h-8 text-orange-500" />
-              <h2 className="text-xl font-bold text-gray-900">Beta Version</h2>
+              <BeakerIcon className="w-6 sm:w-8 h-6 sm:h-8 text-orange-500" />
+              <h2 className="text-lg sm:text-xl font-bold text-gray-900">
+                Beta Version
+              </h2>
             </div>
-            <p className="text-gray-600 mb-6">
+
+            {/* Beta Message */}
+            <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6">
               This AI assistant is currently in beta testing. Response times may
               be slower than expected as we optimize our systems.
             </p>
+
+            {/* Divider */}
+            <div className="h-px bg-gray-200 my-4 sm:my-6" />
+
+            {/* Instructions Section */}
+            <div className="mb-4 sm:mb-6">
+              <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4">
+                How to Use SAai
+              </h3>
+              <ul className="space-y-3 sm:space-y-4">
+                <li className="flex gap-2 sm:gap-3">
+                  <span className="w-5 h-5 sm:w-6 sm:h-6 bg-orange-100 rounded-full flex items-center justify-center text-orange-500 flex-shrink-0 text-sm">
+                    1
+                  </span>
+                  <p className="text-sm sm:text-base text-gray-600">
+                    Paste your article content in the text box provided
+                  </p>
+                </li>
+                <li className="flex gap-2 sm:gap-3">
+                  <span className="w-5 h-5 sm:w-6 sm:h-6 bg-orange-100 rounded-full flex items-center justify-center text-orange-500 flex-shrink-0 text-sm">
+                    2
+                  </span>
+                  <p className="text-sm sm:text-base text-gray-600">
+                    Ask specific questions about the article content
+                  </p>
+                </li>
+                <li className="flex gap-2 sm:gap-3">
+                  <span className="w-5 h-5 sm:w-6 sm:h-6 bg-orange-100 rounded-full flex items-center justify-center text-orange-500 flex-shrink-0 text-sm">
+                    3
+                  </span>
+                  <p className="text-sm sm:text-base text-gray-600">
+                    Get AI-powered answers based on the provided content
+                  </p>
+                </li>
+              </ul>
+            </div>
+
+            {/* Important Note */}
+            <div className="bg-orange-50 p-3 sm:p-4 rounded-xl mb-4 sm:mb-6">
+              <p className="text-xs sm:text-sm text-gray-600">
+                <span className="font-medium text-orange-500">Note:</span> This
+                is not a conversational chatbot. It can only answer questions
+                about the article content you provide. Each question-answer pair
+                is independent.
+              </p>
+            </div>
+
+            {/* Action Button */}
             <button
               onClick={() => setShowBetaPopup(false)}
-              className="w-full bg-orange-500 text-white py-3 rounded-xl hover:bg-orange-600 transition-colors font-medium"
+              className="w-full bg-orange-500 text-white py-2.5 sm:py-3 rounded-xl hover:bg-orange-600 transition-colors font-medium text-sm sm:text-base"
             >
               Got it, continue
             </button>
