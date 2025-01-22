@@ -22,7 +22,7 @@ const AdminPage = () => {
   const handleAuthSubmit = async () => {
     try {
       const response = await fetch(
-        "http://localhost:5000/api/admin/authenticate",
+        "https://community-article-backend.onrender.com/api/admin/authenticate",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -61,7 +61,7 @@ const AdminPage = () => {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:5000/api/stories", {
+      const response = await fetch("https://community-article-backend.onrender.com/api/stories", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(storyData),
