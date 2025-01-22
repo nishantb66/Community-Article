@@ -31,9 +31,6 @@ const ProfilePage = () => {
   return (
     <div
       className="min-h-screen bg-cover bg-center py-8 px-4 sm:px-6 lg:px-8"
-      style={{
-        backgroundImage: `url('/bg2.jpeg')`,
-      }}
     >
       <div className="max-w-4xl mx-auto backdrop-blur-sm bg-white/60 rounded-2xl p-8 shadow-lg">
         {/* Profile Header */}
