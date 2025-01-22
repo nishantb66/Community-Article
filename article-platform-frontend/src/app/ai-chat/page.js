@@ -66,30 +66,76 @@ export default function AIChat() {
     }
   };
 
-   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-50 flex flex-col">
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
       {/* Beta Version Popup */}
       {showBetaPopup && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center px-4">
-          <div className="bg-white rounded-lg shadow-lg max-w-lg w-full p-6">
-            <div className="flex items-center mb-4">
-              <BeakerIcon className="w-6 h-6 text-orange-500 mr-2" />
-              <h2 className="text-lg font-bold text-gray-900">Beta Version</h2>
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl p-4 sm:p-8 w-full max-w-[95%] sm:max-w-md mx-auto shadow-xl max-h-[90vh] overflow-y-auto">
+            {/* Beta Version Header */}
+            <div className="flex items-center gap-3 mb-4">
+              <BeakerIcon className="w-6 sm:w-8 h-6 sm:h-8 text-orange-500" />
+              <h2 className="text-lg sm:text-xl font-bold text-gray-900">
+                Beta Version
+              </h2>
             </div>
-            <p className="text-sm text-gray-600 mb-4">
-              This AI assistant is currently in beta. Response times may vary as
-              we optimize our systems.
+
+            {/* Beta Message */}
+            <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6">
+              This AI assistant is currently in beta testing. Response times may
+              be slower than expected as we optimize our systems.
             </p>
-            <div className="bg-orange-50 p-3 rounded-lg mb-4">
-              <p className="text-xs text-gray-600">
-                <strong className="text-orange-500">Note:</strong> This is not a
-                conversational chatbot. It answers specific questions about the
-                provided article.
+
+            {/* Divider */}
+            <div className="h-px bg-gray-200 my-4 sm:my-6" />
+
+            {/* Instructions Section */}
+            <div className="mb-4 sm:mb-6">
+              <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4">
+                How to Use SAai
+              </h3>
+              <ul className="space-y-3 sm:space-y-4">
+                <li className="flex gap-2 sm:gap-3">
+                  <span className="w-5 h-5 sm:w-6 sm:h-6 bg-orange-100 rounded-full flex items-center justify-center text-orange-500 flex-shrink-0 text-sm">
+                    1
+                  </span>
+                  <p className="text-sm sm:text-base text-gray-600">
+                    Paste your article content in the text box provided
+                  </p>
+                </li>
+                <li className="flex gap-2 sm:gap-3">
+                  <span className="w-5 h-5 sm:w-6 sm:h-6 bg-orange-100 rounded-full flex items-center justify-center text-orange-500 flex-shrink-0 text-sm">
+                    2
+                  </span>
+                  <p className="text-sm sm:text-base text-gray-600">
+                    Ask specific questions about the article content
+                  </p>
+                </li>
+                <li className="flex gap-2 sm:gap-3">
+                  <span className="w-5 h-5 sm:w-6 sm:h-6 bg-orange-100 rounded-full flex items-center justify-center text-orange-500 flex-shrink-0 text-sm">
+                    3
+                  </span>
+                  <p className="text-sm sm:text-base text-gray-600">
+                    Get AI-powered answers based on the provided content
+                  </p>
+                </li>
+              </ul>
+            </div>
+
+            {/* Important Note */}
+            <div className="bg-orange-50 p-3 sm:p-4 rounded-xl mb-4 sm:mb-6">
+              <p className="text-xs sm:text-sm text-gray-600">
+                <span className="font-medium text-orange-500">Note:</span> This
+                is not a conversational chatbot. It can only answer questions
+                about the article content you provide. Each question-answer pair
+                is independent.
               </p>
             </div>
+
+            {/* Action Button */}
             <button
               onClick={() => setShowBetaPopup(false)}
-              className="w-full bg-orange-500 text-white py-2 rounded-lg hover:bg-orange-600 transition"
+              className="w-full bg-orange-500 text-white py-2.5 sm:py-3 rounded-xl hover:bg-orange-600 transition-colors font-medium text-sm sm:text-base"
             >
               Got it, continue
             </button>
@@ -97,99 +143,116 @@ export default function AIChat() {
         </div>
       )}
 
-      {/* Content */}
       <div className="flex flex-col lg:flex-row h-screen">
-        {/* Sidebar */}
-        <aside className="bg-white shadow-lg lg:w-96 p-6 flex-shrink-0">
-          <div className="mb-8">
-            <div className="flex items-center mb-4">
-              <div className="bg-orange-100 p-2 rounded-lg">
+        {/* Enhanced Sidebar */}
+        <div className="w-full lg:w-96 bg-white shadow-lg z-10">
+          <div className="p-6 h-full flex flex-col">
+            <div className="flex items-center gap-3 mb-8">
+              <div className="p-2 bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg">
                 <SparklesIcon className="w-6 h-6 text-orange-500" />
               </div>
-              <h1 className="ml-3 text-xl font-bold text-gray-800">SAai</h1>
+              <h1 className="text-xl font-bold text-gray-900">SAai</h1>
             </div>
-            <textarea
-              placeholder="Paste your article content here..."
-              value={articleContent}
-              onChange={(e) => setArticleContent(e.target.value)}
-              className="w-full h-64 p-4 bg-gray-50 border border-gray-200 rounded-lg resize-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
-            />
-          </div>
-        </aside>
 
-        {/* Chat Section */}
-        <main className="flex-1 flex flex-col bg-gray-50">
-          {/* Messages */}
-          <div className="flex-1 overflow-y-auto p-6">
+            <div className="flex-1 space-y-6">
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Article Content
+                </label>
+                <div className="relative">
+                  <textarea
+                    placeholder="Paste your article content here..."
+                    value={articleContent}
+                    onChange={(e) => setArticleContent(e.target.value)}
+                    className="w-full h-[calc(100vh-280px)] p-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 resize-none text-gray-700 placeholder-gray-400"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Enhanced Chat Area */}
+        <div className="flex-1 flex flex-col bg-gray-50">
+          <div className="flex-1 p-6 overflow-y-auto">
             {error && (
-              <div className="p-4 bg-red-50 text-red-600 rounded-lg mb-4">
+              <div className="mb-4 p-4 bg-red-50 border border-red-100 rounded-xl text-red-600 text-sm">
                 {error}
               </div>
             )}
 
-            {conversation.map((chat, index) => (
-              <div
-                key={index}
-                className={`flex ${
-                  chat.sender === "user" ? "justify-end" : "justify-start"
-                }`}
-              >
+            <div className="space-y-6">
+              {conversation.map((chat, index) => (
                 <div
-                  className={`max-w-lg p-4 rounded-lg shadow-md ${
-                    chat.sender === "user"
-                      ? "bg-orange-500 text-white"
-                      : "bg-white text-gray-800"
+                  key={index}
+                  className={`flex ${
+                    chat.sender === "user" ? "justify-end" : "justify-start"
                   }`}
                 >
-                  <ReactMarkdown>{chat.message}</ReactMarkdown>
-                </div>
-              </div>
-            ))}
-
-            {isTyping && (
-              <div className="flex justify-start">
-                <div className="bg-white shadow-md p-4 rounded-lg max-w-lg">
-                  <div className="flex space-x-2">
-                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-pulse"></div>
-                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-pulse"></div>
-                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-pulse"></div>
+                  <div
+                    className={`max-w-[80%] p-4 rounded-2xl shadow-sm ${
+                      chat.sender === "user"
+                        ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white"
+                        : "bg-white"
+                    }`}
+                  >
+                    <ReactMarkdown
+                      className={`prose ${
+                        chat.sender === "user" ? "prose-invert" : "prose-gray"
+                      } max-w-none text-sm`}
+                    >
+                      {chat.message}
+                    </ReactMarkdown>
                   </div>
                 </div>
-              </div>
-            )}
-
-            <div ref={messagesEndRef}></div>
+              ))}
+              {isTyping && (
+                <div className="flex justify-start">
+                  <div className="bg-white shadow-sm rounded-2xl p-4 max-w-[80%]">
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-pulse"></div>
+                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-pulse"></div>
+                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-pulse"></div>
+                    </div>
+                  </div>
+                </div>
+              )}
+              <div ref={messagesEndRef} />
+            </div>
           </div>
 
-          {/* Input */}
-          <div className="p-4 bg-white border-t border-gray-200">
-            <div className="flex items-center">
-              <textarea
-                placeholder="Ask a question about the article..."
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" && !e.shiftKey) {
-                    e.preventDefault();
-                    handleSendMessage();
-                  }
-                }}
-                className="flex-1 px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg resize-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
-              />
+          {/* Enhanced Input Area */}
+          <div className="p-6 bg-white border-t border-gray-100">
+            <div className="flex gap-4 max-w-4xl mx-auto">
+              <div className="flex-1">
+                <textarea
+                  placeholder="Ask a question about the article..."
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && !e.shiftKey) {
+                      e.preventDefault();
+                      handleSendMessage();
+                    }
+                  }}
+                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 resize-none text-gray-700 placeholder-gray-400"
+                  rows="2"
+                />
+              </div>
               <button
                 onClick={handleSendMessage}
                 disabled={loading || !message.trim()}
-                className="ml-4 px-4 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition"
+                className="flex-shrink-0 inline-flex items-center justify-center w-12 h-12 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-xl hover:from-orange-600 hover:to-orange-700 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm hover:shadow transition-all"
               >
                 {loading ? (
-                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
                 ) : (
                   <ArrowUpIcon className="w-5 h-5" />
                 )}
               </button>
             </div>
           </div>
-        </main>
+        </div>
       </div>
     </div>
   );
