@@ -66,75 +66,7 @@ export default function AIChat() {
     }
   };
 
-"use client";
-
-import { useState, useRef, useEffect } from "react";
-import {
-  ArrowUpIcon,
-  SparklesIcon,
-  XMarkIcon,
-  BeakerIcon,
-} from "@heroicons/react/24/outline";
-import ReactMarkdown from "react-markdown";
-
-export default function AIChat() {
-  const [articleContent, setArticleContent] = useState("");
-  const [message, setMessage] = useState("");
-  const [error, setError] = useState("");
-  const [conversation, setConversation] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [isTyping, setIsTyping] = useState(false);
-  const [showBetaPopup, setShowBetaPopup] = useState(true);
-  const messagesEndRef = useRef(null);
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  useEffect(() => {
-    scrollToBottom();
-  }, [conversation, isTyping]);
-
-  const handleSendMessage = async () => {
-    if (!articleContent || !message) {
-      setError("Please provide both article content and message");
-      return;
-    }
-
-    setError("");
-    setLoading(true);
-    setConversation((prev) => [...prev, { sender: "user", message }]);
-    setMessage("");
-    setIsTyping(true);
-
-    try {
-      const response = await fetch(
-        "https://python-backend-91zp.onrender.com/api/interact",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ article_content: articleContent, message }),
-        }
-      );
-
-      const data = await response.json();
-      if (!response.ok)
-        throw new Error(data.detail || "Failed to fetch response");
-
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      setConversation((prev) => [
-        ...prev,
-        { sender: "ai", message: data.reply },
-      ]);
-    } catch (err) {
-      setError(err.message || "An unknown error occurred");
-    } finally {
-      setLoading(false);
-      setIsTyping(false);
-    }
-  };
-
-  return (
+   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-50 flex flex-col">
       {/* Beta Version Popup */}
       {showBetaPopup && (
@@ -263,5 +195,4 @@ export default function AIChat() {
   );
 }
 
-}
 
