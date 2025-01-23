@@ -372,7 +372,7 @@ export default function Home() {
         <header className="bg-gradient-to-r from-orange-400 via-pink-400 to-orange-500 text-white py-4 sticky top-0 z-50 backdrop-blur-sm shadow-lg border-b border-white/10">
           <div className="container mx-auto flex justify-between items-center px-4 sm:px-6 lg:px-8">
             {/* Logo Section */}
-            <Link href="/">
+            <Link href="/about">
               <div className="flex items-center space-x-3 group">
                 <div className="w-12 h-12 bg-white/90 backdrop-blur-sm rounded-xl flex items-center justify-center shadow-lg transform transition-all duration-300 group-hover:scale-105 group-hover:rotate-3">
                   <span className="text-transparent bg-clip-text bg-gradient-to-br from-orange-500 to-pink-500 text-2xl font-black">
@@ -1250,6 +1250,15 @@ export default function Home() {
                 <h2 className="text-3xl font-black bg-gradient-to-r from-orange-400 to-pink-500 bg-clip-text text-transparent">
                   simpleArticle
                 </h2>
+                <br />
+                <Link
+                  href="/about"
+                  className="px-4 py-2 text-sm bg-white/90 backdrop-blur-sm text-orange-500 
+                 rounded-lg font-medium shadow-sm hover:bg-orange-50 
+                 transition-all duration-300 border border-orange-200"
+                >
+                  About Us
+                </Link>
                 <p className="text-gray-400 max-w-sm">
                   Building a better future, one article at a time. Join our
                   community of knowledge seekers.
