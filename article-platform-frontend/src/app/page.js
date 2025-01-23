@@ -345,6 +345,43 @@ export default function Home() {
               </div>
             </Link>
 
+            <div className="relative">
+              <Link href="/notification">
+                <button
+                  className="relative bg-white/10 hover:bg-black/20 px-4 py-2 rounded-full flex items-center"
+                  aria-label="Notifications"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6 text-black"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14V9a6 6 0 10-12 0v5c0 .217-.105.432-.293.568L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                    />
+                  </svg>
+                  {/* Active status dot */}
+                  <span className="absolute bottom-1 right-1 h-2.5 w-2.5 rounded-full bg-emerald-500 ring-2 ring-white shadow-lg shadow-emerald-500/50"></span>
+                  {loadingNotifications ? (
+                    <span className="absolute -top-2 -right-2 bg-blue-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                      ...
+                    </span>
+                  ) : (
+                    unreadCount > 0 && (
+                      <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                        {unreadCount}
+                      </span>
+                    )
+                  )}
+                </button>
+              </Link>
+            </div>
+
             {/* Hamburger Menu */}
             <button
               className={`relative block sm:hidden focus:outline-none z-50 ${
