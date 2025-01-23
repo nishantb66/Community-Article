@@ -795,7 +795,7 @@ export default function Home() {
                     onClick={() => setIsCollaboratePopupOpen(true)}
                     className="px-8 py-3 bg-orange-500 text-white font-medium rounded-xl hover:bg-orange-600 shadow-sm hover:shadow-md transition-all duration-200"
                   >
-                    Collaborate
+                    Collaborate with Us
                   </button>
                 </div>
 
