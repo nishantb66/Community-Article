@@ -380,7 +380,7 @@ export default function Home() {
                   </span>
                 </div>
                 <h1 className="text-xl sm:text-2xl font-black tracking-tight">
-                  Simple<span className="text-orange-100">Article</span>
+                  simple<span className="text-orange-100">Article</span>
                 </h1>
               </div>
             </Link>
