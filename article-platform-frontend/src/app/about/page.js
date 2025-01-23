@@ -151,19 +151,118 @@ export default function About() {
 
       {/* Privacy Policy Modal */}
       {showPrivacy && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl p-8 max-w-2xl w-full max-h-[80vh] overflow-y-auto">
-            <h2 className="text-2xl font-bold mb-4">Privacy Policy</h2>
-            <div className="prose prose-orange">
-              <p></p>
-              {/* Add privacy policy content */}
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-2 sm:p-4">
+          <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-8 w-full max-w-3xl max-h-[90vh] sm:max-h-[80vh] overflow-y-auto">
+            {/* Header with close button */}
+            <div className="sticky top-0 bg-white pb-4 border-b">
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex items-center gap-2">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6 sm:h-8 sm:w-8 text-orange-500"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                    />
+                  </svg>
+                  <h2 className="text-xl sm:text-2xl font-bold">
+                    Privacy Policy
+                  </h2>
+                </div>
+                <button
+                  onClick={() => setShowPrivacy(false)}
+                  className="p-2 hover:bg-gray-100 rounded-full"
+                  aria-label="Close privacy policy"
+                >
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </button>
+              </div>
             </div>
-            <button
-              onClick={() => setShowPrivacy(false)}
-              className="mt-6 px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors"
-            >
-              Close
-            </button>
+
+            {/* Content */}
+            <div className="prose prose-orange max-w-none mt-4 sm:mt-6 space-y-6">
+              <section>
+                <h3 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-3">
+                  Data Security & Protection
+                </h3>
+                <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
+                  At SimpleArticle, we prioritize the security and
+                  confidentiality of your personal information. Our platform
+                  implements robust security measures, including:
+                </p>
+                <ul className="mt-2 sm:mt-3 space-y-2 text-sm sm:text-base text-gray-600">
+                  <li className="flex items-center gap-2">
+                    <span className="text-orange-500">•</span>
+                    Advanced authentication protocols with multi-factor
+                    verification
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="text-orange-500">•</span>
+                    Secure credential validation and storage
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="text-orange-500">•</span>
+                    Regular security audits and compliance checks
+                  </li>
+                </ul>
+              </section>
+
+              <section>
+                <h3 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-3">
+                  Data Collection & Usage
+                </h3>
+                <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
+                  We collect and process your information solely for the purpose
+                  of providing and improving our services. Your data is handled
+                  with utmost care and in accordance with applicable data
+                  protection regulations.
+                </p>
+              </section>
+
+              <section>
+                <h3 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-3">
+                  User Rights
+                </h3>
+                <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
+                  You maintain full control over your personal information. You
+                  can request access, modification, or deletion of your data at
+                  any time through your account settings or by contacting our
+                  support team.
+                </p>
+              </section>
+            </div>
+
+            {/* Footer */}
+            <div className="mt-6 sm:mt-8 pt-4 border-t flex flex-col sm:flex-row justify-between items-center gap-4">
+              <p className="text-xs sm:text-sm text-gray-500">
+                Last updated: January 2025
+              </p>
+              <button
+                onClick={() => setShowPrivacy(false)}
+                className="w-full sm:w-auto px-6 py-2.5 bg-orange-500 text-white rounded-lg hover:bg-orange-600 
+                   active:bg-orange-700 transition-colors duration-300 font-medium text-sm sm:text-base"
+              >
+                I Understand
+              </button>
+            </div>
           </div>
         </div>
       )}
