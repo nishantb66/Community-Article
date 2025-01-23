@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import dynamic from "next/dynamic";
 
 const QuillEditor = dynamic(() => import("../../components/QuillEditor"), {
@@ -10,6 +10,8 @@ const QuillEditor = dynamic(() => import("../../components/QuillEditor"), {
 const AdminPage = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [notificationTitle, setNotificationTitle] = useState("");
+  const [notificationMessage, setNotificationMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [notification, setNotification] = useState("");
   const [authPopup, setAuthPopup] = useState(true); // For authentication popup
@@ -46,7 +48,7 @@ const AdminPage = () => {
     }
   };
 
-  const handleSubmit = async () => {
+  const handleStorySubmit = async () => {
     if (!title || !content) {
       alert("All fields are required.");
       return;
@@ -77,6 +79,45 @@ const AdminPage = () => {
       }
     } catch (error) {
       console.error("Error publishing story:", error);
+      alert("An error occurred. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleNotificationSubmit = async () => {
+    if (!notificationTitle || !notificationMessage) {
+      alert("Both title and message are required.");
+      return;
+    }
+
+    const notificationData = {
+      title: notificationTitle,
+      message: notificationMessage,
+    };
+
+    setLoading(true);
+
+    try {
+      const response = await fetch(
+        "https://community-article-backend.onrender.com/api/notifications/send",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(notificationData),
+        }
+      );
+
+      if (response.ok) {
+        setNotification("Notification sent successfully!");
+        setTimeout(() => setNotification(""), 3000); // Clear notification after 3 seconds
+        setNotificationTitle("");
+        setNotificationMessage("");
+      } else {
+        alert("Failed to send notification.");
+      }
+    } catch (error) {
+      console.error("Error sending notification:", error);
       alert("An error occurred. Please try again.");
     } finally {
       setLoading(false);
@@ -137,52 +178,107 @@ const AdminPage = () => {
 
           <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-8">
             <h1 className="text-4xl font-bold text-center text-gray-800 mb-8">
-              Admin - Publish a Story
+              Admin Panel
             </h1>
 
-            {/* Title Input */}
+            {/* Story Section */}
             <div>
-              <label
-                htmlFor="title"
-                className="block text-lg font-semibold text-gray-700"
-              >
-                Title
-              </label>
-              <input
-                id="title"
-                type="text"
-                placeholder="Enter story title"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                className="mt-2 w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
-              />
-            </div>
-
-            {/* Content Editor */}
-            <div className="mt-6">
-              <label
-                htmlFor="content"
-                className="block text-lg font-semibold text-gray-700"
-              >
-                Content
-              </label>
-              <div className="mt-2">
-                <QuillEditor setContent={setContent} />
+              <h2 className="text-2xl font-semibold mb-4">Publish a Story</h2>
+              <div className="mb-4">
+                <label
+                  htmlFor="storyTitle"
+                  className="block text-lg font-semibold text-gray-700"
+                >
+                  Title
+                </label>
+                <input
+                  id="storyTitle"
+                  type="text"
+                  placeholder="Enter story title"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  className="mt-2 w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+                />
               </div>
+
+              <div className="mb-4">
+                <label
+                  htmlFor="storyContent"
+                  className="block text-lg font-semibold text-gray-700"
+                >
+                  Content
+                </label>
+                <div className="mt-2">
+                  <QuillEditor setContent={setContent} />
+                </div>
+              </div>
+
+              <button
+                onClick={handleStorySubmit}
+                disabled={loading}
+                className={`mt-4 w-full py-3 rounded-lg text-white font-semibold ${
+                  loading
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-orange-500 hover:bg-orange-600"
+                } transition`}
+              >
+                {loading ? "Publishing..." : "Publish Story"}
+              </button>
             </div>
 
-            {/* Publish Button */}
-            <button
-              onClick={handleSubmit}
-              disabled={loading}
-              className={`mt-6 w-full py-3 rounded-lg text-white font-semibold ${
-                loading
-                  ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-orange-500 hover:bg-orange-600"
-              } transition`}
-            >
-              {loading ? "Publishing..." : "Publish Story"}
-            </button>
+            <hr className="my-8" />
+
+            {/* Notification Section */}
+            <div>
+              <h2 className="text-2xl font-semibold mb-4">
+                Send a Notification
+              </h2>
+              <div className="mb-4">
+                <label
+                  htmlFor="notificationTitle"
+                  className="block text-lg font-semibold text-gray-700"
+                >
+                  Notification Title
+                </label>
+                <input
+                  id="notificationTitle"
+                  type="text"
+                  placeholder="Enter notification title"
+                  value={notificationTitle}
+                  onChange={(e) => setNotificationTitle(e.target.value)}
+                  className="mt-2 w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+                />
+              </div>
+
+              <div className="mb-4">
+                <label
+                  htmlFor="notificationMessage"
+                  className="block text-lg font-semibold text-gray-700"
+                >
+                  Notification Message
+                </label>
+                <textarea
+                  id="notificationMessage"
+                  placeholder="Enter notification message"
+                  value={notificationMessage}
+                  onChange={(e) => setNotificationMessage(e.target.value)}
+                  className="mt-2 w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400 resize-none"
+                  rows={4}
+                />
+              </div>
+
+              <button
+                onClick={handleNotificationSubmit}
+                disabled={loading}
+                className={`mt-4 w-full py-3 rounded-lg text-white font-semibold ${
+                  loading
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-blue-500 hover:bg-blue-600"
+                } transition`}
+              >
+                {loading ? "Sending..." : "Send Notification"}
+              </button>
+            </div>
           </div>
         </>
       )}
