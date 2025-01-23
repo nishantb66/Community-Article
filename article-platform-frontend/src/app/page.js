@@ -38,6 +38,46 @@ export default function Home() {
   };
   const [showWelcomePopup, setShowWelcomePopup] = useState(false);
   const [messageType, setMessageType] = useState(null);
+  const [unreadCount, setUnreadCount] = useState(0); // Add unreadCount state
+  const [loadingNotifications, setLoadingNotifications] = useState(false); // Loading state for notifications
+
+  const fetchUnreadCount = async () => {
+    setLoadingNotifications(true);
+    try {
+      const token = localStorage.getItem("token"); // Fetch token from localStorage
+      if (!token) {
+        console.warn("No token found. Unable to fetch notifications.");
+        return;
+      }
+
+      const response = await fetch(
+        "http://localhost:5000/api/notifications/unread",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        setUnreadCount(data.unreadCount || 0); // Update unreadCount state
+      } else {
+        console.error("Failed to fetch unread count");
+      }
+    } catch (error) {
+      console.error("Error fetching unread notifications count:", error);
+    } finally {
+      setLoadingNotifications(false);
+    }
+  };
+
+  // Fetch unreadCount on component mount
+  useEffect(() => {
+    fetchUnreadCount();
+  }, []);
 
   useEffect(() => {
     const sessionCheck = sessionStorage.getItem("pageLoaded");
@@ -615,6 +655,7 @@ export default function Home() {
                           </svg>
                           Proposals & Networking
                         </Link>
+                            
                         <Link
                           href="/ai-chat"
                           className="flex items-center px-4 py-2.5 text-gray-700 hover:bg-orange-50 transition-colors duration-300"
@@ -632,7 +673,12 @@ export default function Home() {
                               d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"
                             />
                           </svg>
-                          SimpleArticle AI
+                          <span className="flex items-center gap-2">
+                            SimpleArticle AI
+                            <span className="px-1.5 py-0.5 text-[10px] font-semibold bg-orange-100 text-orange-600 rounded-full animate-pulse">
+                              NEW
+                            </span>
+                          </span>
                         </Link>
 
                         <button
