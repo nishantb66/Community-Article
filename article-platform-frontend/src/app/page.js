@@ -955,23 +955,84 @@ export default function Home() {
             </h2>
             
             <Link href="/categorise">
-              <button className="px-6 py-3 bg-orange-500 text-white rounded-lg font-medium hover:bg-orange-600 transition-colors duration-200 shadow-md hover:shadow-lg inline-flex items-center gap-2">
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
-                  />
-                </svg>
-                Summarize✨ 
-              </button>
+              <div className="relative inline-block">
+                <button className="group px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg font-medium shadow-md inline-flex items-center gap-2">
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M13 10V3L4 14h7v7l9-11h-7z"
+                    />
+                  </svg>
+                  <span>Summarize and Classify using AI</span>
+                </button>
+                <div className="absolute -top-3 -right-2 px-2 py-0.5 bg-white rounded-full shadow-sm border border-orange-100">
+                  <span className="text-xs font-semibold bg-gradient-to-r from-orange-500 to-pink-500 bg-clip-text text-transparent">
+                    New ✨
+                  </span>
+                </div>
+              </div>
             </Link>
+
+            <br />
+            <br />
+
+            <div className="relative inline-block">
+              <Link
+                href={user ? "/create" : ""}
+                onClick={async (e) => {
+                  if (!user) {
+                    e.preventDefault();
+                    setNotification(
+                      "Please log in or register to write an article."
+                    );
+                    setNotificationType("error");
+                    setTimeout(() => setNotification(""), 3000);
+                  } else {
+                    setIsLoading(true);
+                    // Loading state will be automatically handled by Next.js route change
+                  }
+                }}
+                className={`w-full sm:w-auto px-6 py-2.5 text-center bg-white/10 backdrop-blur-sm text-gray-800 rounded-xl font-semibold shadow-lg hover:bg-white/20 transition-all duration-300 text-sm sm:text-base flex items-center justify-center space-x-2 ${
+                  isLoading ? "cursor-not-allowed opacity-75" : ""
+                }`}
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <>
+                    <svg
+                      className="animate-spin -ml-1 mr-2 h-4 w-4 text-gray-800"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      />
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      />
+                    </svg>
+                    <span>Loading...</span>
+                  </>
+                ) : (
+                  "Write and Publish✍🏻"
+                )}
+              </Link>
+            </div>
 
             <br />  
             <br />
