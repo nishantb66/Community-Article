@@ -993,23 +993,23 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {loading && page === 1
               ? Array.from({ length: 6 }).map((_, index) => (
                   <div
                     key={index}
-                    className="bg-white rounded-2xl shadow-lg overflow-hidden"
+                    className="bg-gray-100 rounded-lg p-6 border border-gray-200"
                   >
-                    <div className="p-6 space-y-4">
-                      <div className="h-6 bg-gray-100 rounded-full w-32" />
+                    <div className="space-y-4">
+                      <div className="h-6 bg-gray-300 rounded-full w-32" />
                       <div className="space-y-3">
-                        <div className="h-6 bg-gray-100 rounded w-3/4" />
-                        <div className="h-4 bg-gray-100 rounded" />
-                        <div className="h-4 bg-gray-100 rounded w-5/6" />
+                        <div className="h-6 bg-gray-300 rounded w-3/4" />
+                        <div className="h-4 bg-gray-300 rounded" />
+                        <div className="h-4 bg-gray-300 rounded w-5/6" />
                       </div>
-                      <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                        <div className="w-24 h-8 bg-gray-100 rounded-full" />
-                        <div className="w-24 h-8 bg-gray-100 rounded-full" />
+                      <div className="flex items-center justify-between pt-4 border-t border-gray-300">
+                        <div className="w-24 h-8 bg-gray-300 rounded-full" />
+                        <div className="w-24 h-8 bg-gray-300 rounded-full" />
                       </div>
                     </div>
                   </div>
@@ -1017,83 +1017,80 @@ export default function Home() {
               : (searchQuery ? filteredArticles : articles).map((article) => (
                   <div
                     key={article._id}
-                    className="bg-white rounded-2xl shadow-lg hover:shadow-2xl overflow-hidden group relative"
+                    className="bg-white rounded-lg p-6 border border-gray-300"
                   >
+                    {/* Loading Overlay */}
                     {clickedArticleId === article._id && (
-                      <div className="absolute inset-0 bg-white/80 backdrop-blur-sm z-10 flex items-center justify-center">
-                        <div className="w-8 h-8 border-3 border-orange-500 border-t-transparent rounded-full" />
+                      <div className="absolute inset-0 bg-gray-100/80 z-10 flex items-center justify-center">
+                        <div className="w-8 h-8 border-3 border-orange-500 border-t-transparent rounded-full"></div>
                       </div>
                     )}
-
-                    <div className="p-6 space-y-4">
+          
+                    {/* Article Content */}
+                    <div className="space-y-4">
                       <div className="flex items-center justify-between">
-                        <span className="text-sm font-medium text-orange-500 bg-orange-50 px-3 py-1 rounded-full">
-                          {new Date(article.createdAt).toLocaleDateString(
-                            "en-US",
-                            {
-                              month: "short",
-                              day: "numeric",
-                              year: "numeric",
-                            }
-                          )}
+                        <span className="text-sm font-medium text-orange-600 bg-orange-100 px-3 py-1 rounded">
+                          {new Date(article.createdAt).toLocaleDateString("en-US", {
+                            month: "short",
+                            day: "numeric",
+                            year: "numeric",
+                          })}
                         </span>
                         <div className="flex items-center space-x-3">
-                          <div className="w-8 h-8 rounded-full bg-gradient-to-r from-orange-400 to-pink-400 flex items-center justify-center">
-                            <span className="text-white font-medium text-sm">
+                          <div className="w-8 h-8 rounded-full bg-orange-500 text-white flex items-center justify-center">
+                            <span className="text-sm font-semibold">
                               {article.author.charAt(0)}
                             </span>
                           </div>
-                          <span className="text-sm text-gray-600 font-medium">
+                          <span className="text-sm text-gray-700 font-medium">
                             {article.author}
                           </span>
                         </div>
                       </div>
-
+          
                       <h2
                         onClick={() => {
                           setClickedArticleId(article._id);
                           router.push(`/article/${article._id}`);
                         }}
-                        className="text-xl font-bold text-gray-900 cursor-pointer hover:text-orange-500"
+                        className="text-lg font-bold text-gray-800 cursor-pointer"
                       >
                         {article.title}
                       </h2>
-
+          
                       <div
-                        className="prose prose-sm text-gray-600 line-clamp-3"
+                        className="text-sm text-gray-600 line-clamp-3"
                         dangerouslySetInnerHTML={{
                           __html: article.content,
                         }}
                       />
-
-                      <div className="flex items-center justify-between pt-4 border-t">
+          
+                      <div className="flex items-center justify-between pt-4 border-t border-gray-300">
                         <button
                           onClick={() => {
                             setClickedArticleId(article._id);
                             router.push(`/article/${article._id}`);
                           }}
-                          className="text-gray-600 hover:text-orange-500"
+                          className="text-sm text-orange-600 hover:underline"
                         >
                           Read More
                         </button>
-
+          
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
                             if (!user) {
-                              setNotification(
-                                "Please log in to bookmark articles"
-                              );
+                              setNotification("Please log in to bookmark articles");
                               setNotificationType("error");
                               setTimeout(() => setNotification(""), 3000);
                               return;
                             }
                             handleBookmark(article._id);
                           }}
-                          className="inline-flex items-center px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium rounded-full"
+                          className="px-4 py-2 text-sm font-medium text-white bg-orange-600 rounded-lg"
                         >
                           <svg
-                            className="w-4 h-4 mr-1.5"
+                            className="w-4 h-4 mr-1.5 inline"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -1112,6 +1109,7 @@ export default function Home() {
                   </div>
                 ))}
           </div>
+
 
           {/* Load More Button */}
           {filteredArticles.length < articles.length && (
