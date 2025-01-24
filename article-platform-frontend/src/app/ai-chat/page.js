@@ -82,7 +82,7 @@ export default function AIChat() {
 
             {/* Beta Message */}
             <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6">
-              This AI assistant is currently in beta testing. Response times may
+              This AI assistant is currently in beta testing and have rate limits. Response time may
               be slower than expected as we optimize our systems.
             </p>
 
