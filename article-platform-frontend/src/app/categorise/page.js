@@ -82,16 +82,8 @@ export default function Articles() {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gradient-to-b from-white to-orange-50">
         <div className="relative">
-          {/* Main spinner */}
-          <div className="w-16 h-16 border-4 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
+          
 
-          {/* Outer ring */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 border-2 border-orange-300 rounded-full animate-ping opacity-75"></div>
-
-          {/* AI Icon */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-2xl animate-bounce">
-            🤖
-          </div>
         </div>
 
         <div className="mt-8 text-center">
