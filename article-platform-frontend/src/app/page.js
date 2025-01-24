@@ -724,37 +724,30 @@ export default function Home() {
           </div>
         </header>
 
-        <section
-          className={`relative min-h-[70vh] flex items-center bg-gradient-to-br from-gray-50 via-white to-orange-50 ${
-            mobileMenuOpen ? "mt-[320px] sm:mt-0" : ""
-          } transition-all duration-300`}
-        >
+        <section className={`relative min-h-[70vh] flex items-center bg-gradient-to-br from-gray-100 to-white ${mobileMenuOpen ? "mt-[320px] sm:mt-0" : ""} transition-all duration-300`}>
           {/* Subtle Grid Background */}
-          <div className="absolute inset-0 bg-grid-pattern opacity-[0.03]"></div>
-
-          <div className="relative z-10 container mx-auto flex flex-col-reverse lg:flex-row items-center px-12 sm:px-16 lg:px-24 py-12 sm:py-16 lg:py-20">
+          <div className="absolute inset-0 bg-gray-50"></div>
+        
+          <div className="relative z-10 container mx-auto flex flex-col lg:flex-row items-center px-6 sm:px-12 lg:px-20 py-12 sm:py-16 lg:py-20">
             {/* Text Content */}
-            <div className="lg:w-1/2 max-w-4xl mx-auto lg:mx-0 lg:mr-8 items-center">
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight">
-                Discover a Variety of
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-orange-500 ml-2">
-                  Stories
-                </span>
+            <div className="lg:w-1/2 max-w-3xl mx-auto lg:mx-0 lg:mr-8 text-center lg:text-left">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-6">
+                Discover a Variety of 
+                <span className="text-orange-600 ml-2">Stories</span>
               </h1>
-
-              <p className="text-base sm:text-lg text-gray-600 mb-12 max-w-2xl">
-                Explore articles and stories written by the community
+              <p className="text-base sm:text-lg text-gray-700 mb-10">
+                Explore articles and stories written by the community.
               </p>
-
+        
               {/* Search Interface */}
               <div className="space-y-6">
                 <div className="relative">
                   {searchQuery.length > 0 && (
-                    <div className="absolute -top-8 left-0 right-0 text-sm text-gray-500">
-                      📝 Load all articles and then apply search
+                    <div className="absolute -top-6 left-0 text-sm text-gray-500">
+                      Apply search after loading articles
                     </div>
                   )}
-
+        
                   <div className="relative flex items-center">
                     <input
                       type="text"
@@ -764,10 +757,10 @@ export default function Home() {
                         handleSearch(e.target.value);
                       }}
                       placeholder="Search articles..."
-                      className="w-full px-6 py-4 bg-white border border-gray-200 rounded-xl shadow-sm focus:shadow-md focus:border-orange-500 outline-none transition-all duration-200 text-gray-800 placeholder-gray-400"
+                      className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-gray-800 placeholder-gray-400"
                     />
                     <svg
-                      className="w-5 h-5 absolute right-4 text-gray-400"
+                      className="w-5 h-5 absolute right-3 text-gray-500"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -781,30 +774,29 @@ export default function Home() {
                     </svg>
                   </div>
                 </div>
-
+        
                 {/* Action Items */}
-                <div className="flex flex-col sm:flex-row items-center gap-6 pt-4">
+                <div className="flex flex-wrap justify-center lg:justify-start items-center gap-4 pt-4">
                   <Link
                     href="/deleteRequest"
-                    className="text-sm text-gray-600 hover:text-orange-600 transition-colors"
+                    className="text-sm text-gray-600 hover:text-orange-600 transition"
                   >
                     Request article removal
                   </Link>
-
                   <button
                     onClick={() => setIsCollaboratePopupOpen(true)}
-                    className="px-8 py-3 bg-orange-500 text-white font-medium rounded-xl hover:bg-orange-600 shadow-sm hover:shadow-md transition-all duration-200"
+                    className="px-6 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition"
                   >
-                    Collaborate with Us
+                    Collaborate
                   </button>
                 </div>
-
+        
                 {/* User Stories Button */}
                 {user && (
                   <div className="pt-6">
                     <button
                       onClick={() => router.push("/stories")}
-                      className="px-8 py-3 bg-gray-900 text-white font-medium rounded-xl hover:bg-gray-800 shadow-sm hover:shadow-md transition-all duration-200"
+                      className="px-6 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition"
                     >
                       Stories by SimpleArticles
                     </button>
@@ -812,23 +804,20 @@ export default function Home() {
                 )}
               </div>
             </div>
-
+        
             {/* Image Section */}
-            <div className="lg:w-1/2 flex justify-center items-center relative overflow-hidden">
-              {/* Image with Blending */}
-              <div
-                className="absolute inset-0 bg-gradient-to-r from-transparent via-orange-50 to-white rounded-bl-[30%] rounded-tl-[30%] rounded-tr-[30%] rounded-br-[30%] lg:rounded-bl-[60%] lg:rounded-br-[60%] lg:rounded-tl-[60%] lg:rounded-tr-[60%]"
-                style={{ zIndex: -1 }}
-              ></div>
+            <div className="lg:w-1/2 flex justify-center items-center relative">
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gray-100 to-white rounded-lg"></div>
               <img
                 src="/bg.jpeg"
                 alt="Hero Background"
-                className="max-w-full lg:max-w-[700px] w-auto h-auto object-cover rounded-bl-[30%] rounded-tl-[30%] rounded-tr-[30%] rounded-br-[30%] lg:rounded-bl-[60%] lg:rounded-br-[60%] lg:rounded-tl-[60%] lg:rounded-tr-[60%]"
-                style={{ transform: "scale(1.05)" }}
+                className="max-w-full w-auto h-auto object-cover rounded-lg"
+                style={{ transform: "scale(1.02)" }}
               />
             </div>
           </div>
         </section>
+
 
         {/* Collaborate Popup */}
         {isCollaboratePopupOpen && (
