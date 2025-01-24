@@ -1012,15 +1012,15 @@ export default function Home() {
                     className="bg-white rounded-2xl shadow-lg overflow-hidden"
                   >
                     <div className="p-6 space-y-4">
-                      <div className="h-6 bg-gray-100 rounded-full w-32 animate-pulse" />
+                      <div className="h-6 bg-gray-100 rounded-full w-32" />
                       <div className="space-y-3">
-                        <div className="h-6 bg-gray-100 rounded w-3/4 animate-pulse" />
-                        <div className="h-4 bg-gray-100 rounded animate-pulse" />
-                        <div className="h-4 bg-gray-100 rounded w-5/6 animate-pulse" />
+                        <div className="h-6 bg-gray-100 rounded w-3/4" />
+                        <div className="h-4 bg-gray-100 rounded" />
+                        <div className="h-4 bg-gray-100 rounded w-5/6" />
                       </div>
                       <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                        <div className="w-24 h-8 bg-gray-100 rounded-full animate-pulse" />
-                        <div className="w-24 h-8 bg-gray-100 rounded-full animate-pulse" />
+                        <div className="w-24 h-8 bg-gray-100 rounded-full" />
+                        <div className="w-24 h-8 bg-gray-100 rounded-full" />
                       </div>
                     </div>
                   </div>
@@ -1028,12 +1028,11 @@ export default function Home() {
               : (searchQuery ? filteredArticles : articles).map((article) => (
                   <div
                     key={article._id}
-                    className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden group relative"
+                    className="bg-white rounded-2xl shadow-lg hover:shadow-2xl overflow-hidden group relative"
                   >
-                    {/* Loading Overlay */}
                     {clickedArticleId === article._id && (
                       <div className="absolute inset-0 bg-white/80 backdrop-blur-sm z-10 flex items-center justify-center">
-                        <div className="w-8 h-8 border-3 border-orange-500 border-t-transparent rounded-full animate-spin" />
+                        <div className="w-8 h-8 border-3 border-orange-500 border-t-transparent rounded-full" />
                       </div>
                     )}
 
@@ -1066,7 +1065,7 @@ export default function Home() {
                           setClickedArticleId(article._id);
                           router.push(`/article/${article._id}`);
                         }}
-                        className="text-xl font-bold text-gray-900 cursor-pointer group-hover:text-orange-500 transition-colors duration-300"
+                        className="text-xl font-bold text-gray-900 cursor-pointer hover:text-orange-500"
                       >
                         {article.title}
                       </h2>
@@ -1074,7 +1073,7 @@ export default function Home() {
                       <div
                         className="prose prose-sm text-gray-600 line-clamp-3"
                         dangerouslySetInnerHTML={{
-                          __html: article.content
+                          __html: article.content,
                         }}
                       />
 
@@ -1084,7 +1083,7 @@ export default function Home() {
                             setClickedArticleId(article._id);
                             router.push(`/article/${article._id}`);
                           }}
-                          className="text-gray-600 hover:text-orange-500 transition-colors duration-300"
+                          className="text-gray-600 hover:text-orange-500"
                         >
                           Read More
                         </button>
@@ -1102,7 +1101,7 @@ export default function Home() {
                             }
                             handleBookmark(article._id);
                           }}
-                          className="inline-flex items-center px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium rounded-full transition-colors duration-300"
+                          className="inline-flex items-center px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium rounded-full"
                         >
                           <svg
                             className="w-4 h-4 mr-1.5"
