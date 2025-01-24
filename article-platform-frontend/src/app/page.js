@@ -538,16 +538,32 @@ export default function Home() {
                   <div className="relative w-full sm:w-auto">
                     <button
                       onClick={() => setDropdownOpen(!dropdownOpen)}
-                      className="w-full sm:w-auto px-4 py-3 bg-white rounded-xl border border-gray-100 shadow-sm flex items-center justify-between"
+                      className="w-full sm:w-auto px-5 py-3 bg-white/90 backdrop-blur-sm rounded-xl border border-gray-100 shadow-sm hover:border-orange-200 hover:shadow flex items-center justify-between gap-4 group"
                     >
                       <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 text-white flex items-center justify-center font-medium text-lg">
-                          {user.name.charAt(0)}
+                        <div className="relative">
+                          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-orange-400 to-pink-500 text-white flex items-center justify-center font-semibold text-lg shadow-sm">
+                            {user.name.charAt(0)}
+                          </div>
+                          <div className="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-green-500 border-2 border-white rounded-full"></div>
                         </div>
-                        <span className="text-gray-700 font-medium">{user.name}</span>
+                        <div className="flex flex-col items-start">
+                          <span className="text-gray-800 font-medium text-sm">{user.name}</span>
+                          <span className="text-gray-400 text-xs">View menu</span>
+                        </div>
                       </div>
-                      <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"/>
+                      <svg 
+                        className="w-5 h-5 text-gray-400 group-hover:text-orange-500" 
+                        fill="none" 
+                        viewBox="0 0 24 24" 
+                        stroke="currentColor"
+                      >
+                        <path 
+                          strokeLinecap="round" 
+                          strokeLinejoin="round" 
+                          strokeWidth="2" 
+                          d="M8 9l4 4 4-4"
+                        />
                       </svg>
                     </button>
                   
