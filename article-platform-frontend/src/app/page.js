@@ -536,106 +536,143 @@ export default function Home() {
                 {/* User Actions */}
                 {user ? (
                   <div className="relative w-full sm:w-auto">
-                    {/* Profile Button */}
                     <button
                       onClick={() => setDropdownOpen(!dropdownOpen)}
-                      className="w-full sm:w-auto px-5 py-2.5 bg-white rounded-xl border border-gray-100 shadow-sm flex items-center justify-between gap-3"
+                      className="w-full sm:w-auto px-4 py-3 bg-white rounded-xl border border-gray-100 shadow-sm flex items-center justify-between"
                     >
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-gradient-to-r from-orange-500 to-orange-600 text-white flex items-center justify-center font-medium">
+                        <div className="w-9 h-9 rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 text-white flex items-center justify-center font-medium text-lg">
                           {user.name.charAt(0)}
                         </div>
                         <span className="text-gray-700 font-medium">{user.name}</span>
                       </div>
                       <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"/>
                       </svg>
                     </button>
                   
-                    {/* Dropdown Menu */}
                     {dropdownOpen && (
-                      <div className="absolute top-full right-0 mt-2 w-64 bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden z-50">
-                        {/* Profile Section */}
-                        <div className="p-4 border-b border-gray-100">
-                          <Link href="/profile" className="flex items-center gap-3 text-gray-700 hover:text-orange-500">
-                            <div className="p-2 bg-gray-50 rounded-lg">
-                              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                              </svg>
-                            </div>
-                            <div>
-                              <div className="font-medium">View Profile</div>
-                              <div className="text-xs text-gray-500">Manage your account</div>
-                            </div>
-                          </Link>
-                        </div>
-                  
-                        {/* Main Menu */}
-                        <div className="py-2">
-                          <div className="px-3 py-2">
-                            <div className="text-xs font-medium text-gray-400 uppercase">Content</div>
-                            <div className="mt-2 space-y-1">
-                              <Link href="/my-articles" className="flex items-center gap-3 px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-lg">
-                                <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2 2 0 00-2-2h-2" />
-                                </svg>
-                                My Articles
-                              </Link>
-                              <Link href="/bookmarks" className="flex items-center gap-3 px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-lg">
-                                <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
-                                </svg>
-                                Bookmarks
-                              </Link>
-                            </div>
-                          </div>
-                  
-                          <div className="px-3 py-2 border-t border-gray-100">
-                            <div className="text-xs font-medium text-gray-400 uppercase">Community</div>
-                            <div className="mt-2 space-y-1">
-                              <Link href="/community" className="flex items-center gap-3 px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-lg">
-                                <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a2 2 0 01-2-2v-6a2 2 0 012-2h8z" />
-                                </svg>
-                                Community Forum
-                              </Link>
-                              <Link href="/proposals" className="flex items-center gap-3 px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-lg">
-                                <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                                </svg>
-                                Proposals & Networking
-                              </Link>
-                            </div>
-                          </div>
-                  
-                          <div className="px-3 py-2 border-t border-gray-100">
-                            <div className="text-xs font-medium text-gray-400 uppercase">AI Tools</div>
-                            <div className="mt-2">
-                              <Link href="/ai-chat" className="flex items-center gap-3 px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-lg">
-                                <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                </svg>
-                                <div className="flex items-center gap-2">
-                                  SimpleArticle AI
-                                  <span className="px-1.5 py-0.5 text-[10px] font-semibold bg-orange-100 text-orange-600 rounded-full">
-                                    NEW
-                                  </span>
+                      <>
+                        <div className="fixed inset-0 bg-black/20 sm:hidden z-40" onClick={() => setDropdownOpen(false)} />
+                        <div className="fixed sm:absolute inset-x-0 bottom-0 sm:top-full sm:bottom-auto sm:right-0 sm:left-auto sm:w-64 bg-white sm:rounded-xl shadow-xl sm:mt-2 z-50">
+                          <div className="max-h-[85vh] sm:max-h-[600px] overflow-y-auto">
+                            {/* Profile Header - Mobile Only */}
+                            <div className="p-4 border-b border-gray-100 sm:hidden">
+                              <div className="flex items-center gap-3">
+                                <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 text-white flex items-center justify-center text-xl font-medium">
+                                  {user.name.charAt(0)}
                                 </div>
-                              </Link>
+                                <div>
+                                  <div className="font-medium text-gray-900">{user.name}</div>
+                                  <div className="text-sm text-gray-500">Account Settings</div>
+                                </div>
+                              </div>
+                            </div>
+                  
+                            {/* Menu Groups */}
+                            <div className="p-2">
+                              {/* Profile Group */}
+                              <div className="mb-3">
+                                <Link href="/profile" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50">
+                                  <div className="w-10 h-10 rounded-lg bg-gray-50 flex items-center justify-center text-gray-500">
+                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                    </svg>
+                                  </div>
+                                  <div>
+                                    <div className="font-medium text-gray-700">View Profile</div>
+                                    <div className="text-xs text-gray-500">Manage your account</div>
+                                  </div>
+                                </Link>
+                              </div>
+                  
+                              {/* Content Group */}
+                              <div className="mb-3">
+                                <div className="px-2 mb-2 text-xs font-medium text-gray-400 uppercase">Content</div>
+                                <div className="space-y-1">
+                                  <Link href="/my-articles" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50">
+                                    <div className="w-10 h-10 rounded-lg bg-gray-50 flex items-center justify-center text-gray-500">
+                                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2 2 0 00-2-2h-2" />
+                                      </svg>
+                                    </div>
+                                    <span className="font-medium text-gray-700">My Articles</span>
+                                  </Link>
+                  
+                                  <Link href="/bookmarks" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50">
+                                    <div className="w-10 h-10 rounded-lg bg-gray-50 flex items-center justify-center text-gray-500">
+                                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+                                      </svg>
+                                    </div>
+                                    <span className="font-medium text-gray-700">Bookmarks</span>
+                                  </Link>
+                                </div>
+                              </div>
+                  
+                              {/* Community Group */}
+                              <div className="mb-3">
+                                <div className="px-2 mb-2 text-xs font-medium text-gray-400 uppercase">Community</div>
+                                <div className="space-y-1">
+                                  <Link href="/community" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50">
+                                    <div className="w-10 h-10 rounded-lg bg-gray-50 flex items-center justify-center text-gray-500">
+                                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a2 2 0 01-2-2v-6a2 2 0 012-2h8z" />
+                                      </svg>
+                                    </div>
+                                    <span className="font-medium text-gray-700">Community Forum</span>
+                                  </Link>
+                  
+                                  <Link href="/proposals" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50">
+                                    <div className="w-10 h-10 rounded-lg bg-gray-50 flex items-center justify-center text-gray-500">
+                                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                                      </svg>
+                                    </div>
+                                    <span className="font-medium text-gray-700">Proposals & Networking</span>
+                                  </Link>
+                                </div>
+                              </div>
+                  
+                              {/* AI Tools Group */}
+                              <div className="mb-3">
+                                <div className="px-2 mb-2 text-xs font-medium text-gray-400 uppercase">AI Tools</div>
+                                <Link href="/ai-chat" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50">
+                                  <div className="w-10 h-10 rounded-lg bg-gray-50 flex items-center justify-center text-gray-500">
+                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+                                    </svg>
+                                  </div>
+                                  <div className="flex items-center gap-2">
+                                    <span className="font-medium text-gray-700">SimpleArticle AI</span>
+                                    <span className="px-1.5 py-0.5 text-[10px] font-semibold bg-orange-100 text-orange-600 rounded-full">
+                                      NEW
+                                    </span>
+                                  </div>
+                                </Link>
+                              </div>
+                            </div>
+                  
+                            {/* Footer */}
+                            <div className="p-2 border-t border-gray-100 bg-gray-50">
+                              <button
+                                onClick={handleLogout}
+                                className="flex items-center w-full gap-3 p-2 rounded-lg hover:bg-gray-100 text-red-600"
+                              >
+                                <div className="w-10 h-10 rounded-lg bg-red-50 flex items-center justify-center">
+                                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                  </svg>
+                                </div>
+                                <span className="font-medium">Sign Out</span>
+                              </button>
                             </div>
                           </div>
+                          
+                          {/* Mobile Safe Area */}
+                          <div className="h-6 bg-gray-50 sm:hidden" />
                         </div>
-                  
-                        {/* Footer Actions */}
-                        <div className="p-2 border-t border-gray-100 bg-gray-50">
-                          <button onClick={handleLogout} className="flex items-center w-full gap-3 px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
-                            <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                            </svg>
-                            Logout
-                          </button>
-                        </div>
-                      </div>
+                      </>
                     )}
                   </div>
                 ) : (
