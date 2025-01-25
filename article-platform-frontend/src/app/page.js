@@ -1066,7 +1066,7 @@ export default function Home() {
               : (searchQuery ? filteredArticles : articles).map((article) => (
                   <div
                     key={article._id}
-                    className="bg-white rounded-lg p-6 border border-gray-300"
+                    className="bg-orange-30 rounded-lg p-10"
                   >
                     {/* Loading Overlay */}
                     {clickedArticleId === article._id && (
@@ -1136,7 +1136,7 @@ export default function Home() {
                             }
                             handleBookmark(article._id);
                           }}
-                          className="px-4 py-2 text-sm font-medium text-white bg-orange-600 rounded-lg"
+                          className="px-4 py-2 text-sm font-medium text-white bg-orange-500 rounded-lg"
                         >
                           <svg
                             className="w-4 h-4 mr-1.5 inline"
