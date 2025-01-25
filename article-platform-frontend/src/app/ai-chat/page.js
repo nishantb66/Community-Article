@@ -10,13 +10,15 @@ import {
 import ReactMarkdown from "react-markdown";
 
 export default function AIChat() {
+  const [showPopup, setShowPopup] = useState(true); // Controls the visibility of the popup
+  const [inputType, setInputType] = useState("content"); // "content" or "url"
   const [articleContent, setArticleContent] = useState("");
+  const [articleURL, setArticleURL] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [conversation, setConversation] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
-  const [showBetaPopup, setShowBetaPopup] = useState(true);
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -27,9 +29,46 @@ export default function AIChat() {
     scrollToBottom();
   }, [conversation, isTyping]);
 
+  const simulateTyping = (text) => {
+    return new Promise((resolve) => {
+      let index = 0;
+      const chunkSize = 3; // Number of characters to append at each step
+      const interval = setInterval(() => {
+        setConversation((prev) => {
+          const lastMessage = prev[prev.length - 1];
+          if (lastMessage?.sender === "ai") {
+            return [
+              ...prev.slice(0, -1),
+              {
+                sender: "ai",
+                message:
+                  lastMessage.message + text.slice(index, index + chunkSize),
+              },
+            ];
+          } else {
+            return [
+              ...prev,
+              { sender: "ai", message: text.slice(index, index + chunkSize) },
+            ];
+          }
+        });
+        index += chunkSize;
+        if (index >= text.length) {
+          clearInterval(interval);
+          resolve();
+        }
+      }, 20); // Typing interval
+    });
+  };
+
   const handleSendMessage = async () => {
-    if (!articleContent || !message) {
-      setError("Please provide both article content and message");
+    if (inputType === "content" && (!articleContent || !message)) {
+      setError("Please provide both article content and a message.");
+      return;
+    }
+
+    if (inputType === "url" && (!articleURL || !message)) {
+      setError("Please provide both a valid URL and a message.");
       return;
     }
 
@@ -40,24 +79,28 @@ export default function AIChat() {
     setIsTyping(true);
 
     try {
-      const response = await fetch(
-        "https://python-backend-91zp.onrender.com/api/interact",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ article_content: articleContent, message }),
-        }
-      );
+      const endpoint =
+        inputType === "content"
+          ? "https://python-backend-91zp.onrender.com/api/interact"
+          : "https://python-backend-91zp.onrender.com/api/interact_from_url";
+
+      const payload =
+        inputType === "content"
+          ? { article_content: articleContent, message }
+          : { url: articleURL, message };
+
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
 
       const data = await response.json();
       if (!response.ok)
         throw new Error(data.detail || "Failed to fetch response");
 
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      setConversation((prev) => [
-        ...prev,
-        { sender: "ai", message: data.reply },
-      ]);
+      const replyText = data.reply || "No response received.";
+      await simulateTyping(replyText);
     } catch (err) {
       setError(err.message || "An unknown error occurred");
     } finally {
@@ -68,73 +111,31 @@ export default function AIChat() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
-      {/* Beta Version Popup */}
-      {showBetaPopup && (
+      {/* Popup on page load */}
+      {showPopup && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl p-4 sm:p-8 w-full max-w-[95%] sm:max-w-md mx-auto shadow-xl max-h-[90vh] overflow-y-auto">
-            {/* Beta Version Header */}
             <div className="flex items-center gap-3 mb-4">
               <BeakerIcon className="w-6 sm:w-8 h-6 sm:h-8 text-orange-500" />
               <h2 className="text-lg sm:text-xl font-bold text-gray-900">
                 Beta Version
               </h2>
             </div>
-
-            {/* Beta Message */}
             <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6">
-              This AI assistant is currently in beta testing and have rate limits. Response time may
-              be slower than expected as we optimize our systems.
+              Welcome to SAai, your AI assistant currently in beta testing. This
+              platform may experience slower response times as we optimize our
+              systems. Please provide article content or URLs to get started.
             </p>
-
-            {/* Divider */}
-            <div className="h-px bg-gray-200 my-4 sm:my-6" />
-
-            {/* Instructions Section */}
-            <div className="mb-4 sm:mb-6">
-              <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4">
-                How to Use SAai
-              </h3>
-              <ul className="space-y-3 sm:space-y-4">
-                <li className="flex gap-2 sm:gap-3">
-                  <span className="w-5 h-5 sm:w-6 sm:h-6 bg-orange-100 rounded-full flex items-center justify-center text-orange-500 flex-shrink-0 text-sm">
-                    1
-                  </span>
-                  <p className="text-sm sm:text-base text-gray-600">
-                    Paste your article content in the text box provided
-                  </p>
-                </li>
-                <li className="flex gap-2 sm:gap-3">
-                  <span className="w-5 h-5 sm:w-6 sm:h-6 bg-orange-100 rounded-full flex items-center justify-center text-orange-500 flex-shrink-0 text-sm">
-                    2
-                  </span>
-                  <p className="text-sm sm:text-base text-gray-600">
-                    Ask specific questions about the article content
-                  </p>
-                </li>
-                <li className="flex gap-2 sm:gap-3">
-                  <span className="w-5 h-5 sm:w-6 sm:h-6 bg-orange-100 rounded-full flex items-center justify-center text-orange-500 flex-shrink-0 text-sm">
-                    3
-                  </span>
-                  <p className="text-sm sm:text-base text-gray-600">
-                    Get AI-powered answers based on the provided content
-                  </p>
-                </li>
-              </ul>
-            </div>
-
-            {/* Important Note */}
             <div className="bg-orange-50 p-3 sm:p-4 rounded-xl mb-4 sm:mb-6">
               <p className="text-xs sm:text-sm text-gray-600">
                 <span className="font-medium text-orange-500">Note:</span> This
-                is not a conversational chatbot. It can only answer questions
-                about the article content you provide. Each question-answer pair
-                is independent.
+                assistant only answers questions based on the article content
+                you provide. Questions outside the scope of the provided content
+                may not yield relevant responses.
               </p>
             </div>
-
-            {/* Action Button */}
             <button
-              onClick={() => setShowBetaPopup(false)}
+              onClick={() => setShowPopup(false)}
               className="w-full bg-orange-500 text-white py-2.5 sm:py-3 rounded-xl hover:bg-orange-600 transition-colors font-medium text-sm sm:text-base"
             >
               Got it, continue
@@ -144,7 +145,7 @@ export default function AIChat() {
       )}
 
       <div className="flex flex-col lg:flex-row h-screen">
-        {/* Enhanced Sidebar */}
+        {/* Sidebar */}
         <div className="w-full lg:w-96 bg-white shadow-lg z-10">
           <div className="p-6 h-full flex flex-col">
             <div className="flex items-center gap-3 mb-8">
@@ -155,11 +156,34 @@ export default function AIChat() {
             </div>
 
             <div className="flex-1 space-y-6">
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Article Content
-                </label>
-                <div className="relative">
+              <div className="flex items-center gap-4">
+                <button
+                  onClick={() => setInputType("content")}
+                  className={`px-4 py-2 rounded-xl font-medium ${
+                    inputType === "content"
+                      ? "bg-orange-500 text-white"
+                      : "bg-gray-100 text-gray-700"
+                  }`}
+                >
+                  Use Article Content
+                </button>
+                <button
+                  onClick={() => setInputType("url")}
+                  className={`px-4 py-2 rounded-xl font-medium ${
+                    inputType === "url"
+                      ? "bg-orange-500 text-white"
+                      : "bg-gray-100 text-gray-700"
+                  }`}
+                >
+                  Use Article URL
+                </button>
+              </div>
+
+              {inputType === "content" && (
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Article Content
+                  </label>
                   <textarea
                     placeholder="Paste your article content here..."
                     value={articleContent}
@@ -167,12 +191,27 @@ export default function AIChat() {
                     className="w-full h-[calc(100vh-280px)] p-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 resize-none text-gray-700 placeholder-gray-400"
                   />
                 </div>
-              </div>
+              )}
+
+              {inputType === "url" && (
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Article URL
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Paste the article URL here..."
+                    value={articleURL}
+                    onChange={(e) => setArticleURL(e.target.value)}
+                    className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 text-gray-700 placeholder-gray-400"
+                  />
+                </div>
+              )}
             </div>
           </div>
         </div>
 
-        {/* Enhanced Chat Area */}
+        {/* Chat Area */}
         <div className="flex-1 flex flex-col bg-gray-50">
           <div className="flex-1 p-6 overflow-y-auto">
             {error && (
@@ -221,7 +260,7 @@ export default function AIChat() {
             </div>
           </div>
 
-          {/* Enhanced Input Area */}
+          {/* Input Area */}
           <div className="p-6 bg-white border-t border-gray-100">
             <div className="flex gap-4 max-w-4xl mx-auto">
               <div className="flex-1">
