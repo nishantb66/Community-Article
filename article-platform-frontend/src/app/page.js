@@ -40,6 +40,7 @@ export default function Home() {
   const [messageType, setMessageType] = useState(null);
   const [unreadCount, setUnreadCount] = useState(0); // Add unreadCount state
   const [loadingNotifications, setLoadingNotifications] = useState(false); // Loading state for notifications
+  const [loadingArticles, setLoadingArticles] = useState({});
 
   const fetchUnreadCount = async () => {
     setLoadingNotifications(true);
@@ -1116,13 +1117,23 @@ export default function Home() {
           
                       <div className="flex items-center justify-between pt-4 border-t border-gray-300">
                         <button
-                          onClick={() => {
+                          onClick={async () => {
+                            setLoadingArticles(prev => ({ ...prev, [article._id]: true }));
                             setClickedArticleId(article._id);
-                            router.push(`/article/${article._id}`);
+                            await router.push(`/article/${article._id}`);
+                            setLoadingArticles(prev => ({ ...prev, [article._id]: false }));
                           }}
-                          className="text-sm text-orange-600 hover:underline"
+                          className="text-sm text-orange-600 hover:underline flex items-center space-x-2"
+                          disabled={loadingArticles[article._id]}
                         >
-                          Read More
+                          {loadingArticles[article._id] ? (
+                            <div className="flex items-center">
+                              <div className="w-4 h-4 border-2 border-orange-600 border-t-transparent rounded-full animate-spin mr-2"></div>
+                              <span>Loading...</span>
+                            </div>
+                          ) : (
+                            <span>Read More</span>
+                          )}
                         </button>
           
                         <button
