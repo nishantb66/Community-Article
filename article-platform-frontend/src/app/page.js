@@ -309,7 +309,7 @@ export default function Home() {
 
   return (
     <main className="flex-grow">
-      <div className="min-h-screen bg-gradient-to-br from-orange-100 to-pink-100">
+      <div className="min-h-screen bg-gradient-to-br from-orange-10 to-pink-100">
         {showWelcomePopup && (
           <div className="fixed inset-0 z-[60] flex items-center justify-center px-4">
             <div
