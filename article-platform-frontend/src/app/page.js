@@ -1305,7 +1305,7 @@ export default function Home() {
                   simpleArticle
                 </h2>
                 <br />
-                <Link href="/about" className="px-4 py-2 text-sm bg-white/90 text-orange-500 rounded-lg font-medium shadow-sm border border-orange-200">
+                <Link href="/about" className="px-4 py-2 text-sm bg-white/90 text-orange-700 rounded-lg font-medium">
                   About Us
                 </Link>
                 <p className="text-gray-400 max-w-sm">
