@@ -1066,7 +1066,7 @@ export default function Home() {
               : (searchQuery ? filteredArticles : articles).map((article) => (
                   <div
                     key={article._id}
-                    className="bg-orange-100 rounded-lg p-10"
+                    className="bg-white rounded-lg p-10"
                   >
                     {/* Loading Overlay */}
                     {clickedArticleId === article._id && (
