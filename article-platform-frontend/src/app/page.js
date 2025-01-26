@@ -393,10 +393,18 @@ export default function Home() {
             {/* Logo Section */}
             <Link href="/about">
               <div className="flex items-center space-x-3 group">
-                <div className="w-12 h-12 bg-white/90 backdrop-blur-sm rounded-xl flex items-center justify-center shadow-lg transform transition-all duration-300 group-hover:scale-105 group-hover:rotate-3">
-                  <span className="text-transparent bg-clip-text bg-gradient-to-br from-orange-500 to-pink-500 text-2xl font-black">
-                    sA
-                  </span>
+                <div className="flex items-center space-x-3 bg-white/90 backdrop-blur-sm rounded-xl px-4 py-2 shadow-lg border border-gray-100/20 transition-all duration-300 group-hover:scale-[1.02] group-hover:shadow-xl">
+                  {/* Logo Icon */}
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-orange-500 to-pink-500 flex items-center justify-center">
+                    <span className="text-white text-xl font-black">sA</span>
+                  </div>
+
+                  {/* Company Name */}
+                  <div className="flex flex-col">
+                    <span className="text-lg font-bold bg-gradient-to-br from-orange-600 to-pink-600 bg-clip-text text-transparent">
+                      SimpleArticle
+                    </span>
+                  </div>
                 </div>
               </div>
             </Link>
