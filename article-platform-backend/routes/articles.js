@@ -87,15 +87,25 @@ router.get("/all", async (req, res) => {
 });
 
 
-// Get Single Article
+// Fetch a single article by ID and increment the `viewed` count
 router.get("/:id", async (req, res) => {
   try {
-    const article = await Article.findById(req.params.id);
+    const { id } = req.params;
+
+    // Increment the viewed count and fetch the article
+    const article = await Article.findByIdAndUpdate(
+      id,
+      { $inc: { viewed: 1 } }, // Increment the `viewed` field by 1
+      { new: true } // Return the updated document
+    );
+
     if (!article) {
       return res.status(404).json({ message: "Article not found" });
     }
+
     res.status(200).json(article);
   } catch (error) {
+    console.error("Error fetching article:", error);
     res.status(500).json({ message: "Error fetching article", error });
   }
 });
