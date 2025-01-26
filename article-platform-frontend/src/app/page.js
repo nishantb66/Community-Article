@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import "../styles/globals.css";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 
 export default function Home() {
   const router = useRouter(); // Initialize the router
@@ -41,6 +42,23 @@ export default function Home() {
   const [unreadCount, setUnreadCount] = useState(0); // Add unreadCount state
   const [loadingNotifications, setLoadingNotifications] = useState(false); // Loading state for notifications
   const [loadingArticles, setLoadingArticles] = useState({});
+  const [trendingArticles, setTrendingArticles] = useState([]);
+
+  useEffect(() => {
+    // Fetch trending articles
+    async function fetchTrendingArticles() {
+      try {
+        const res = await axios.get(
+          "https://community-article-backend.onrender.com/api/articles/trending"
+        );
+        setTrendingArticles(res.data);
+      } catch (error) {
+        console.error("Error fetching trending articles:", error);
+      }
+    }
+
+    fetchTrendingArticles();
+  }, []);
 
   // Function to fetch unread notifications count
   const fetchUnreadCount = async () => {
@@ -307,7 +325,6 @@ export default function Home() {
       setTimeout(() => setNotification(""), 3000); // Clear notification after 3 seconds
     }
   };
-
 
   return (
     <main className="flex-grow">
@@ -594,7 +611,7 @@ export default function Home() {
                                   </div>
                                 </Link>
                               </div>
-                              
+
                               <Link
                                 href="/notification"
                                 className="relative flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
@@ -821,95 +838,98 @@ export default function Home() {
           </div>
         </header>
 
-        <section
-          className={`relative min-h-[80vh] flex items-center justify-center ${
-            mobileMenuOpen ? "mt-[320px] sm:mt-0" : ""
-          } transition-all duration-300 overflow-hidden`}
-        >
-          {/* Background Elements */}
-          <div className="absolute inset-0 bg-gradient-to-b from-gray-50 to-white">
-            <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] opacity-30"></div>
-          </div>
-
-          {/* Decorative Elements */}
-          <div className="absolute top-20 -left-20 w-64 h-64 bg-orange-100 rounded-full mix-blend-multiply filter blur-xl opacity-20"></div>
-          <div className="absolute bottom-20 -right-20 w-64 h-64 bg-pink-100 rounded-full mix-blend-multiply filter blur-xl opacity-20"></div>
-
+        <section className="relative min-h-[80vh] flex flex-col items-center justify-between px-6 lg:px-12 gap-8 bg-gray-50">
           {/* Main Content */}
-          <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 py-16">
-            <div className="max-w-3xl mx-auto text-center space-y-12">
-              {/* Header Section */}
-              <div className="space-y-6">
-                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight">
-                  Discover a Variety of
-                  <span className="block mt-2 bg-gradient-to-r from-orange-600 to-pink-600 bg-clip-text text-transparent">
-                    Stories
-                  </span>
-                </h1>
-                <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto">
-                  Explore articles and stories written by the community.
-                </p>
-              </div>
-
-              {/* Search Section */}
-              <div className="max-w-2xl mx-auto">
-                <div className="relative">
-                  {searchQuery.length > 0 && (
-                    <div className="absolute -top-6 left-0 text-sm text-gray-500">
-                      Apply search after loading articles
-                    </div>
-                  )}
-                  <div className="relative group">
-                    <input
-                      type="text"
-                      value={searchQuery}
-                      onChange={(e) => {
-                        setSearchQuery(e.target.value);
-                        handleSearch(e.target.value);
-                      }}
-                      placeholder="Search articles..."
-                      className="w-full px-6 py-4 bg-white border border-gray-200 rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 text-gray-800 placeholder-gray-400"
-                    />
-                    <svg
-                      className="w-5 h-5 absolute right-5 top-1/2 -translate-y-1/2 text-gray-400"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                      />
-                    </svg>
-                  </div>
+          <div className="flex-grow relative flex items-center justify-center w-full">
+            <div className="relative z-10 container mx-auto max-w-5xl">
+              <div className="text-center space-y-8">
+                {/* Header Section */}
+                <div className="space-y-4">
+                  <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-gray-800">
+                    Discover a Variety of
+                    <span className="block mt-2 text-orange-600">Stories</span>
+                  </h1>
+                  <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+                    Explore an expansive collection of articles and stories
+                    crafted by writers from around the world. Get inspired, stay
+                    informed, and share your thoughts with the community.
+                  </p>
                 </div>
-              </div>
 
-              {/* Actions Grid */}
-              <div className="flex flex-wrap items-center justify-center gap-4">
-                <button
-                  onClick={() => setIsCollaboratePopupOpen(true)}
-                  className="px-8 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-full shadow-sm hover:shadow-md transition-shadow font-medium"
-                >
-                  Collaborate
-                </button>
-                <Link
-                  href="/deleteRequest"
-                  className="px-8 py-3 text-gray-600 hover:text-orange-600 transition-colors font-medium"
-                >
-                  Request article removal
-                </Link>
-                {user && (
+                {/* Actions Section */}
+                <div className="flex flex-wrap items-center justify-center gap-4">
+                  <button
+                    onClick={() => setIsCollaboratePopupOpen(true)}
+                    className="px-6 py-3 bg-orange-600 text-white rounded-lg shadow hover:bg-orange-700"
+                  >
+                    Collaborate
+                  </button>
+                  <a
+                    href="/deleteRequest"
+                    className="px-6 py-3 border border-gray-300 text-gray-700 hover:border-orange-600 hover:text-orange-600 rounded-lg shadow"
+                  >
+                    Request Article Removal
+                  </a>
                   <button
                     onClick={() => router.push("/stories")}
-                    className="px-8 py-3 bg-gray-900 text-white rounded-full shadow-sm hover:shadow-md transition-shadow font-medium"
+                    className="px-6 py-3 bg-gray-900 text-white rounded-lg shadow hover:bg-gray-800"
                   >
                     Stories by SimpleArticles
                   </button>
-                )}
+                </div>
               </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="w-full px-4 lg:px-8">
+          <div className="max-w-5xl mx-auto bg-white rounded-xl shadow-lg p-6">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-bold text-gray-800">
+                Trending Articles
+              </h2>
+              <div className="flex items-center space-x-1">
+                <span className="inline-block w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
+                <span className="text-sm text-gray-500">Live</span>
+              </div>
+            </div>
+
+            {/* Articles List */}
+            <div className="flex flex-wrap gap-4">
+              {trendingArticles.map((article) => (
+                <div
+                  key={article._id}
+                  className="flex-shrink-0 w-full md:w-1/2 lg:w-auto p-4 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-lg transition-shadow shadow-sm hover:shadow-md cursor-pointer"
+                >
+                  <div className="flex items-start space-x-4">
+                    <div className="h-12 w-12 rounded-full bg-gradient-to-r from-orange-100 to-pink-100 flex items-center justify-center">
+                      <span className="text-lg font-semibold text-orange-600">
+                        {article.author[0]}
+                      </span>
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-lg font-semibold text-gray-800 line-clamp-2">
+                        {article.title}
+                      </h3>
+                      <div className="mt-2 flex items-center space-x-4">
+                        <div className="flex items-center text-sm text-gray-500">
+                          <span>{article.author}</span>
+                        </div>
+                        <div className="flex items-center text-sm text-gray-400">
+                          <svg
+                            className="w-4 h-4 mr-1"
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                          >
+                            <path d="M15 12c0 1.654-1.346 3-3 3s-3-1.346-3-3 1.346-3 3-3 3 1.346 3 3zm9-.449s-4.252 8.449-11.985 8.449c-7.18 0-12.015-8.449-12.015-8.449s4.446-7.551 12.015-7.551c7.694 0 11.985 7.551 11.985 7.551zm-7 .449c0-2.757-2.243-5-5-5s-5 2.243-5 5 2.243 5 5 5 5-2.243 5-5z" />
+                          </svg>
+                          {article.viewed}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </section>
@@ -1151,6 +1171,42 @@ export default function Home() {
                     </span>
                   )}
                 </Link>
+              </div>
+            </div>
+
+            <br />
+
+            <div className="relative">
+              {searchQuery.length > 0 && (
+                <div className="absolute -top-8 left-0 right-0 text-sm text-gray-500">
+                  📝 Load all articles and then apply search
+                </div>
+              )}
+
+              <div className="relative flex items-center">
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => {
+                    setSearchQuery(e.target.value);
+                    handleSearch(e.target.value);
+                  }}
+                  placeholder="Search articles..."
+                  className="w-full px-6 py-4 bg-white border border-gray-200 rounded-xl shadow-sm focus:shadow-md focus:border-orange-500 outline-none transition-all duration-200 text-gray-800 placeholder-gray-400"
+                />
+                <svg
+                  className="w-5 h-5 absolute right-4 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  />
+                </svg>
               </div>
             </div>
           </section>
