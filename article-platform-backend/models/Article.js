@@ -7,7 +7,9 @@ const ArticleSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
   reported: { type: Boolean, default: false },
   reportReason: { type: String },
+  viewed: { type: Number, default: 0 }, // New field
 });
+
 
 module.exports = mongoose.model("Article", ArticleSchema);
 
