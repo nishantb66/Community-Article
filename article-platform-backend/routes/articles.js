@@ -18,7 +18,20 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
+// Define specific routes first
+router.get("/trending", async (req, res) => {
+  try {
+    const trendingArticles = await Article.find()
+      .sort({ viewed: -1 }) // Sort by number of views in descending order
+      .limit(2) // Limit to top 2 articles
+      .select("title author viewed createdAt"); // Select only relevant fields
 
+    res.status(200).json(trendingArticles);
+  } catch (error) {
+    console.error("Error fetching trending articles:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
 
 router.post("/", async (req, res) => {
   const { title, content } = req.body;
