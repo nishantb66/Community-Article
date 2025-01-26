@@ -42,6 +42,7 @@ export default function Home() {
   const [loadingNotifications, setLoadingNotifications] = useState(false); // Loading state for notifications
   const [loadingArticles, setLoadingArticles] = useState({});
 
+  // Function to fetch unread notifications count
   const fetchUnreadCount = async () => {
     setLoadingNotifications(true);
     try {
@@ -52,7 +53,7 @@ export default function Home() {
       }
 
       const response = await fetch(
-        "http://localhost:5000/api/notifications/unread",
+        "https://community-article-backend.onrender.com/api/notifications/unread",
         {
           method: "GET",
           headers: {
@@ -179,7 +180,6 @@ export default function Home() {
     }
   };
 
-  // Handle subscription
   // Updated subscription handler
   const handleSubscribe = async (e) => {
     e.preventDefault();
@@ -308,6 +308,7 @@ export default function Home() {
     }
   };
 
+
   return (
     <main className="flex-grow">
       <div className="min-h-screen bg-gradient-to-br from-orange-10 to-pink-100">
@@ -380,48 +381,8 @@ export default function Home() {
                     sA
                   </span>
                 </div>
-                <h1 className="text-xl sm:text-2xl font-black tracking-tight">
-                  simple<span className="text-orange-100">Article</span>
-                </h1>
               </div>
             </Link>
-
-            <div className="relative">
-              <Link href="/notification">
-                <button
-                  className="relative bg-white/10 hover:bg-black/20 px-4 py-2 rounded-full flex items-center"
-                  aria-label="Notifications"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6 text-black"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14V9a6 6 0 10-12 0v5c0 .217-.105.432-.293.568L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-                    />
-                  </svg>
-                  {/* Active status dot */}
-                  <span className="absolute bottom-1 right-1 h-2.5 w-2.5 rounded-full bg-emerald-500 ring-2 ring-white shadow-lg shadow-emerald-500/50"></span>
-                  {loadingNotifications ? (
-                    <span className="absolute -top-2 -right-2 bg-blue-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                      ...
-                    </span>
-                  ) : (
-                    unreadCount > 0 && (
-                      <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                        {unreadCount}
-                      </span>
-                    )
-                  )}
-                </button>
-              </Link>
-            </div>
 
             {/* Hamburger Menu */}
             <button
@@ -537,157 +498,304 @@ export default function Home() {
                 {/* User Actions */}
                 {user ? (
                   <div className="relative w-full sm:w-auto">
+                    {/* User Profile Button */}
                     <button
                       onClick={() => setDropdownOpen(!dropdownOpen)}
-                      className="w-full sm:w-auto px-5 py-3 bg-white/90 backdrop-blur-sm rounded-xl border border-gray-100 shadow-sm hover:border-orange-200 hover:shadow flex items-center justify-between gap-4 group"
+                      className="w-full sm:w-auto px-5 py-3 bg-white rounded-lg border border-gray-200 shadow-sm hover:border-gray-300 flex items-center justify-between gap-4"
                     >
                       <div className="flex items-center gap-3">
                         <div className="relative">
-                          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-orange-400 to-pink-500 text-white flex items-center justify-center font-semibold text-lg shadow-sm">
+                          <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-orange-500 to-pink-500 text-white flex items-center justify-center font-semibold text-lg">
                             {user.name.charAt(0)}
                           </div>
                           <div className="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-green-500 border-2 border-white rounded-full"></div>
                         </div>
                         <div className="flex flex-col items-start">
-                          <span className="text-gray-800 font-medium text-sm">{user.name}</span>
-                          <span className="text-gray-400 text-xs">View menu</span>
+                          <span className="text-gray-800 font-medium text-sm">
+                            {user.name}
+                          </span>
+                          <span className="text-gray-500 text-xs">
+                            View menu
+                          </span>
                         </div>
                       </div>
-                      <svg 
-                        className="w-5 h-5 text-gray-400 group-hover:text-orange-500" 
-                        fill="none" 
-                        viewBox="0 0 24 24" 
+                      <svg
+                        className="w-5 h-5 text-gray-400"
+                        fill="none"
+                        viewBox="0 0 24 24"
                         stroke="currentColor"
                       >
-                        <path 
-                          strokeLinecap="round" 
-                          strokeLinejoin="round" 
-                          strokeWidth="2" 
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
                           d="M8 9l4 4 4-4"
                         />
                       </svg>
                     </button>
-                  
+
+                    {/* Dropdown Menu */}
                     {dropdownOpen && (
                       <>
-                        <div className="fixed inset-0 bg-black/20 sm:hidden z-40" onClick={() => setDropdownOpen(false)} />
-                        <div className="fixed sm:absolute inset-x-0 bottom-0 sm:top-full sm:bottom-auto sm:right-0 sm:left-auto sm:w-64 bg-white sm:rounded-xl shadow-xl sm:mt-2 z-50">
+                        {/* Overlay for mobile */}
+                        <div
+                          className="fixed inset-0 bg-black/20 sm:hidden z-40"
+                          onClick={() => setDropdownOpen(false)}
+                        />
+                        <div className="fixed sm:absolute inset-x-0 bottom-0 sm:top-full sm:bottom-auto sm:right-0 sm:left-auto sm:w-64 bg-white rounded-lg shadow-lg sm:mt-2 z-50">
                           <div className="max-h-[85vh] sm:max-h-[600px] overflow-y-auto">
-                            {/* Profile Header - Mobile Only */}
-                            <div className="p-4 border-b border-gray-100 sm:hidden">
+                            {/* Mobile Profile Header */}
+                            <div className="p-4 border-b border-gray-200 sm:hidden">
                               <div className="flex items-center gap-3">
-                                <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 text-white flex items-center justify-center text-xl font-medium">
+                                <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-orange-500 to-pink-500 text-white flex items-center justify-center text-lg font-semibold">
                                   {user.name.charAt(0)}
                                 </div>
                                 <div>
-                                  <div className="font-medium text-gray-900">{user.name}</div>
-                                  <div className="text-sm text-gray-500">Account Settings</div>
+                                  <div className="font-medium text-gray-800">
+                                    {user.name}
+                                  </div>
+                                  <div className="text-sm text-gray-500">
+                                    Account Settings
+                                  </div>
                                 </div>
                               </div>
                             </div>
-                  
-                            {/* Menu Groups */}
-                            <div className="p-2">
-                              {/* Profile Group */}
-                              <div className="mb-3">
-                                <Link href="/profile" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50">
-                                  <div className="w-10 h-10 rounded-lg bg-gray-50 flex items-center justify-center text-gray-500">
-                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+
+                            {/* Menu Items */}
+                            <div className="p-4">
+                              {/* Profile Section */}
+                              <div className="mb-4">
+                                <Link
+                                  href="/profile"
+                                  className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100"
+                                >
+                                  <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center text-gray-500">
+                                    <svg
+                                      className="w-5 h-5"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      viewBox="0 0 24 24"
+                                    >
+                                      <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth="2"
+                                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                                      />
                                     </svg>
                                   </div>
                                   <div>
-                                    <div className="font-medium text-gray-700">View Profile</div>
-                                    <div className="text-xs text-gray-500">Manage your account</div>
+                                    <span className="font-medium text-gray-800">
+                                      View Profile
+                                    </span>
+                                    <span className="text-xs text-gray-500 block">
+                                      Manage your account
+                                    </span>
                                   </div>
                                 </Link>
                               </div>
-                  
-                              {/* Content Group */}
-                              <div className="mb-3">
-                                <div className="px-2 mb-2 text-xs font-medium text-gray-400 uppercase">Content</div>
-                                <div className="space-y-1">
-                                  <Link href="/my-articles" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50">
-                                    <div className="w-10 h-10 rounded-lg bg-gray-50 flex items-center justify-center text-gray-500">
-                                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2 2 0 00-2-2h-2" />
+                              
+                              <Link
+                                href="/notification"
+                                className="relative flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                              >
+                                <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center text-gray-600">
+                                  <svg
+                                    className="w-5 h-5"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth="1.75"
+                                      d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                                    />
+                                  </svg>
+                                </div>
+
+                                <div className="relative">
+                                  <span className="font-medium text-gray-800">
+                                    Notifications
+                                  </span>
+                                  <span className="absolute -top-1 -right-2 h-2 w-2 rounded-full bg-emerald-500 ring-2 ring-white"></span>
+                                </div>
+                              </Link>
+
+                              {/* Content Section */}
+                              <div className="mb-4">
+                                <div className="text-xs font-medium text-gray-400 uppercase mb-2">
+                                  Content
+                                </div>
+                                <div className="space-y-2">
+                                  <Link
+                                    href="/my-articles"
+                                    className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100"
+                                  >
+                                    <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center text-gray-500">
+                                      <svg
+                                        className="w-5 h-5"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                      >
+                                        <path
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                          strokeWidth="2"
+                                          d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2 2 0 00-2-2h-2"
+                                        />
                                       </svg>
                                     </div>
-                                    <span className="font-medium text-gray-700">My Articles</span>
+                                    <span className="font-medium text-gray-800">
+                                      My Articles
+                                    </span>
                                   </Link>
-                  
-                                  <Link href="/bookmarks" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50">
-                                    <div className="w-10 h-10 rounded-lg bg-gray-50 flex items-center justify-center text-gray-500">
-                                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+
+                                  <Link
+                                    href="/bookmarks"
+                                    className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100"
+                                  >
+                                    <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center text-gray-500">
+                                      <svg
+                                        className="w-5 h-5"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                      >
+                                        <path
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                          strokeWidth="2"
+                                          d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"
+                                        />
                                       </svg>
                                     </div>
-                                    <span className="font-medium text-gray-700">Bookmarks</span>
+                                    <span className="font-medium text-gray-800">
+                                      Bookmarks
+                                    </span>
                                   </Link>
                                 </div>
                               </div>
-                  
-                              {/* Community Group */}
-                              <div className="mb-3">
-                                <div className="px-2 mb-2 text-xs font-medium text-gray-400 uppercase">Community</div>
-                                <div className="space-y-1">
-                                  <Link href="/community" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50">
-                                    <div className="w-10 h-10 rounded-lg bg-gray-50 flex items-center justify-center text-gray-500">
-                                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a2 2 0 01-2-2v-6a2 2 0 012-2h8z" />
+
+                              {/* Community Section */}
+                              <div className="mb-4">
+                                <div className="text-xs font-medium text-gray-400 uppercase mb-2">
+                                  Community
+                                </div>
+                                <div className="space-y-2">
+                                  <Link
+                                    href="/community"
+                                    className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100"
+                                  >
+                                    <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center text-gray-500">
+                                      <svg
+                                        className="w-5 h-5"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                      >
+                                        <path
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                          strokeWidth="2"
+                                          d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a2 2 0 01-2-2v-6a2 2 0 012-2h8z"
+                                        />
                                       </svg>
                                     </div>
-                                    <span className="font-medium text-gray-700">Community Forum</span>
+                                    <span className="font-medium text-gray-800">
+                                      Discussion Forum
+                                    </span>
                                   </Link>
-                  
-                                  <Link href="/proposals" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50">
-                                    <div className="w-10 h-10 rounded-lg bg-gray-50 flex items-center justify-center text-gray-500">
-                                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+
+                                  <Link
+                                    href="/proposals"
+                                    className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100"
+                                  >
+                                    <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center text-gray-500">
+                                      <svg
+                                        className="w-5 h-5"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                      >
+                                        <path
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                          strokeWidth="2"
+                                          d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
+                                        />
                                       </svg>
                                     </div>
-                                    <span className="font-medium text-gray-700">Proposals & Networking</span>
+                                    <span className="font-medium text-gray-800">
+                                      Proposals & Networking
+                                    </span>
                                   </Link>
                                 </div>
                               </div>
-                  
-                              {/* AI Tools Group */}
-                              <div className="mb-3">
-                                <div className="px-2 mb-2 text-xs font-medium text-gray-400 uppercase">AI Tools</div>
-                                <Link href="/ai-chat" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50">
-                                  <div className="w-10 h-10 rounded-lg bg-gray-50 flex items-center justify-center text-gray-500">
-                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+
+                              {/* AI Tools Section */}
+                              <div className="mb-4">
+                                <div className="text-xs font-medium text-gray-400 uppercase mb-2">
+                                  AI Tools
+                                </div>
+                                <Link
+                                  href="/ai-chat"
+                                  className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100"
+                                >
+                                  <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center text-gray-500">
+                                    <svg
+                                      className="w-5 h-5"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      viewBox="0 0 24 24"
+                                    >
+                                      <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth="2"
+                                        d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"
+                                      />
                                     </svg>
                                   </div>
                                   <div className="flex items-center gap-2">
-                                    <span className="font-medium text-gray-700">SimpleArticle AI</span>
-                                    <span className="px-1.5 py-0.5 text-[10px] font-semibold bg-orange-100 text-orange-600 rounded-full">
+                                    <span className="font-medium text-gray-800">
+                                      SimpleArticle AI
+                                    </span>
+                                    <span className="px-2 py-0.5 text-[10px] font-semibold bg-orange-100 text-orange-600 rounded-full">
                                       NEW
                                     </span>
                                   </div>
                                 </Link>
                               </div>
                             </div>
-                  
-                            {/* Footer */}
-                            <div className="p-2 border-t border-gray-100 bg-gray-50">
+
+                            {/* Footer Section */}
+                            <div className="p-4 border-t border-gray-200 bg-gray-50">
                               <button
                                 onClick={handleLogout}
-                                className="flex items-center w-full gap-3 p-2 rounded-lg hover:bg-gray-100 text-red-600"
+                                className="flex items-center w-full gap-3 p-2 rounded-lg text-red-600 hover:bg-gray-100"
                               >
-                                <div className="w-10 h-10 rounded-lg bg-red-50 flex items-center justify-center">
-                                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                <div className="w-10 h-10 rounded-lg bg-red-100 flex items-center justify-center">
+                                  <svg
+                                    className="w-5 h-5"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth="2"
+                                      d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                                    />
                                   </svg>
                                 </div>
                                 <span className="font-medium">Sign Out</span>
                               </button>
                             </div>
                           </div>
-                          
-                          {/* Mobile Safe Area */}
-                          <div className="h-6 bg-gray-50 sm:hidden" />
                         </div>
                       </>
                     )}
@@ -713,31 +821,45 @@ export default function Home() {
           </div>
         </header>
 
-        <section className={`relative min-h-[70vh] flex items-center bg-gradient-to-br from-gray-100 to-white ${mobileMenuOpen ? "mt-[320px] sm:mt-0" : ""} transition-all duration-300`}>
-          {/* Subtle Grid Background */}
-          <div className="absolute inset-0 bg-gray-50"></div>
-        
-          <div className="relative z-10 container mx-auto flex flex-col lg:flex-row items-center px-6 sm:px-12 lg:px-20 py-12 sm:py-16 lg:py-20">
-            {/* Text Content */}
-            <div className="lg:w-1/2 max-w-3xl mx-auto lg:mx-0 lg:mr-8 text-center lg:text-left">
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-6">
-                Discover a Variety of 
-                <span className="text-orange-600 ml-2">Stories</span>
-              </h1>
-              <p className="text-base sm:text-lg text-gray-700 mb-10">
-                Explore articles and stories written by the community.
-              </p>
-        
-              {/* Search Interface */}
+        <section
+          className={`relative min-h-[80vh] flex items-center justify-center ${
+            mobileMenuOpen ? "mt-[320px] sm:mt-0" : ""
+          } transition-all duration-300 overflow-hidden`}
+        >
+          {/* Background Elements */}
+          <div className="absolute inset-0 bg-gradient-to-b from-gray-50 to-white">
+            <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] opacity-30"></div>
+          </div>
+
+          {/* Decorative Elements */}
+          <div className="absolute top-20 -left-20 w-64 h-64 bg-orange-100 rounded-full mix-blend-multiply filter blur-xl opacity-20"></div>
+          <div className="absolute bottom-20 -right-20 w-64 h-64 bg-pink-100 rounded-full mix-blend-multiply filter blur-xl opacity-20"></div>
+
+          {/* Main Content */}
+          <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div className="max-w-3xl mx-auto text-center space-y-12">
+              {/* Header Section */}
               <div className="space-y-6">
+                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight">
+                  Discover a Variety of
+                  <span className="block mt-2 bg-gradient-to-r from-orange-600 to-pink-600 bg-clip-text text-transparent">
+                    Stories
+                  </span>
+                </h1>
+                <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto">
+                  Explore articles and stories written by the community.
+                </p>
+              </div>
+
+              {/* Search Section */}
+              <div className="max-w-2xl mx-auto">
                 <div className="relative">
                   {searchQuery.length > 0 && (
                     <div className="absolute -top-6 left-0 text-sm text-gray-500">
                       Apply search after loading articles
                     </div>
                   )}
-        
-                  <div className="relative flex items-center">
+                  <div className="relative group">
                     <input
                       type="text"
                       value={searchQuery}
@@ -746,10 +868,10 @@ export default function Home() {
                         handleSearch(e.target.value);
                       }}
                       placeholder="Search articles..."
-                      className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-gray-800 placeholder-gray-400"
+                      className="w-full px-6 py-4 bg-white border border-gray-200 rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 text-gray-800 placeholder-gray-400"
                     />
                     <svg
-                      className="w-5 h-5 absolute right-3 text-gray-500"
+                      className="w-5 h-5 absolute right-5 top-1/2 -translate-y-1/2 text-gray-400"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -763,50 +885,34 @@ export default function Home() {
                     </svg>
                   </div>
                 </div>
-        
-                {/* Action Items */}
-                <div className="flex flex-wrap justify-center lg:justify-start items-center gap-4 pt-4">
-                  <Link
-                    href="/deleteRequest"
-                    className="text-sm text-gray-600 hover:text-orange-600 transition"
-                  >
-                    Request article removal
-                  </Link>
-                  <button
-                    onClick={() => setIsCollaboratePopupOpen(true)}
-                    className="px-6 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition"
-                  >
-                    Collaborate
-                  </button>
-                </div>
-        
-                {/* User Stories Button */}
+              </div>
+
+              {/* Actions Grid */}
+              <div className="flex flex-wrap items-center justify-center gap-4">
+                <button
+                  onClick={() => setIsCollaboratePopupOpen(true)}
+                  className="px-8 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-full shadow-sm hover:shadow-md transition-shadow font-medium"
+                >
+                  Collaborate
+                </button>
+                <Link
+                  href="/deleteRequest"
+                  className="px-8 py-3 text-gray-600 hover:text-orange-600 transition-colors font-medium"
+                >
+                  Request article removal
+                </Link>
                 {user && (
-                  <div className="pt-6">
-                    <button
-                      onClick={() => router.push("/stories")}
-                      className="px-6 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition"
-                    >
-                      Stories by SimpleArticles
-                    </button>
-                  </div>
+                  <button
+                    onClick={() => router.push("/stories")}
+                    className="px-8 py-3 bg-gray-900 text-white rounded-full shadow-sm hover:shadow-md transition-shadow font-medium"
+                  >
+                    Stories by SimpleArticles
+                  </button>
                 )}
               </div>
             </div>
-        
-            {/* Image Section */}
-            <div className="lg:w-1/2 flex justify-center items-center relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gray-100 to-white rounded-lg"></div>
-              <img
-                src="/bg.jpeg"
-                alt="Hero Background"
-                className="max-w-full w-auto h-auto object-cover rounded-lg"
-                style={{ transform: "scale(1.02)" }}
-              />
-            </div>
           </div>
         </section>
-
 
         {/* Collaborate Popup */}
         {isCollaboratePopupOpen && (
@@ -950,98 +1056,104 @@ export default function Home() {
           )}
 
           {/* Section Header */}
-          <div className="text-center max-w-3xl mx-auto mb-12">
-            <h2 className="text-4xl sm:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-orange-600 to-pink-600 mb-4">
-              Explore Articles
-            </h2>
-            
-            <Link href="/categorise">
-              <div className="relative inline-block">
-                <button className="group px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg font-medium shadow-md inline-flex items-center gap-2">
-                  <svg
-                    className="w-5 h-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M13 10V3L4 14h7v7l9-11h-7z"
-                    />
-                  </svg>
-                  <span>Summarize and Classify using AI</span>
-                </button>
-                <div className="absolute -top-3 -right-2 px-2 py-0.5 bg-white rounded-full shadow-sm border border-orange-100">
-                  <span className="text-xs font-semibold bg-gradient-to-r from-orange-500 to-pink-500 bg-clip-text text-transparent">
-                    New ✨
-                  </span>
-                </div>
-              </div>
-            </Link>
+          <section className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+            {/* Header Section */}
+            <div className="space-y-8 text-center">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 tracking-tight">
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-orange-600 to-pink-600">
+                  Explore Articles
+                </span>
+              </h2>
 
-            <br />
-            <br />
+              <p className="text-gray-600 text-base md:text-lg max-w-2xl mx-auto">
+                Discover thought-provoking stories and insights from our
+                community
+              </p>
 
-            <div className="relative inline-block">
-              <Link
-                href={user ? "/create" : ""}
-                onClick={async (e) => {
-                  if (!user) {
-                    e.preventDefault();
-                    setNotification(
-                      "Please log in or register to write an article."
-                    );
-                    setNotificationType("error");
-                    setTimeout(() => setNotification(""), 3000);
-                  } else {
-                    setIsLoading(true);
-                    // Loading state will be automatically handled by Next.js route change
-                  }
-                }}
-                className={`w-full sm:w-auto px-6 py-2.5 text-center bg-white/10 backdrop-blur-sm text-gray-800 rounded-xl font-semibold shadow-lg hover:bg-white/20 transition-all duration-300 text-sm sm:text-base flex items-center justify-center space-x-2 ${
-                  isLoading ? "cursor-not-allowed opacity-75" : ""
-                }`}
-                disabled={isLoading}
-              >
-                {isLoading ? (
-                  <>
-                    <svg
-                      className="animate-spin -ml-1 mr-2 h-4 w-4 text-gray-800"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
+              {/* Action Buttons */}
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6">
+                {/* AI Summarize Button */}
+                <Link href="/categorise">
+                  <div className="relative inline-block">
+                    <button className="px-5 py-2.5 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg font-medium shadow-sm inline-flex items-center gap-2 hover:shadow-md transition-shadow">
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
                         stroke="currentColor"
-                        strokeWidth="4"
-                      />
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      />
-                    </svg>
-                    <span>Loading...</span>
-                  </>
-                ) : (
-                  "Write and Publish✍🏻"
-                )}
-              </Link>
-            </div>
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M13 10V3L4 14h7v7l9-11h-7z"
+                        />
+                      </svg>
+                      <span className="text-sm md:text-base">
+                        Summarize and classify with AI
+                      </span>
+                    </button>
+                    <div className="absolute -top-5 -right-5 px-2 py-0.5 bg-white rounded-full shadow-sm border border-orange-100">
+                      <span className="text-xs font-small bg-gradient-to-r from-orange-500 to-pink-500 bg-clip-text text-transparent">
+                        New✨
+                      </span>
+                    </div>
+                  </div>
+                </Link>
 
-            <br />  
-            <br />
-                  
-            <p className="text-gray-600 text-lg">
-              Discover thought-provoking stories and insights from our community
-            </p>
-          </div>
+                {/* Write Article Button */}
+                <Link
+                  href={user ? "/create" : ""}
+                  onClick={async (e) => {
+                    if (!user) {
+                      e.preventDefault();
+                      setNotification(
+                        "Please log in or register to write an article."
+                      );
+                      setNotificationType("error");
+                      setTimeout(() => setNotification(""), 3000);
+                    } else {
+                      setIsLoading(true);
+                    }
+                  }}
+                  className={`px-5 py-2.5 bg-white text-gray-800 rounded-lg font-medium shadow-sm 
+          hover:shadow-md transition-shadow inline-flex items-center gap-2
+          ${isLoading ? "opacity-75 cursor-not-allowed" : ""}`}
+                  disabled={isLoading}
+                >
+                  {isLoading ? (
+                    <div className="flex items-center gap-2">
+                      <svg
+                        className="animate-spin h-4 w-4 text-gray-800"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        />
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        />
+                      </svg>
+                      <span className="text-sm md:text-base">Loading...</span>
+                    </div>
+                  ) : (
+                    <span className="text-sm md:text-base">
+                      Write Article ✍🏻
+                    </span>
+                  )}
+                </Link>
+              </div>
+            </div>
+          </section>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {loading && page === 1
@@ -1065,65 +1177,70 @@ export default function Home() {
                   </div>
                 ))
               : (searchQuery ? filteredArticles : articles).map((article) => (
-                  <div
-                    key={article._id}
-                    className="bg-white rounded-lg p-6"
-                  >
+                  <div key={article._id} className="bg-white rounded-lg p-6">
                     {/* Loading Overlay */}
                     {clickedArticleId === article._id && (
-                      <div className="absolute inset-0 bg-gray-100/80 z-10 flex items-center justify-center">
-                        <div className="w-8 h-8 border-3 border-orange-500 border-t-transparent rounded-full"></div>
+                      <div className="absolute inset-0 bg-white/90 z-10 flex items-center justify-center">
+                        <div className="w-6 h-6 border-2 border-gray-700 border-t-transparent rounded-full"></div>
                       </div>
                     )}
-          
+
                     {/* Article Content */}
-                    <div className="space-y-4">
+                    <div className="space-y-6 border border-gray-200 rounded-lg shadow-sm p-6 bg-white">
                       <div className="flex items-center justify-between">
-                        <span className="text-sm font-medium text-orange-600 bg-orange-100 px-3 py-1 rounded">
-                          {new Date(article.createdAt).toLocaleDateString("en-US", {
-                            month: "short",
-                            day: "numeric",
-                            year: "numeric",
-                          })}
+                        <span className="text-xs font-semibold text-gray-700 bg-gray-100 px-3 py-1 rounded-md">
+                          {new Date(article.createdAt).toLocaleDateString(
+                            "en-US",
+                            {
+                              month: "short",
+                              day: "numeric",
+                              year: "numeric",
+                            }
+                          )}
                         </span>
-                        <div className="flex items-center space-x-3">
-                          <div className="w-8 h-8 rounded-full bg-orange-500 text-white flex items-center justify-center">
-                            <span className="text-sm font-semibold">
-                              {article.author.charAt(0)}
-                            </span>
-                          </div>
-                          <span className="text-sm text-gray-700 font-medium">
+                        <div className="flex items-center">
+                          <span className="text-sm font-medium text-gray-600">
                             {article.author}
                           </span>
                         </div>
                       </div>
-          
+
                       <h2
                         onClick={() => {
                           setClickedArticleId(article._id);
                           router.push(`/article/${article._id}`);
                         }}
-                        className="text-lg font-bold text-gray-800 cursor-pointer"
+                        className="text-xl font-semibold text-gray-800 hover:text-orange-600 cursor-pointer"
                       >
                         {article.title}
                       </h2>
-          
+
                       <div
-                        className="text-sm text-gray-600 line-clamp-3"
+                        className="text-sm text-gray-700 line-clamp-3"
                         dangerouslySetInnerHTML={{
                           __html: article.content,
                         }}
                       />
-          
-                      <div className="flex items-center justify-between pt-4 border-t border-gray-300">
+
+                      <div className="flex items-center justify-between pt-4">
                         <button
                           onClick={async () => {
-                            setLoadingArticles(prev => ({ ...prev, [article._id]: true }));
+                            setLoadingArticles((prev) => ({
+                              ...prev,
+                              [article._id]: true,
+                            }));
                             setClickedArticleId(article._id);
                             await router.push(`/article/${article._id}`);
-                            setLoadingArticles(prev => ({ ...prev, [article._id]: false }));
+                            setLoadingArticles((prev) => ({
+                              ...prev,
+                              [article._id]: false,
+                            }));
                           }}
-                          className="text-sm text-orange-600 hover:underline flex items-center space-x-2"
+                          className={`text-sm font-medium text-orange-600 hover:text-orange-700 ${
+                            loadingArticles[article._id]
+                              ? "cursor-not-allowed"
+                              : "cursor-pointer"
+                          }`}
                           disabled={loadingArticles[article._id]}
                         >
                           {loadingArticles[article._id] ? (
@@ -1135,22 +1252,24 @@ export default function Home() {
                             <span>Read More</span>
                           )}
                         </button>
-          
+
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
                             if (!user) {
-                              setNotification("Please log in to bookmark articles");
+                              setNotification(
+                                "Please log in to bookmark articles"
+                              );
                               setNotificationType("error");
                               setTimeout(() => setNotification(""), 3000);
                               return;
                             }
                             handleBookmark(article._id);
                           }}
-                          className="px-4 py-2 text-sm font-medium text-white bg-orange-500 rounded-lg"
+                          className="flex items-center px-4 py-2 text-sm font-medium text-white bg-orange-600 hover:bg-orange-700 rounded-lg"
                         >
                           <svg
-                            className="w-4 h-4 mr-1.5 inline"
+                            className="w-4 h-4 mr-2"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -1169,7 +1288,6 @@ export default function Home() {
                   </div>
                 ))}
           </div>
-
 
           {/* Load More Button */}
           {filteredArticles.length < articles.length && (
@@ -1299,15 +1417,17 @@ export default function Home() {
           </div>
         )}
       </div>
-          
       <footer className="relative mt-20">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-gray-900 via-gray-800 to-black"></div>
-      
+
         <div className="relative">
-          <svg className="fill-current text-white dark:text-gray-900" viewBox="0 0 1440 48">
+          <svg
+            className="fill-current text-white dark:text-gray-900"
+            viewBox="0 0 1440 48"
+          >
             <path d="M0 48h1440V0c-624 52-816 0-1440 0v48z"></path>
           </svg>
-      
+
           <div className="container mx-auto px-6 py-12 backdrop-blur-sm bg-black/20">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 mb-12">
               {/* Brand Section */}
@@ -1316,68 +1436,120 @@ export default function Home() {
                   simpleArticle
                 </h2>
                 <br />
-                <Link href="/about" className="px-4 py-2 text-sm bg-white/90 text-orange-700 rounded-lg font-medium">
+                <Link
+                  href="/about"
+                  className="px-4 py-2 text-sm bg-white/90 text-orange-700 rounded-lg font-medium"
+                >
                   About Us
                 </Link>
                 <p className="text-gray-400 max-w-sm">
-                  Building a better future, one article at a time. Join our community of knowledge seekers.
+                  Building a better future, one article at a time. Join our
+                  community of knowledge seekers.
                 </p>
               </div>
-      
+
               {/* Quick Links */}
               <div className="space-y-4">
-                <h3 className="text-white font-semibold text-lg">Quick Links</h3>
+                <h3 className="text-white font-semibold text-lg">
+                  Quick Links
+                </h3>
                 <div className="grid grid-cols-2 gap-4">
-                  <a href="mailto:nishantbarua3@gmail.com" className="flex items-center text-gray-400 hover:text-orange-400">
-                    <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                  <a
+                    href="mailto:nishantbarua3@gmail.com"
+                    className="flex items-center text-gray-400 hover:text-orange-400"
+                  >
+                    <svg
+                      className="w-4 h-4 mr-2"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
                       <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
                       <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
                     </svg>
                     Email
                   </a>
-                  <a href="https://www.linkedin.com/in/nishantbaru/" target="_blank" rel="noopener noreferrer" className="flex items-center text-gray-400 hover:text-orange-400">
-                    <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                  <a
+                    href="https://www.linkedin.com/in/nishantbaru/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center text-gray-400 hover:text-orange-400"
+                  >
+                    <svg
+                      className="w-4 h-4 mr-2"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
                       <path d="M16.338 16.338H13.67V12.16c0-.995-.017-2.277-1.387-2.277-1.39 0-1.601 1.086-1.601 2.207v4.248H8.014v-8.59h2.559v1.174h.037c.356-.675 1.227-1.387 2.526-1.387 2.703 0 3.203 1.778 3.203 4.092v4.711zM5.005 6.575a1.548 1.548 0 11-.003-3.096 1.548 1.548 0 01.003 3.096zm-1.337 9.763H6.34v-8.59H3.667v8.59zM17.668 1H2.328C1.595 1 1 1.581 1 2.298v15.403C1 18.418 1.595 19 2.328 19h15.34c.734 0 1.332-.582 1.332-1.299V2.298C19 1.581 18.402 1 17.668 1z"></path>
                     </svg>
                     LinkedIn
                   </a>
-                  <a href="https://nishantb66.github.io/MyPortfolio/" target="_blank" rel="noopener noreferrer" className="flex items-center text-gray-400 hover:text-orange-400">
-                    <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                  <a
+                    href="https://nishantb66.github.io/MyPortfolio/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center text-gray-400 hover:text-orange-400"
+                  >
+                    <svg
+                      className="w-4 h-4 mr-2"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
                       <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM14 11a1 1 0 011 1v1h1a1 1 0 110 2h-1v1a1 1 0 11-2 0v-1h-1a1 1 0 110-2h1v-1a1 1 0 011-1z"></path>
                     </svg>
                     Portfolio
                   </a>
                 </div>
               </div>
-      
+
               {/* Contact/Social */}
               <div className="space-y-4">
-                <h3 className="text-white font-semibold text-lg">Stay Connected</h3>
+                <h3 className="text-white font-semibold text-lg">
+                  Stay Connected
+                </h3>
                 <div className="flex space-x-4">
-                  <a href="https://x.com/Nishant03129296" className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-orange-400 hover:bg-gray-700">
-                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <a
+                    href="https://x.com/Nishant03129296"
+                    className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-orange-400 hover:bg-gray-700"
+                  >
+                    <svg
+                      className="w-5 h-5"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
                       <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"></path>
                     </svg>
                   </a>
-                  <a href="https://github.com/nishantb66" className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-orange-400 hover:bg-gray-700">
-                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <a
+                    href="https://github.com/nishantb66"
+                    className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-orange-400 hover:bg-gray-700"
+                  >
+                    <svg
+                      className="w-5 h-5"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
                       <path d="M12 0C5.373 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.6.113.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"></path>
                     </svg>
                   </a>
                 </div>
               </div>
             </div>
-      
+
             {/* Bottom Section with Copyright */}
             <div className="pt-8 mt-8 border-t border-gray-800/50">
               <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
                 <p className="text-gray-400 text-sm">
-                  © {new Date().getFullYear()} Nishant Baruah. All rights reserved.
+                  © {new Date().getFullYear()} Nishant Baruah. All rights
+                  reserved.
                 </p>
                 <div className="flex items-center space-x-4 text-sm text-gray-400">
-                  <span className="cursor-pointer hover:text-orange-400">Privacy Policy</span>
+                  <span className="cursor-pointer hover:text-orange-400">
+                    Privacy Policy
+                  </span>
                   <span className="text-gray-700">•</span>
-                  <span className="cursor-pointer hover:text-orange-400">Terms of Service</span>
+                  <span className="cursor-pointer hover:text-orange-400">
+                    Terms of Service
+                  </span>
                 </div>
               </div>
             </div>
