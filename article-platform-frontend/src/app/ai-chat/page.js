@@ -81,8 +81,8 @@ export default function AIChat() {
     try {
       const endpoint =
         inputType === "content"
-          ? "https://python-backend-91zp.onrender.com/api/interact"
-          : "https://python-backend-91zp.onrender.com/api/interact_from_url";
+          ? "https://python-backend-psi.vercel.app/api/interact"
+          : "https://python-backend-psi.vercel.app/api/interact_from_url";
 
       const payload =
         inputType === "content"
