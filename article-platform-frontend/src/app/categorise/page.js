@@ -31,7 +31,7 @@ export default function Articles() {
     const fetchArticles = async () => {
       try {
         const response = await fetch(
-          "https://python-backend-91zp.onrender.com/api/articles"
+          "https://python-backend-psi.vercel.app/api/articles"
         );
         const data = await response.json();
         setArticles(data.articles || []);
@@ -50,7 +50,7 @@ export default function Articles() {
     try {
       setClassifyingId(articleId);
       const response = await fetch(
-        `https://python-backend-91zp.onrender.com/api/articles/classify_one/${articleId}`
+        `https://python-backend-psi.vercel.app/api/articles/classify_one/${articleId}`
       );
       const data = await response.json();
       setClassifications((prev) => [...prev, data]);
@@ -66,7 +66,7 @@ export default function Articles() {
     try {
       setSummarizingId(articleId);
       const response = await fetch(
-        `https://python-backend-91zp.onrender.com/api/articles/summarize/${articleId}`
+        `https://python-backend-psi.vercel.app/api/articles/summarize/${articleId}`
       );
       const data = await response.json();
       setSummaries((prev) => [...prev, data]);
