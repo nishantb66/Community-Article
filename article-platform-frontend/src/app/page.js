@@ -49,7 +49,7 @@ export default function Home() {
     async function fetchTrendingArticles() {
       try {
         const res = await axios.get(
-          "https://community-article-backend.onrender.com/api/articles/trending"
+          "https://community-article-backend.onrender.com"
         );
         setTrendingArticles(res.data);
       } catch (error) {
@@ -71,7 +71,7 @@ export default function Home() {
       }
 
       const response = await fetch(
-        "https://community-article-backend.onrender.com/api/notifications/unread",
+        "https://community-article-backend.onrender.com",
         {
           method: "GET",
           headers: {
@@ -154,7 +154,7 @@ export default function Home() {
   const fetchArticles = async () => {
     setLoading(true);
     try {
-      const response = await fetch("https://community-article-backend.onrender.com/api/articles/all");
+      const response = await fetch("https://community-article-backend.onrender.com");
       if (!response.ok) {
         throw new Error("Failed to fetch articles");
       }
@@ -215,7 +215,7 @@ export default function Home() {
     }
 
     try {
-      const response = await fetch("https://community-article-backend.onrender.com/api/subscribe/sub", {
+      const response = await fetch("https://community-article-backend.onrender.com", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: email.trim() }),
@@ -259,7 +259,7 @@ export default function Home() {
     };
 
     try {
-      const response = await fetch("https://community-article-backend.onrender.com/api/contributors", {
+      const response = await fetch("https://community-article-backend.onrender.com", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -302,7 +302,7 @@ export default function Home() {
     console.log("UserId:", userId, "ArticleId:", articleId);
 
     try {
-      const response = await fetch("https://community-article-backend.onrender.com/api/bookmarks/add", {
+      const response = await fetch("https://community-article-backend.onrender.com", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId, articleId }),
@@ -390,6 +390,7 @@ export default function Home() {
         {/* Navigation Bar */}
         <header className="bg-gradient-to-r from-orange-400 via-pink-400 to-orange-500 text-white py-4 sticky top-0 z-50 backdrop-blur-sm shadow-lg border-b border-white/10">
           <div className="container mx-auto flex justify-between items-center px-4 sm:px-6 lg:px-8">
+            {/* Logo Section */}
             {/* Logo Section */}
             <Link href="/about">
               <div className="flex items-center space-x-3 group">
@@ -526,35 +527,37 @@ export default function Home() {
                     {/* User Profile Button */}
                     <button
                       onClick={() => setDropdownOpen(!dropdownOpen)}
-                      className="w-full sm:w-auto px-5 py-3 bg-white rounded-lg border border-gray-200 shadow-sm hover:border-gray-300 flex items-center justify-between gap-4"
+                      className="w-full sm:w-auto px-4 py-2.5 bg-white rounded-xl border border-gray-100 shadow-xs hover:shadow-sm transition-shadow duration-200 flex items-center justify-between gap-3"
                     >
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-2.5">
                         <div className="relative">
-                          <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-orange-500 to-pink-500 text-white flex items-center justify-center font-semibold text-lg">
+                          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-500 text-white flex items-center justify-center font-medium text-lg">
                             {user.name.charAt(0)}
                           </div>
-                          <div className="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-green-500 border-2 border-white rounded-full"></div>
+                          <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-400 border-[2.5px] border-white rounded-full"></div>
                         </div>
                         <div className="flex flex-col items-start">
-                          <span className="text-gray-800 font-medium text-sm">
+                          <span className="text-gray-900 font-semibold text-sm leading-tight">
                             {user.name}
                           </span>
-                          <span className="text-gray-500 text-xs">
-                            View menu
+                          <span className="text-gray-500 text-xs font-light">
+                            Account settings
                           </span>
                         </div>
                       </div>
                       <svg
-                        className="w-5 h-5 text-gray-400"
+                        className={`w-5 h-5 text-gray-400 transform transition-transform ${
+                          dropdownOpen ? "rotate-180" : ""
+                        }`}
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
+                        strokeWidth={1.8}
                       >
                         <path
                           strokeLinecap="round"
                           strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M8 9l4 4 4-4"
+                          d="M19 9l-7 7-7-7"
                         />
                       </svg>
                     </button>
@@ -564,140 +567,135 @@ export default function Home() {
                       <>
                         {/* Overlay for mobile */}
                         <div
-                          className="fixed inset-0 bg-black/20 sm:hidden z-40"
+                          className="fixed inset-0 bg-black/30 sm:hidden z-40 backdrop-blur-sm"
                           onClick={() => setDropdownOpen(false)}
                         />
-                        <div className="fixed sm:absolute inset-x-0 bottom-0 sm:top-full sm:bottom-auto sm:right-0 sm:left-auto sm:w-64 bg-white rounded-lg shadow-lg sm:mt-2 z-50">
-                          <div className="max-h-[85vh] sm:max-h-[600px] overflow-y-auto">
+                        <div className="fixed sm:absolute inset-x-0 bottom-0 sm:top-full sm:bottom-auto sm:right-0 sm:left-auto sm:w-72 bg-white rounded-xl shadow-2xl sm:shadow-lg sm:border sm:border-gray-100 sm:mt-1.5 z-50">
+                          <div className="max-h-[85vh] sm:max-h-[70vh] overflow-y-auto">
                             {/* Mobile Profile Header */}
-                            <div className="p-4 border-b border-gray-200 sm:hidden">
-                              <div className="flex items-center gap-3">
-                                <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-orange-500 to-pink-500 text-white flex items-center justify-center text-lg font-semibold">
+                            <div className="p-5 border-b border-gray-100 sm:hidden">
+                              <div className="flex items-center gap-3.5">
+                                <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-500 text-white flex items-center justify-center text-lg font-semibold">
                                   {user.name.charAt(0)}
                                 </div>
                                 <div>
-                                  <div className="font-medium text-gray-800">
+                                  <div className="font-semibold text-gray-900">
                                     {user.name}
                                   </div>
-                                  <div className="text-sm text-gray-500">
-                                    Account Settings
+                                  <div className="text-sm text-gray-500 font-light">
+                                    {user.email}
                                   </div>
                                 </div>
                               </div>
                             </div>
 
                             {/* Menu Items */}
-                            <div className="p-4">
+                            <div className="p-2.5">
                               {/* Profile Section */}
-                              <div className="mb-4">
-                                <Link
-                                  href="/profile"
-                                  className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100"
-                                >
-                                  <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center text-gray-500">
-                                    <svg
-                                      className="w-5 h-5"
-                                      fill="none"
-                                      stroke="currentColor"
-                                      viewBox="0 0 24 24"
-                                    >
-                                      <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                                      />
-                                    </svg>
-                                  </div>
-                                  <div>
-                                    <span className="font-medium text-gray-800">
-                                      View Profile
-                                    </span>
-                                    <span className="text-xs text-gray-500 block">
-                                      Manage your account
-                                    </span>
-                                  </div>
-                                </Link>
-                              </div>
-
                               <Link
-                                href="/notification"
-                                className="relative flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                                href="/profile"
+                                className="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 active:bg-gray-100 transition-colors"
                               >
-                                <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center text-gray-600">
+                                <div className="w-9 h-9 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600">
                                   <svg
                                     className="w-5 h-5"
                                     fill="none"
                                     stroke="currentColor"
                                     viewBox="0 0 24 24"
+                                    strokeWidth={1.8}
                                   >
                                     <path
                                       strokeLinecap="round"
                                       strokeLinejoin="round"
-                                      strokeWidth="1.75"
-                                      d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
                                     />
                                   </svg>
                                 </div>
-
-                                <div className="relative">
-                                  <span className="font-medium text-gray-800">
-                                    Notifications
+                                <div className="flex-1">
+                                  <span className="font-medium text-gray-900 block">
+                                    Profile
                                   </span>
-                                  <span className="absolute -top-1 -right-2 h-2 w-2 rounded-full bg-emerald-500 ring-2 ring-white"></span>
+                                  <span className="text-xs text-gray-400 font-light">
+                                    Personal information
+                                  </span>
                                 </div>
                               </Link>
 
+                              <Link
+                                href="/notification"
+                                className="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 active:bg-gray-100 transition-colors"
+                              >
+                                <div className="w-9 h-9 rounded-lg bg-amber-50 flex items-center justify-center text-amber-600 relative">
+                                  <svg
+                                    className="w-5 h-5"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                    strokeWidth={1.8}
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                                    />
+                                  </svg>
+                                  <div className="absolute top-0 right-0 w-2 h-2 bg-emerald-400 rounded-full ring-2 ring-white"></div>
+                                </div>
+                                <span className="font-medium text-gray-900">
+                                  Notifications
+                                </span>
+                              </Link>
+
                               {/* Content Section */}
-                              <div className="mb-4">
-                                <div className="text-xs font-medium text-gray-400 uppercase mb-2">
+                              <div className="my-2">
+                                <div className="text-[11px] font-medium text-gray-400 uppercase tracking-wider px-3 py-2">
                                   Content
                                 </div>
-                                <div className="space-y-2">
+                                <div className="space-y-1">
                                   <Link
                                     href="/my-articles"
-                                    className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100"
+                                    className="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 active:bg-gray-100 transition-colors"
                                   >
-                                    <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center text-gray-500">
+                                    <div className="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600">
                                       <svg
                                         className="w-5 h-5"
                                         fill="none"
                                         stroke="currentColor"
                                         viewBox="0 0 24 24"
+                                        strokeWidth={1.8}
                                       >
                                         <path
                                           strokeLinecap="round"
                                           strokeLinejoin="round"
-                                          strokeWidth="2"
                                           d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2 2 0 00-2-2h-2"
                                         />
                                       </svg>
                                     </div>
-                                    <span className="font-medium text-gray-800">
-                                      My Articles
+                                    <span className="font-medium text-gray-900">
+                                      Articles
                                     </span>
                                   </Link>
 
                                   <Link
                                     href="/bookmarks"
-                                    className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100"
+                                    className="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 active:bg-gray-100 transition-colors"
                                   >
-                                    <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center text-gray-500">
+                                    <div className="w-9 h-9 rounded-lg bg-rose-50 flex items-center justify-center text-rose-600">
                                       <svg
                                         className="w-5 h-5"
                                         fill="none"
                                         stroke="currentColor"
                                         viewBox="0 0 24 24"
+                                        strokeWidth={1.8}
                                       >
                                         <path
                                           strokeLinecap="round"
                                           strokeLinejoin="round"
-                                          strokeWidth="2"
                                           d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"
                                         />
                                       </svg>
                                     </div>
-                                    <span className="font-medium text-gray-800">
+                                    <span className="font-medium text-gray-900">
                                       Bookmarks
                                     </span>
                                   </Link>
@@ -705,90 +703,90 @@ export default function Home() {
                               </div>
 
                               {/* Community Section */}
-                              <div className="mb-4">
-                                <div className="text-xs font-medium text-gray-400 uppercase mb-2">
+                              <div className="my-2">
+                                <div className="text-[11px] font-medium text-gray-400 uppercase tracking-wider px-3 py-2">
                                   Community
                                 </div>
-                                <div className="space-y-2">
+                                <div className="space-y-1">
                                   <Link
                                     href="/community"
-                                    className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100"
+                                    className="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 active:bg-gray-100 transition-colors"
                                   >
-                                    <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center text-gray-500">
+                                    <div className="w-9 h-9 rounded-lg bg-emerald-50 flex items-center justify-center text-emerald-600">
                                       <svg
                                         className="w-5 h-5"
                                         fill="none"
                                         stroke="currentColor"
                                         viewBox="0 0 24 24"
+                                        strokeWidth={1.8}
                                       >
                                         <path
                                           strokeLinecap="round"
                                           strokeLinejoin="round"
-                                          strokeWidth="2"
                                           d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a2 2 0 01-2-2v-6a2 2 0 012-2h8z"
                                         />
                                       </svg>
                                     </div>
-                                    <span className="font-medium text-gray-800">
-                                      Discussion Forum
+                                    <span className="font-medium text-gray-900">
+                                      Forum
                                     </span>
                                   </Link>
 
                                   <Link
                                     href="/proposals"
-                                    className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100"
+                                    className="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 active:bg-gray-100 transition-colors"
                                   >
-                                    <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center text-gray-500">
+                                    <div className="w-9 h-9 rounded-lg bg-cyan-50 flex items-center justify-center text-cyan-600">
                                       <svg
                                         className="w-5 h-5"
                                         fill="none"
                                         stroke="currentColor"
                                         viewBox="0 0 24 24"
+                                        strokeWidth={1.8}
                                       >
                                         <path
                                           strokeLinecap="round"
                                           strokeLinejoin="round"
-                                          strokeWidth="2"
                                           d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
                                         />
                                       </svg>
                                     </div>
-                                    <span className="font-medium text-gray-800">
-                                      Proposals & Networking
+                                    <span className="font-medium text-gray-900">
+                                      Proposals
                                     </span>
                                   </Link>
                                 </div>
                               </div>
 
                               {/* AI Tools Section */}
-                              <div className="mb-4">
-                                <div className="text-xs font-medium text-gray-400 uppercase mb-2">
+                              <div className="my-2">
+                                <div className="text-[11px] font-medium text-gray-400 uppercase tracking-wider px-3 py-2">
                                   AI Tools
                                 </div>
                                 <Link
                                   href="/ai-chat"
-                                  className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100"
+                                  className="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 active:bg-gray-100 transition-colors"
                                 >
-                                  <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center text-gray-500">
+                                  <div className="w-9 h-9 rounded-lg bg-purple-50 flex items-center justify-center text-purple-600">
                                     <svg
                                       className="w-5 h-5"
                                       fill="none"
                                       stroke="currentColor"
                                       viewBox="0 0 24 24"
+                                      strokeWidth={1.8}
                                     >
                                       <path
                                         strokeLinecap="round"
                                         strokeLinejoin="round"
-                                        strokeWidth="2"
                                         d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"
                                       />
                                     </svg>
                                   </div>
                                   <div className="flex items-center gap-2">
-                                    <span className="font-medium text-gray-800">
-                                      SimpleArticle AI
+                                    <span className="font-medium text-gray-900">
+                                      SimpleAI
                                     </span>
-                                    <span className="px-2 py-0.5 text-[10px] font-semibold bg-orange-100 text-orange-600 rounded-full">
+                                    <span className="px-1.5 py-0.5 text-[10px] font-semibold bg-purple-100 text-purple-600 rounded-md">
                                       NEW
                                     </span>
                                   </div>
@@ -797,22 +795,22 @@ export default function Home() {
                             </div>
 
                             {/* Footer Section */}
-                            <div className="p-4 border-t border-gray-200 bg-gray-50">
+                            <div className="p-2.5 border-t border-gray-100">
                               <button
                                 onClick={handleLogout}
-                                className="flex items-center w-full gap-3 p-2 rounded-lg text-red-600 hover:bg-gray-100"
+                                className="flex items-center w-full gap-3 p-3 rounded-xl hover:bg-gray-50 active:bg-gray-100 transition-colors text-red-600"
                               >
-                                <div className="w-10 h-10 rounded-lg bg-red-100 flex items-center justify-center">
+                                <div className="w-9 h-9 rounded-lg bg-red-50 flex items-center justify-center">
                                   <svg
                                     className="w-5 h-5"
                                     fill="none"
                                     stroke="currentColor"
                                     viewBox="0 0 24 24"
+                                    strokeWidth={1.8}
                                   >
                                     <path
                                       strokeLinecap="round"
                                       strokeLinejoin="round"
-                                      strokeWidth="2"
                                       d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
                                     />
                                   </svg>
@@ -846,18 +844,20 @@ export default function Home() {
           </div>
         </header>
 
-        <section className="relative min-h-[80vh] flex flex-col items-center justify-between px-6 lg:px-12 gap-8 bg-gray-50">
+        <section className="relative min-h-[80vh] flex flex-col items-center justify-between px-6 lg:px-12 gap-8 bg-gradient-to-br from-gray-50 to-gray-100">
           {/* Main Content */}
           <div className="flex-grow relative flex items-center justify-center w-full">
             <div className="relative z-10 container mx-auto max-w-5xl">
               <div className="text-center space-y-8">
                 {/* Header Section */}
                 <div className="space-y-4">
-                  <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-gray-800">
+                  <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-gray-800 animate-fade-in-up">
                     Discover a Variety of
-                    <span className="block mt-2 text-orange-600">Stories</span>
+                    <span className="block mt-2 bg-gradient-to-r from-orange-600 to-orange-500 bg-clip-text text-transparent">
+                      Stories
+                    </span>
                   </h1>
-                  <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+                  <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed animate-fade-in-up delay-100">
                     Explore an expansive collection of articles and stories
                     crafted by writers from around the world. Get inspired, stay
                     informed, and share your thoughts with the community.
@@ -865,22 +865,22 @@ export default function Home() {
                 </div>
 
                 {/* Actions Section */}
-                <div className="flex flex-wrap items-center justify-center gap-4">
+                <div className="flex flex-wrap items-center justify-center gap-4 animate-fade-in-up delay-200">
                   <button
                     onClick={() => setIsCollaboratePopupOpen(true)}
-                    className="px-6 py-3 bg-orange-600 text-white rounded-lg shadow hover:bg-orange-700"
+                    className="px-6 py-3 bg-gradient-to-r from-orange-600 to-orange-500 text-white rounded-lg shadow-lg hover:from-orange-700 hover:to-orange-600 transition-all duration-300 transform hover:scale-105"
                   >
                     Collaborate
                   </button>
                   <a
                     href="/deleteRequest"
-                    className="px-6 py-3 border border-gray-300 text-gray-700 hover:border-orange-600 hover:text-orange-600 rounded-lg shadow"
+                    className="px-6 py-3 border border-gray-300 text-gray-700 hover:border-orange-600 hover:text-orange-600 rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105"
                   >
                     Request Article Removal
                   </a>
                   <button
                     onClick={() => router.push("/stories")}
-                    className="px-6 py-3 bg-gray-900 text-white rounded-lg shadow hover:bg-gray-800"
+                    className="px-6 py-3 bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-lg shadow-lg hover:from-gray-800 hover:to-gray-700 transition-all duration-300 transform hover:scale-105"
                   >
                     Stories by SimpleArticles
                   </button>
@@ -891,9 +891,9 @@ export default function Home() {
         </section>
 
         <section className="w-full px-4 lg:px-8">
-          <div className="max-w-5xl mx-auto bg-white rounded-xl shadow-lg p-6">
+          <div className="max-w-5xl mx-auto bg-gradient-to-br from-white to-gray-50 rounded-xl shadow-2xl p-6 hover:shadow-3xl transition-shadow duration-300">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-bold text-gray-800">
+              <h2 className="text-2xl font-bold text-gray-800 bg-gradient-to-r from-orange-600 to-orange-500 bg-clip-text text-transparent">
                 Trending Articles
               </h2>
               <div className="flex items-center space-x-1">
@@ -903,20 +903,20 @@ export default function Home() {
             </div>
 
             {/* Articles List */}
-            <div className="flex flex-wrap gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {trendingArticles.map((article) => (
                 <div
                   key={article._id}
-                  className="flex-shrink-0 w-full md:w-1/2 lg:w-auto p-4 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-lg transition-shadow shadow-sm hover:shadow-md cursor-pointer"
+                  className="group p-4 bg-white hover:bg-gradient-to-br from-orange-50 to-pink-50 border border-gray-200 rounded-lg transition-all duration-300 transform hover:-translate-y-2 hover:shadow-xl cursor-pointer"
                 >
                   <div className="flex items-start space-x-4">
-                    <div className="h-12 w-12 rounded-full bg-gradient-to-r from-orange-100 to-pink-100 flex items-center justify-center">
+                    <div className="h-12 w-12 rounded-full bg-gradient-to-r from-orange-100 to-pink-100 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
                       <span className="text-lg font-semibold text-orange-600">
                         {article.author[0]}
                       </span>
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-lg font-semibold text-gray-800 line-clamp-2">
+                      <h3 className="text-lg font-semibold text-gray-800 line-clamp-2 group-hover:text-orange-600 transition-colors duration-300">
                         {article.title}
                       </h3>
                       <div className="mt-2 flex items-center space-x-4">
@@ -1250,9 +1250,10 @@ export default function Home() {
                     )}
 
                     {/* Article Content */}
-                    <div className="space-y-6 border border-gray-200 rounded-lg shadow-sm p-6 bg-white">
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-semibold text-gray-700 bg-gray-100 px-3 py-1 rounded-md">
+                    {/* Article Content */}
+                    <div className="space-y-6 border border-gray-100 rounded-xl shadow-sm p-7 bg-white group hover:shadow-md transition-shadow">
+                      <div className="flex items-center justify-between mb-4">
+                        <span className="text-xs font-medium text-gray-500 tracking-wide uppercase">
                           {new Date(article.createdAt).toLocaleDateString(
                             "en-US",
                             {
@@ -1262,11 +1263,9 @@ export default function Home() {
                             }
                           )}
                         </span>
-                        <div className="flex items-center">
-                          <span className="text-sm font-medium text-gray-600">
-                            {article.author}
-                          </span>
-                        </div>
+                        <span className="text-xs font-semibold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-full">
+                          {article.author}
+                        </span>
                       </div>
 
                       <h2
@@ -1274,19 +1273,17 @@ export default function Home() {
                           setClickedArticleId(article._id);
                           router.push(`/article/${article._id}`);
                         }}
-                        className="text-xl font-semibold text-gray-800 hover:text-orange-600 cursor-pointer"
+                        className="text-2xl font-bold text-gray-900 hover:text-indigo-600 cursor-pointer leading-tight"
                       >
                         {article.title}
                       </h2>
 
                       <div
-                        className="text-sm text-gray-700 line-clamp-3"
-                        dangerouslySetInnerHTML={{
-                          __html: article.content,
-                        }}
+                        className="text-gray-600 mt-3 mb-6 leading-relaxed line-clamp-3"
+                        dangerouslySetInnerHTML={{ __html: article.content }}
                       />
 
-                      <div className="flex items-center justify-between pt-4">
+                      <div className="flex items-center justify-between border-t border-gray-50 pt-5">
                         <button
                           onClick={async () => {
                             setLoadingArticles((prev) => ({
@@ -1300,20 +1297,35 @@ export default function Home() {
                               [article._id]: false,
                             }));
                           }}
-                          className={`text-sm font-medium text-orange-600 hover:text-orange-700 ${
+                          className={`flex items-center text-sm font-medium ${
                             loadingArticles[article._id]
-                              ? "cursor-not-allowed"
-                              : "cursor-pointer"
+                              ? "text-indigo-400 cursor-not-allowed"
+                              : "text-indigo-600 hover:text-indigo-700 cursor-pointer"
                           }`}
                           disabled={loadingArticles[article._id]}
                         >
                           {loadingArticles[article._id] ? (
-                            <div className="flex items-center">
-                              <div className="w-4 h-4 border-2 border-orange-600 border-t-transparent rounded-full animate-spin mr-2"></div>
-                              <span>Loading...</span>
-                            </div>
+                            <>
+                              <div className="w-4 h-4 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin mr-2"></div>
+                              Loading...
+                            </>
                           ) : (
-                            <span>Read More</span>
+                            <>
+                              Read Article
+                              <svg
+                                className="w-4 h-4 ml-2"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth="2"
+                                  d="M9 5l7 7-7 7"
+                                />
+                              </svg>
+                            </>
                           )}
                         </button>
 
@@ -1330,7 +1342,7 @@ export default function Home() {
                             }
                             handleBookmark(article._id);
                           }}
-                          className="flex items-center px-4 py-2 text-sm font-medium text-white bg-orange-600 hover:bg-orange-700 rounded-lg"
+                          className="flex items-center px-3.5 py-1.5 text-sm font-medium text-indigo-600 hover:bg-indigo-50 rounded-lg border border-indigo-100"
                         >
                           <svg
                             className="w-4 h-4 mr-2"
@@ -1345,7 +1357,7 @@ export default function Home() {
                               d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"
                             />
                           </svg>
-                          Save
+                          Bookmark
                         </button>
                       </div>
                     </div>
@@ -1623,5 +1635,3 @@ export default function Home() {
     </main>
   );
 }
-
-
