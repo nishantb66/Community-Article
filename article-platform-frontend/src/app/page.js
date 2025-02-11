@@ -49,7 +49,7 @@ export default function Home() {
     async function fetchTrendingArticles() {
       try {
         const res = await axios.get(
-          "https://community-article-backend.onrender.com"
+          "https://community-article-backend.onrender.com/api/articles/trending"
         );
         setTrendingArticles(res.data);
       } catch (error) {
@@ -154,7 +154,7 @@ export default function Home() {
   const fetchArticles = async () => {
     setLoading(true);
     try {
-      const response = await fetch("https://community-article-backend.onrender.com");
+      const response = await fetch("https://community-article-backend.onrender.com/api/articles/all");
       if (!response.ok) {
         throw new Error("Failed to fetch articles");
       }
@@ -215,7 +215,7 @@ export default function Home() {
     }
 
     try {
-      const response = await fetch("https://community-article-backend.onrender.com", {
+      const response = await fetch("https://community-article-backend.onrender.com/api/subscribe/sub", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: email.trim() }),
@@ -259,7 +259,7 @@ export default function Home() {
     };
 
     try {
-      const response = await fetch("https://community-article-backend.onrender.com", {
+      const response = await fetch("https://community-article-backend.onrender.com/api/contributors", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -302,7 +302,7 @@ export default function Home() {
     console.log("UserId:", userId, "ArticleId:", articleId);
 
     try {
-      const response = await fetch("https://community-article-backend.onrender.com", {
+      const response = await fetch("https://community-article-backend.onrender.com/api/bookmarks/add", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId, articleId }),
