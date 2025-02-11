@@ -1,4 +1,5 @@
 import { Geist, Geist_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/react";
 import "../styles/globals.css";
 
 // Import Geist and Geist Mono fonts
@@ -31,6 +32,7 @@ export default function RootLayout({ children }) {
         className={`bg-gray-100 text-gray-800 ${geistSans.variable} ${geistMono.variable}`}
       >
         <main className="min-h-screen flex flex-col">{children}</main>
+        <Analytics />
       </body>
     </html>
   );
