@@ -6,7 +6,6 @@ import {
   PlusCircleIcon,
   ChartBarIcon,
   GlobeAltIcon,
-  SparklesIcon,
   ArrowLeftIcon,
 } from "@heroicons/react/24/outline";
 
@@ -34,7 +33,7 @@ export default function ProposalsPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 to-white">
-      {/* Back Navigation - New Style */}
+      {/* Back Navigation */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-sm border-b border-orange-100/50">
         <div className="container mx-auto px-4 py-4">
           <Link
@@ -46,6 +45,7 @@ export default function ProposalsPage() {
           </Link>
         </div>
       </div>
+
       <div className="container mx-auto px-4 pt-24 pb-16 max-w-6xl relative">
         {/* Decorative Elements */}
         <div className="absolute top-0 left-1/2 w-56 h-56 bg-orange-100 rounded-full opacity-20 -translate-x-1/2 -translate-y-1/2" />
@@ -54,12 +54,11 @@ export default function ProposalsPage() {
         {/* Header Section */}
         <div className="text-center mb-16 relative">
           <div className="inline-flex items-center justify-center space-x-2 mb-4">
-            <SparklesIcon className="w-5 h-5 text-orange-500" />
             <span className="text-orange-500 text-sm font-medium tracking-wider">
               SimpleArticle
             </span>
           </div>
-          <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6">
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
             Proposals & Networking
           </h1>
           <p className="text-gray-600 max-w-2xl mx-auto text-lg mb-8">
@@ -88,7 +87,7 @@ export default function ProposalsPage() {
           <Link
             href="/proposals/create"
             onClick={() => handleClick("create")}
-            className="group bg-white p-8 rounded-2xl shadow-[0_4px_15px_-4px_rgba(249,115,22,0.15)] hover:shadow-[0_8px_25px_-5px_rgba(249,115,22,0.25)] transition-all duration-300 border border-orange-100/50"
+            className="group bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-orange-100/50"
           >
             <div className="flex flex-col items-center text-center min-h-[180px] justify-between">
               <div className="bg-gradient-to-br from-orange-50 to-white p-4 rounded-xl mb-6 ring-1 ring-orange-100">
@@ -114,7 +113,7 @@ export default function ProposalsPage() {
           <Link
             href="/proposals/my-proposals"
             onClick={() => handleClick("track")}
-            className="group bg-white p-8 rounded-2xl shadow-[0_4px_15px_-4px_rgba(249,115,22,0.15)] hover:shadow-[0_8px_25px_-5px_rgba(249,115,22,0.25)] transition-all duration-300 border border-orange-100/50"
+            className="group bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-orange-100/50"
           >
             <div className="flex flex-col items-center text-center min-h-[180px] justify-between">
               <div className="bg-gradient-to-br from-orange-50 to-white p-4 rounded-xl mb-6 ring-1 ring-orange-100">
@@ -140,7 +139,7 @@ export default function ProposalsPage() {
           <Link
             href="/proposals/explore"
             onClick={() => handleClick("explore")}
-            className="group bg-white p-8 rounded-2xl shadow-[0_4px_15px_-4px_rgba(249,115,22,0.15)] hover:shadow-[0_8px_25px_-5px_rgba(249,115,22,0.25)] transition-all duration-300 border border-orange-100/50"
+            className="group bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-orange-100/50"
           >
             <div className="flex flex-col items-center text-center min-h-[180px] justify-between">
               <div className="bg-gradient-to-br from-orange-50 to-white p-4 rounded-xl mb-6 ring-1 ring-orange-100">
@@ -166,4 +165,3 @@ export default function ProposalsPage() {
     </div>
   );
 }
-
